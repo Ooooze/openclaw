@@ -11,6 +11,7 @@
     "dev": "npm run build && npm run build:renderer && npm run fetch:gog && npm run prepare:gog:credentials && cross-env ELECTRON_RUN_AS_NODE= electron .",
     "build": "tsc -p tsconfig.json",
     "build:renderer": "vite build --config renderer/vite.config.ts",
+    "prepare:all": "npm run prepare:openclaw && npm run prepare:node && npm run fetch:gog && npm run prepare:gog:credentials && npm run prepare:gog",
     "prepare:openclaw": "node scripts/prepare-openclaw-bundle.mjs",
     "prepare:node": "node scripts/prepare-node-runtime.mjs",
     "fetch:gog": "node scripts/fetch-gog-runtime.mjs",
@@ -18,6 +19,7 @@
     "prepare:gog": "node scripts/prepare-gog-runtime.mjs",
     "reset:local": "node scripts/reset-local-state.mjs",
     "reset:local:yes": "node scripts/reset-local-state.mjs --yes",
+    "dist:local": "CSC_IDENTITY_AUTO_DISCOVERY=false npm run dist -- --publish never",
     "dist": "npm run build && npm run build:renderer && npm run prepare:openclaw && npm run prepare:node && npm run fetch:gog && npm run prepare:gog:credentials && npm run prepare:gog && electron-builder"
   },
   "devDependencies": {
