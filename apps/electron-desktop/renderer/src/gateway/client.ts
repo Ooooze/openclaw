@@ -175,7 +175,7 @@ export class GatewayClient {
       maxProtocol: 9999,
       client: {
         id: "webchat-ui",
-        displayName: "OpenClaw Desktop",
+        displayName: "Atomic Bot",
         version: "0.0.0",
         platform: "electron",
         mode: "ui",

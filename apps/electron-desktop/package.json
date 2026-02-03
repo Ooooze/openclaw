@@ -2,7 +2,7 @@
   "name": "openclaw-electron-desktop",
   "private": true,
   "version": "0.0.0",
-  "description": "Electron wrapper that embeds OpenClaw Gateway + Control UI.",
+  "description": "Atomic Bot makes things for you",
   "type": "commonjs",
   "main": "dist/main.js",
   "author": "",
@@ -42,8 +42,8 @@
     "json5": "^2.2.3"
   },
   "build": {
-    "appId": "ai.openclaw.desktop",
-    "productName": "OpenClaw Desktop",
+    "appId": "ai.atomicbot.desktop",
+    "productName": "Atomic Bot",
     "directories": {
       "output": "release"
     },
@@ -54,6 +54,18 @@
       "package.json"
     ],
     "extraResources": [
+      {
+        "from": "assets/icon.png",
+        "to": "assets/icon.png"
+      },
+      {
+        "from": "assets/trayTemplate.png",
+        "to": "assets/trayTemplate.png"
+      },
+      {
+        "from": "assets/trayTemplate@2x.png",
+        "to": "assets/trayTemplate@2x.png"
+      },
       {
         "from": "vendor/openclaw",
         "to": "openclaw"
@@ -79,6 +91,7 @@
       }
     ],
     "mac": {
+      "icon": "assets/icon.icns",
       "category": "public.app-category.productivity",
       "target": [
         "dmg"

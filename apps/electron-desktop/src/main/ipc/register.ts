@@ -59,7 +59,14 @@ export function registerIpcHandlers(params: {
     return { ok: true } as const;
   });
 
-  registerGogIpcHandlers({ gogBin: params.gogBin, openclawDir: params.openclawDir, userData: params.userData });
+  registerGogIpcHandlers({
+    gogBin: params.gogBin,
+    openclawDir: params.openclawDir,
+    userData: params.userData,
+    // Let the gog IPC layer auto-discover the correct staged credentials file. Passing an empty
+    // string also keeps this call compatible with older TS inference in some tooling.
+    gogCredentialsPath: "",
+  });
   registerResetAndCloseIpcHandler({
     userData: params.userData,
     stateDir: params.stateDir,

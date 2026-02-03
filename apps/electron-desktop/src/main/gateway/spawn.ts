@@ -14,9 +14,11 @@ export function spawnGateway(params: {
   openclawDir: string;
   nodeBin: string;
   gogBin?: string;
+  electronRunAsNode?: boolean;
   stderrTail: TailBuffer;
 }): ChildProcess {
-  const { port, logsDir, stateDir, configPath, token, openclawDir, nodeBin, gogBin, stderrTail } = params;
+  const { port, logsDir, stateDir, configPath, token, openclawDir, nodeBin, gogBin, electronRunAsNode, stderrTail } =
+    params;
 
   ensureDir(logsDir);
   ensureDir(stateDir);
@@ -37,9 +39,6 @@ export function spawnGateway(params: {
 
   const env: NodeJS.ProcessEnv = {
     ...process.env,
-    // In dev mode we spawn the Gateway using the Electron binary (process.execPath). That binary
-    // must run in "Node mode" for the child process, otherwise it tries to launch Electron again.
-    ELECTRON_RUN_AS_NODE: "1",
     // Keep all OpenClaw state inside the Electron app's userData directory.
     OPENCLAW_STATE_DIR: stateDir,
     OPENCLAW_CONFIG_PATH: configPath,
@@ -51,6 +50,11 @@ export function spawnGateway(params: {
     NO_COLOR: "1",
     FORCE_COLOR: "0",
   };
+
+  // If we're spawning via Electron, force it into "Node mode" (otherwise it tries to launch a GUI process).
+  if (electronRunAsNode) {
+    env.ELECTRON_RUN_AS_NODE = "1";
+  }
 
   const child = spawn(nodeBin, args, {
     cwd: openclawDir,
