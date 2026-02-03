@@ -5,6 +5,7 @@ import { SettingsPage } from "./SettingsPage";
 import { WelcomePage } from "./WelcomePage";
 import { ConsentScreen, type ConsentDesktopApi } from "./ConsentScreen";
 import { LoadingScreen } from "./LoadingScreen";
+import { Brand, ToolbarButton } from "./kit";
 import { GatewayRpcProvider } from "../gateway/context";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { initGatewayState } from "../store/slices/gatewaySlice";
@@ -15,49 +16,51 @@ import { isBootstrapPath, routes } from "./routes";
 function Topbar() {
   const api = window.openclawDesktop;
   return (
-    <div className="Topbar">
-      <div className="TopbarTitle">Atomic Bot</div>
-      <div className="TopbarActions">
+    <div className="UiAppTopbar">
+      <Brand text="ATOMIC BOT" />
+      <div className="UiAppTopbarNav">
         <NavLink
           to={routes.legacy}
-          className={({ isActive }) => `TopbarLink${isActive ? " TopbarLink-active" : ""}`}
+          className={({ isActive }) => `UiNavLink${isActive ? " UiNavLink-active" : ""}`}
         >
           Legacy
         </NavLink>
         <NavLink
           to={routes.chat}
-          className={({ isActive }) => `TopbarLink${isActive ? " TopbarLink-active" : ""}`}
+          className={({ isActive }) => `UiNavLink${isActive ? " UiNavLink-active" : ""}`}
         >
           Chat
         </NavLink>
         <NavLink
           to={routes.settings}
-          className={({ isActive }) => `TopbarLink${isActive ? " TopbarLink-active" : ""}`}
+          className={({ isActive }) => `UiNavLink${isActive ? " UiNavLink-active" : ""}`}
         >
           Settings
         </NavLink>
-        <button
+      </div>
+      <div className="UiAppTopbarActions">
+        <ToolbarButton
           onClick={() => {
             void api?.openLogs();
           }}
         >
           Open logs
-        </button>
-        <button
+        </ToolbarButton>
+        <ToolbarButton
           onClick={() => {
             void api?.toggleDevTools();
           }}
         >
           DevTools
-        </button>
-        <button
-          className="primary"
+        </ToolbarButton>
+        <ToolbarButton
+          variant="primary"
           onClick={() => {
             void api?.retry();
           }}
         >
           Retry
-        </button>
+        </ToolbarButton>
       </div>
     </div>
   );
@@ -162,6 +165,9 @@ export function App() {
   }, []);
 
   React.useEffect(() => {
+    if (consent !== "accepted") {
+      return;
+    }
     if (!state) {
       return;
     }
@@ -186,7 +192,7 @@ export function App() {
     if (state.kind === "starting") {
       navigate(routes.loading, { replace: true });
     }
-  }, [state, onboarded, navigate, location.pathname]);
+  }, [state, consent, onboarded, navigate, location.pathname]);
 
   if (consent !== "accepted") {
     // While consent is loading, keep showing the splash to avoid a flash of unstyled content.
@@ -197,16 +203,30 @@ export function App() {
       <ConsentScreen
         onAccepted={() => {
           setConsent("accepted");
+          // Avoid getting stuck on /loading when gateway is already ready.
+          if (state?.kind === "ready") {
+            navigate(onboarded ? routes.chat : routes.welcome, { replace: true });
+            return;
+          }
+          if (state?.kind === "failed") {
+            navigate(routes.error, { replace: true });
+            return;
+          }
           navigate(routes.loading, { replace: true });
         }}
       />
     );
   }
 
+  // Render the loading screen outside the App shell so it has no header/topbar.
+  if (location.pathname === routes.loading) {
+    return <LoadingScreen state={state ?? null} />;
+  }
+
   return (
-    <div className="AppShell">
+    <div className="UiAppShell">
       <Topbar />
-      <div className="Page">
+      <div className="UiAppPage">
         {state?.kind === "ready" ? <ReadyRoutes state={state} /> : <BootstrapRoutes state={state} />}
       </div>
     </div>

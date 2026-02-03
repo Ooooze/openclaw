@@ -18,12 +18,27 @@ export const initGatewayState = createAsyncThunk("gateway/initGatewayState", asy
   if (didInit) {
     return;
   }
-  didInit = true;
+  const waitForApi = async (timeoutMs: number) => {
+    const start = Date.now();
+    while (Date.now() - start < timeoutMs) {
+      if (thunkApi.signal.aborted) {
+        return null;
+      }
+      const api = window.openclawDesktop;
+      if (api) {
+        return api;
+      }
+      await new Promise((r) => setTimeout(r, 50));
+    }
+    return window.openclawDesktop ?? null;
+  };
 
-  const api = window.openclawDesktop;
+  const api = await waitForApi(2_000);
   if (!api) {
+    // Do not lock init if preload is not ready yet.
     return;
   }
+  didInit = true;
 
   try {
     const info = await api.getGatewayInfo();
