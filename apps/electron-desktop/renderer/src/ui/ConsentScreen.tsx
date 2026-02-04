@@ -48,9 +48,12 @@ export function ConsentScreen({ onAccepted }: { onAccepted: () => void }) {
       role="dialog"
       aria-label="User agreement"
       title="USER AGREEMENT"
-      subtitle="Please read the following terms before continuing."
+      variant="compact"
+      align="center"
     >
       <GlassCard>
+        <div className="UiSectionTitle">Terms of Use</div>
+        <div className="UiSectionSubtitle">Please read the following terms before continuing.</div>
         <ScrollBox>
           <p>
             This is placeholder text for design iteration. By accepting, you acknowledge that this desktop app may start

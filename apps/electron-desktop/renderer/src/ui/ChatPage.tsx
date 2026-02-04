@@ -1,8 +1,10 @@
 import React from "react";
+import Markdown from "react-markdown";
 import { useGatewayRpc } from "../gateway/context";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { chatActions, extractText, loadChatHistory, sendChatMessage } from "../store/slices/chatSlice";
 import type { GatewayState } from "../../../src/main/types";
+import { ActionButton, InlineError } from "./kit";
 
 type ChatEvent = {
   runId: string;
@@ -16,6 +18,10 @@ type ChatEvent = {
 export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kind: "ready" }> }) {
   const sessionKey = "main";
   const [input, setInput] = React.useState("");
+
+  const logoUrl = React.useMemo(() => {
+    return new URL("../../assets/icon-simple-splash.png", document.baseURI).toString();
+  }, []);
   const dispatch = useAppDispatch();
   const messages = useAppSelector((s) => s.chat.messages);
   const streamByRun = useAppSelector((s) => s.chat.streamByRun);
@@ -80,58 +86,77 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
     void dispatch(sendChatMessage({ request: gw.request, sessionKey, message }));
   }, [dispatch, gw.request, input, sessionKey]);
 
-  return (
-    <div className="ChatShell">
-      {error ? <div className="ChatInlineError">{error}</div> : null}
+  const isEmpty = messages.length === 0 && Object.keys(streamByRun).length === 0;
 
-      <div className="ChatTranscript" ref={scrollRef}>
+  return (
+    <div className="UiChatShell">
+      {error && <InlineError>{error}</InlineError>}
+
+      <div className="UiChatTranscript" ref={scrollRef}>
+        {isEmpty && (
+          <div className="UiChatEmpty">
+            <div className="UiChatEmptyBubble">
+              <img className="UiChatEmptyLogo" src={logoUrl} alt="" aria-hidden="true" />
+            </div>
+            <div className="UiChatEmptyTitle">Start a conversation</div>
+            <div className="UiChatEmptySubtitle">Send a message to begin chatting with the assistant.</div>
+          </div>
+        )}
         {messages.map((m) => (
-          <div key={m.id} className={`ChatRow ChatRow-${m.role}`}>
-            <div className={`ChatBubble ChatBubble-${m.role}`}>
-              <div className="ChatBubbleMeta">
-                <span className="ChatRole">{m.role}</span>
-                {m.pending ? <span className="ChatPending">sending…</span> : null}
+          <div key={m.id} className={`UiChatRow UiChatRow-${m.role}`}>
+            <div className={`UiChatBubble UiChatBubble-${m.role}`}>
+              <div className="UiChatBubbleMeta">
+                <span className="UiChatRole">{m.role}</span>
+                {m.pending && <span className="UiChatPending">sending…</span>}
               </div>
-              <div className="ChatText">{m.text}</div>
+              <div className="UiChatText UiMarkdown">
+                <Markdown>{m.text}</Markdown>
+              </div>
             </div>
           </div>
         ))}
         {Object.values(streamByRun).map((m) => (
-          <div key={m.id} className="ChatRow ChatRow-assistant">
-            <div className="ChatBubble ChatBubble-assistant ChatBubble-stream">
-              <div className="ChatBubbleMeta">
-                <span className="ChatRole">assistant</span>
-                <span className="ChatPending">
-                  <span className="ChatTypingDots" aria-label="typing">
+          <div key={m.id} className="UiChatRow UiChatRow-assistant">
+            <div className="UiChatBubble UiChatBubble-assistant UiChatBubble-stream">
+              <div className="UiChatBubbleMeta">
+                <span className="UiChatRole">assistant</span>
+                <span className="UiChatPending">
+                  <span className="UiChatTypingDots" aria-label="typing">
                     <span />
                     <span />
                     <span />
                   </span>
                 </span>
               </div>
-              {m.text ? <div className="ChatText">{m.text}</div> : null}
+              {m.text ? (
+                <div className="UiChatText UiMarkdown">
+                  <Markdown>{m.text}</Markdown>
+                </div>
+              ) : null}
             </div>
           </div>
         ))}
       </div>
 
-      <div className="ChatComposer">
-        <textarea
-          className="ChatInput"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Write a message…"
-          rows={2}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              send();
-            }
-          }}
-        />
-        <button className="primary" onClick={send} disabled={sending || !input.trim()}>
-          {sending ? "Sending…" : "Send"}
-        </button>
+      <div className="UiChatComposer">
+        <div className="UiChatComposerInner">
+          <textarea
+            className="UiChatInput"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Write a message…"
+            rows={2}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                send();
+              }
+            }}
+          />
+          <ActionButton variant="primary" onClick={send} disabled={sending || !input.trim()}>
+            {sending ? "Sending…" : "Send"}
+          </ActionButton>
+        </div>
       </div>
     </div>
   );

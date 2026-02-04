@@ -23,6 +23,13 @@ export function Brand({
   );
 }
 
+// Resolve brand icon relative to renderer's index.html (renderer/dist/index.html -> ../../assets/)
+function useBrandIconUrl(): string {
+  return React.useMemo(() => {
+    return new URL("../../assets/icon-simple-splash.png", document.baseURI).toString();
+  }, []);
+}
+
 export function HeroPageLayout(props: {
   title?: string;
   subtitle?: string;
@@ -31,16 +38,21 @@ export function HeroPageLayout(props: {
   "aria-label"?: string;
   align?: "start" | "center";
   variant?: "default" | "compact";
+  hideTopbar?: boolean;
 }) {
   const { title, subtitle, children, role = "main" } = props;
   const align = props.align ?? "start";
   const variant = props.variant ?? "default";
+  const hideTopbar = props.hideTopbar ?? false;
+  const brandIconUrl = useBrandIconUrl();
   const heroClassName = `UiHero UiHero-align-${align}${variant === "compact" ? " UiHero-compact" : ""}`;
   return (
     <div className="UiHeroShell" role={role} aria-label={props["aria-label"]}>
-      <div className="UiHeroTopbar">
-        <Brand />
-      </div>
+      {!hideTopbar && (
+        <div className="UiHeroTopbar">
+          <Brand iconSrc={brandIconUrl} />
+        </div>
+      )}
 
       <div className={heroClassName}>
         {title ? <div className="UiHeroTitle">{title}</div> : null}

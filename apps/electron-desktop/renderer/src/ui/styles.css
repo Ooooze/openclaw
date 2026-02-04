@@ -154,6 +154,8 @@ button:disabled {
 }
 
 .GatewaySplashDots {
+  display: inline-flex;
+  align-items: center;
   height: 14px;
   gap: 7px;
   margin-top: 14px;
@@ -162,7 +164,18 @@ button:disabled {
 .GatewaySplashDots span {
   width: 9px;
   height: 9px;
+  border-radius: 999px;
   background: rgba(230, 237, 243, 0.78);
+  display: inline-block;
+  animation: chatTypingBounce 1.1s infinite ease-in-out;
+}
+
+.GatewaySplashDots span:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.GatewaySplashDots span:nth-child(3) {
+  animation-delay: 0.24s;
 }
 
 @keyframes gatewaySplashSpin {
@@ -397,7 +410,8 @@ button:disabled {
 }
 
 .UiHero-align-center {
-  place-items: center;
+  place-items: start center;
+  padding-top: 10vh;
 }
 
 .UiHero-align-start {
@@ -509,6 +523,7 @@ button:disabled {
 
 .UiInput {
   width: 100%;
+  box-sizing: border-box;
   border-radius: 12px;
   border: 1px solid rgba(230, 237, 243, 0.16);
   background: rgba(230, 237, 243, 0.06);
@@ -1058,3 +1073,732 @@ pre {
   background: #0b0f14;
 }
 
+/* Provider selection styles */
+.UiProviderList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.UiProviderOption {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.UiProviderOption:hover {
+  border-color: rgba(255, 255, 255, 0.24);
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.UiProviderOption--selected {
+  border-color: var(--accent-color, #a3e635);
+  background-color: rgba(163, 230, 53, 0.06);
+}
+
+.UiProviderRadio {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  margin: 2px 0 0 0;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.UiProviderRadio:checked {
+  border-color: var(--accent-color, #a3e635);
+  background: radial-gradient(circle, var(--accent-color, #a3e635) 40%, transparent 45%);
+}
+
+.UiProviderContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.UiProviderHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.UiProviderName {
+  font-weight: 600;
+  font-size: 14px;
+  color: #fff;
+}
+
+.UiProviderBadge {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background-color: var(--accent-color, #a3e635);
+  color: #0b0f14;
+}
+
+.UiProviderDescription {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.4;
+}
+
+/* Link styles */
+.UiLink {
+  color: var(--accent-color, #a3e635);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.UiLink:hover {
+  text-decoration: underline;
+}
+
+/* Model selection styles */
+.UiModelList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 16px 0;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.UiModelGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.UiModelGroupTitle {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 0 4px;
+}
+
+.UiModelOption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.UiModelOption:hover {
+  border-color: rgba(255, 255, 255, 0.24);
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.UiModelOption--selected {
+  border-color: var(--accent-color, #a3e635);
+  background-color: rgba(163, 230, 53, 0.06);
+}
+
+.UiModelRadio {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  margin: 0;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.UiModelRadio:checked {
+  border-color: var(--accent-color, #a3e635);
+  background: radial-gradient(circle, var(--accent-color, #a3e635) 40%, transparent 45%);
+}
+
+.UiModelContent {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  gap: 4px;
+}
+
+.UiModelName {
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.UiModelHints {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.UiModelHint {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.UiModelNameRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  min-width: 0;
+}
+
+.UiModelTier {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 0;
+  border-radius: 4px;
+  background-color: var(--accent-color, #a3e635);
+  color: #0b0f14;
+  flex-shrink: 0;
+  width: 46px;
+  text-align: center;
+}
+
+.UiSectionTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.UiTierHelp {
+  position: relative;
+  display: inline-flex;
+}
+
+.UiTierHelpIcon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: help;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.UiTierHelp:hover .UiTierHelpIcon {
+  border-color: var(--accent-color, #a3e635);
+  color: var(--accent-color, #a3e635);
+}
+
+.UiTierHelpTooltip {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 8px;
+  background: rgba(20, 24, 28, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 12px;
+  width: 280px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s, visibility 0.15s;
+}
+
+.UiTierHelp:hover .UiTierHelpTooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.UiTierHelpItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.4;
+}
+
+.UiTierHelpItem:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.UiTierHelpItem:first-child {
+  padding-top: 0;
+}
+
+.UiTierHelpItem .UiModelTier {
+  flex-shrink: 0;
+}
+
+/* Settings page styles */
+.UiSettingsSection {
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(230, 237, 243, 0.08);
+}
+
+.UiSettingsSection:first-of-type {
+  padding-top: 0;
+}
+
+.UiSettingsSection:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.UiSettingsSection--danger {
+  border-top: 1px solid rgba(255, 122, 0, 0.25);
+  margin-top: 8px;
+  padding-top: 20px;
+}
+
+.UiSettingsSection--danger .UiSectionTitle {
+  color: rgba(255, 122, 0, 0.95);
+}
+
+.UiSettingsSubsection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(230, 237, 243, 0.08);
+}
+
+.UiInputRow {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.UiInputRow .UiInput {
+  flex: 1 1 auto;
+}
+
+/* New Chat UI styles */
+.UiChatShell {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(900px 520px at 50% 28%, rgba(194, 255, 64, 0.06), transparent 58%),
+    radial-gradient(900px 520px at 50% 80%, rgba(194, 255, 64, 0.03), transparent 62%),
+    var(--bg);
+}
+
+.UiChatTranscript {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.UiChatTranscriptInner {
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.UiChatEmpty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  padding: 40px 20px;
+  animation: gatewaySplashEnter 260ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+}
+
+.UiChatEmptyBubble {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(145deg, rgba(255, 140, 50, 0.12), rgba(255, 100, 20, 0.06));
+  border-radius: 28px 28px 28px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    0 0 24px rgba(255, 122, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 140, 80, 0.12);
+}
+
+.UiChatEmptyLogo {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+}
+
+.UiChatEmptyTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: rgba(230, 237, 243, 0.92);
+}
+
+.UiChatEmptySubtitle {
+  font-size: 13px;
+  color: rgba(230, 237, 243, 0.55);
+  max-width: 280px;
+}
+
+.UiChatRow {
+  display: flex;
+  margin: 8px 0;
+  padding: 0 24px;
+  animation: uiChatBubbleEnter 180ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+}
+
+.UiChatRow:first-child {
+  margin-top: 0;
+}
+
+@keyframes uiChatBubbleEnter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.UiChatRow-user {
+  justify-content: flex-end;
+}
+
+.UiChatRow-assistant,
+.UiChatRow-system,
+.UiChatRow-unknown {
+  justify-content: flex-start;
+}
+
+.UiChatBubble {
+  max-width: min(600px, 80%);
+  border-radius: 18px;
+  border: none;
+  background: rgba(230, 237, 243, 0.06);
+  padding: 14px 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.UiChatBubble-user {
+  background: rgba(194, 255, 64, 0.18);
+}
+
+.UiChatBubble-assistant {
+  background: rgba(230, 237, 243, 0.06);
+}
+
+.UiChatBubble-stream {
+  opacity: 0.85;
+}
+
+.UiChatBubbleMeta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.UiChatRole {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: rgba(230, 237, 243, 0.50);
+}
+
+.UiChatBubble-user .UiChatRole {
+  color: var(--lime);
+}
+
+.UiChatPending {
+  font-size: 10px;
+  color: rgba(230, 237, 243, 0.45);
+}
+
+.UiChatTypingDots {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 10px;
+}
+
+.UiChatTypingDots span {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--lime);
+  display: inline-block;
+  animation: uiChatTypingBounce 1.1s infinite ease-in-out;
+}
+
+.UiChatTypingDots span:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.UiChatTypingDots span:nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+@keyframes uiChatTypingBounce {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.45;
+  }
+  40% {
+    transform: translateY(-3px);
+    opacity: 0.95;
+  }
+}
+
+.UiChatText {
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.6;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.UiChatBubble-user .UiChatText {
+  color: #fff;
+}
+
+/* Markdown styles */
+.UiMarkdown {
+  white-space: normal;
+}
+
+.UiMarkdown p {
+  margin: 0 0 12px;
+}
+
+.UiMarkdown p:last-child {
+  margin-bottom: 0;
+}
+
+.UiMarkdown h1,
+.UiMarkdown h2,
+.UiMarkdown h3,
+.UiMarkdown h4,
+.UiMarkdown h5,
+.UiMarkdown h6 {
+  margin: 16px 0 8px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.UiMarkdown h1:first-child,
+.UiMarkdown h2:first-child,
+.UiMarkdown h3:first-child {
+  margin-top: 0;
+}
+
+.UiMarkdown h1 {
+  font-size: 1.4em;
+}
+
+.UiMarkdown h2 {
+  font-size: 1.25em;
+}
+
+.UiMarkdown h3 {
+  font-size: 1.1em;
+}
+
+.UiMarkdown ul,
+.UiMarkdown ol {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.UiMarkdown li {
+  margin: 4px 0;
+}
+
+.UiMarkdown code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.UiMarkdown pre {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.35);
+  overflow-x: auto;
+}
+
+.UiMarkdown pre code {
+  background: none;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.UiMarkdown blockquote {
+  margin: 12px 0;
+  padding: 8px 14px;
+  border-left: 3px solid var(--lime);
+  background: rgba(194, 255, 64, 0.06);
+  border-radius: 0 8px 8px 0;
+}
+
+.UiMarkdown blockquote p {
+  margin: 0;
+}
+
+.UiMarkdown a {
+  color: var(--lime);
+  text-decoration: none;
+}
+
+.UiMarkdown a:hover {
+  text-decoration: underline;
+}
+
+.UiMarkdown hr {
+  border: none;
+  border-top: 1px solid rgba(230, 237, 243, 0.15);
+  margin: 16px 0;
+}
+
+.UiMarkdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 13px;
+}
+
+.UiMarkdown th,
+.UiMarkdown td {
+  padding: 8px 10px;
+  border: 1px solid rgba(230, 237, 243, 0.12);
+  text-align: left;
+}
+
+.UiMarkdown th {
+  background: rgba(230, 237, 243, 0.06);
+  font-weight: 600;
+}
+
+.UiMarkdown strong {
+  font-weight: 700;
+}
+
+.UiMarkdown em {
+  font-style: italic;
+}
+
+.UiChatComposer {
+  padding: 16px 24px 20px;
+}
+
+.UiChatComposerInner {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.UiChatInput {
+  flex: 1 1 auto;
+  resize: none;
+  border-radius: 14px;
+  border: 1px solid rgba(230, 237, 243, 0.14);
+  background: rgba(230, 237, 243, 0.06);
+  color: var(--text);
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 48px;
+  max-height: 180px;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease;
+}
+
+.UiChatInput:focus {
+  outline: none;
+  border-color: rgba(194, 255, 64, 0.35);
+  background: rgba(230, 237, 243, 0.08);
+}
+
+.UiChatInput::placeholder {
+  color: rgba(230, 237, 243, 0.35);
+}
+
+.UiChatComposerInner .UiActionButton {
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .UiChatRow {
+    animation: none;
+  }
+  .UiChatEmpty {
+    animation: none;
+  }
+  .UiChatTypingDots span {
+    animation: none;
+  }
+}

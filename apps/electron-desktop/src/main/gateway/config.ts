@@ -39,6 +39,11 @@ export function ensureGatewayConfigFile(params: { configPath: string; token: str
         token: params.token,
       },
     },
+    // Enable debug logging by default to help diagnose provider/model errors.
+    logging: {
+      level: "debug",
+      consoleLevel: "debug",
+    },
   };
   // Write JSON (JSON5-compatible) to keep it simple and deterministic.
   fs.writeFileSync(params.configPath, `${JSON.stringify(minimal, null, 2)}\n`, "utf-8");

@@ -69,9 +69,13 @@ export function registerIpcHandlers(params: {
     app.exit(0);
   });
 
-  ipcMain.handle("auth-set-anthropic-api-key", async (_evt, p: { apiKey?: unknown }) => {
+  ipcMain.handle("auth-set-api-key", async (_evt, p: { provider?: unknown; apiKey?: unknown }) => {
+    const provider = typeof p?.provider === "string" ? p.provider.trim() : "";
     const apiKey = typeof p?.apiKey === "string" ? p.apiKey : "";
-    upsertApiKeyProfile({ stateDir: params.stateDir, provider: "anthropic", key: apiKey, profileName: "default" });
+    if (!provider) {
+      throw new Error("provider is required");
+    }
+    upsertApiKeyProfile({ stateDir: params.stateDir, provider, key: apiKey, profileName: "default" });
     return { ok: true } as const;
   });
 

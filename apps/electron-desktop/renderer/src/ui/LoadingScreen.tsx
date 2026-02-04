@@ -13,7 +13,7 @@ export function LoadingScreen({ state: _state }: { state: GatewayState | null })
       <div className="GatewaySplashInner">
         <img className="GatewaySplashLogo" src={splashLogoUrl} alt="" aria-hidden="true" />
 
-        <div className="ChatTypingDots GatewaySplashDots" aria-hidden="true">
+        <div className="GatewaySplashDots" aria-hidden="true">
           <span />
           <span />
           <span />

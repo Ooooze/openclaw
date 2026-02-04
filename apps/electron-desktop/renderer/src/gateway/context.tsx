@@ -66,8 +66,8 @@ export function GatewayRpcProvider({
         for (const listener of listenersRef.current) {
           try {
             listener(evt as GatewayEventFrame);
-          } catch {
-            // ignore
+          } catch (err) {
+            console.error("[GatewayRpc] Event listener error:", err, "Event:", evt.event);
           }
         }
       },

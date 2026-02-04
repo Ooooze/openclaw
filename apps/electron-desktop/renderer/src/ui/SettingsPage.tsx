@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { reloadConfig } from "../store/slices/configSlice";
 import type { ConfigSnapshot } from "../store/slices/configSlice";
 import type { GatewayState } from "../../../src/main/types";
+import { ActionButton, ButtonRow, GlassCard, HeroPageLayout, InlineError, TextInput } from "./kit";
 
 type GogExecResult = {
   ok: boolean;
@@ -270,7 +271,7 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
       if (!key) {
         throw new Error("Anthropic API key is required.");
       }
-      await window.openclawDesktop?.setAnthropicApiKey(key);
+      await window.openclawDesktop?.setApiKey("anthropic", key);
 
       // Ensure the config references the default profile id (does not store the secret).
       const baseHash =
@@ -387,19 +388,14 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
   }, [gw, reload]);
 
   return (
-    <div className="Centered" style={{ alignItems: "stretch", padding: 12 }}>
-      <div className="Card" style={{ width: "min(980px, 96vw)" }}>
-        <div className="CardTitle">Settings</div>
+    <HeroPageLayout title="SETTINGS" variant="compact" align="center" aria-label="Settings page" hideTopbar>
+      <GlassCard size="wide">
+        {error && <InlineError>{error}</InlineError>}
 
-        {error ? (
-          <div className="CardSubtitle" style={{ color: "rgba(255, 122, 0, 0.95)" }}>
-            {error}
-          </div>
-        ) : null}
-
-        <div style={{ marginTop: 14 }}>
-          <div className="CardTitle">Config</div>
-          <div className="CardSubtitle" style={{ marginTop: 6 }}>
+        {/* Config Section */}
+        <section className="UiSettingsSection">
+          <div className="UiSectionTitle">Config</div>
+          <div className="UiSectionSubtitle">
             {configSnap?.path ? (
               <>
                 Path: <code>{configSnap.path}</code>
@@ -408,143 +404,110 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
               <>Path: —</>
             )}
           </div>
-          <div className="Meta" style={{ marginTop: 10 }}>
-            <div className="Pill">
-              exists: {configSnap ? (configSnap.exists === false ? "no" : "yes") : "—"}
-            </div>
-            <div className="Pill">
-              valid: {configSnap ? (configSnap.valid === false ? "no" : "yes") : "—"}
-            </div>
-            <button
-              className="primary"
+          <div className="UiMetaRow">
+            <span className="UiPill">exists: {configSnap ? (configSnap.exists === false ? "no" : "yes") : "—"}</span>
+            <span className="UiPill">valid: {configSnap ? (configSnap.valid === false ? "no" : "yes") : "—"}</span>
+          </div>
+          <ButtonRow>
+            <ActionButton
+              variant="primary"
               onClick={() => void seedOnboardingDefaults()}
               disabled={configActionStatus === "seeding"}
             >
               {configActionStatus === "seeding" ? "Seeding…" : "Ensure onboarding defaults"}
-            </button>
-            {configSnap?.exists === false ? (
-              <button onClick={() => void createConfigFile()} disabled={configActionStatus === "creating"}>
+            </ActionButton>
+            {configSnap?.exists === false && (
+              <ActionButton onClick={() => void createConfigFile()} disabled={configActionStatus === "creating"}>
                 {configActionStatus === "creating" ? "Creating…" : "Create minimal config"}
-              </button>
-            ) : null}
-          </div>
-          <div className="CardSubtitle" style={{ marginTop: 8, opacity: 0.8 }}>
+              </ActionButton>
+            )}
+          </ButtonRow>
+          <div className="UiSectionSubtitle" style={{ marginTop: 8 }}>
             Ensures missing onboarding defaults are present (currently: embedded gateway + workspace). It will not
             overwrite non-empty values.
           </div>
-        </div>
+        </section>
 
-        <div style={{ marginTop: 14 }}>
-          <div className="CardTitle">Telegram</div>
-          <div className="CardSubtitle" style={{ marginTop: 6 }}>
+        {/* Telegram Section */}
+        <section className="UiSettingsSection">
+          <div className="UiSectionTitle">Telegram</div>
+          <div className="UiSectionSubtitle">
             Stored in <code>openclaw.json</code> as <code>channels.telegram.botToken</code>.
           </div>
-          <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
-            <input
+          <div className="UiInputRow">
+            <TextInput
               type="password"
               value={telegramToken}
-              onChange={(e) => setTelegramToken(e.target.value)}
+              onChange={setTelegramToken}
               placeholder="123456:ABCDEF"
               autoCapitalize="none"
               autoCorrect="off"
               spellCheck={false}
-              style={{
-                width: "100%",
-                borderRadius: 10,
-                border: "1px solid rgba(230,237,243,0.16)",
-                background: "rgba(230,237,243,0.06)",
-                color: "var(--text)",
-                padding: "8px 10px",
-              }}
             />
-            <button onClick={() => void pasteFromClipboard("telegram")}>Paste</button>
-            <button className="primary" onClick={() => void saveTelegram()}>
+            <ActionButton onClick={() => void pasteFromClipboard("telegram")}>Paste</ActionButton>
+            <ActionButton variant="primary" onClick={() => void saveTelegram()}>
               Save
-            </button>
+            </ActionButton>
           </div>
-        </div>
+        </section>
 
-        <div style={{ marginTop: 18 }}>
-          <div className="CardTitle">Anthropic</div>
-          <div className="CardSubtitle" style={{ marginTop: 6 }}>
+        {/* Anthropic Section */}
+        <section className="UiSettingsSection">
+          <div className="UiSectionTitle">Anthropic</div>
+          <div className="UiSectionSubtitle">
             Stored in <code>auth-profiles.json</code> (not in <code>openclaw.json</code>).
           </div>
-          <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
-            <input
+          <div className="UiInputRow">
+            <TextInput
               type="password"
               value={anthropicKey}
-              onChange={(e) => setAnthropicKey(e.target.value)}
+              onChange={setAnthropicKey}
               placeholder="Anthropic API key"
               autoCapitalize="none"
               autoCorrect="off"
               spellCheck={false}
-              style={{
-                width: "100%",
-                borderRadius: 10,
-                border: "1px solid rgba(230,237,243,0.16)",
-                background: "rgba(230,237,243,0.06)",
-                color: "var(--text)",
-                padding: "8px 10px",
-              }}
             />
-            <button onClick={() => void pasteFromClipboard("anthropic")}>Paste</button>
-            <button className="primary" onClick={() => void saveAnthropic()}>
+            <ActionButton onClick={() => void pasteFromClipboard("anthropic")}>Paste</ActionButton>
+            <ActionButton variant="primary" onClick={() => void saveAnthropic()}>
               Save
-            </button>
+            </ActionButton>
           </div>
-          <div className="CardSubtitle" style={{ marginTop: 8, opacity: 0.8 }}>
-            Note: this writes the key locally and sets config metadata + default model. It does not
-            expose the key to the Gateway config file. Default model will be set to{" "}
-            <code>{DEFAULT_ANTHROPIC_MODEL}</code>.
+          <div className="UiSectionSubtitle" style={{ marginTop: 8 }}>
+            Note: this writes the key locally and sets config metadata + default model. It does not expose the key to
+            the Gateway config file. Default model will be set to <code>{DEFAULT_ANTHROPIC_MODEL}</code>.
           </div>
-        </div>
+        </section>
 
-        <div style={{ marginTop: 18 }}>
-          <div className="CardTitle">gog (Gmail hooks)</div>
-          <div className="CardSubtitle" style={{ marginTop: 6 }}>
-            Configures <code>gogcli</code> locally via the embedded <code>gog</code> binary (OAuth
-            credentials + account). This does not write secrets into <code>openclaw.json</code>.
+        {/* gog (Gmail hooks) Section */}
+        <section className="UiSettingsSection">
+          <div className="UiSectionTitle">gog (Gmail hooks)</div>
+          <div className="UiSectionSubtitle">
+            Configures <code>gogcli</code> locally via the embedded <code>gog</code> binary (OAuth credentials +
+            account). This does not write secrets into <code>openclaw.json</code>.
             <br />
-            By default, the Desktop app auto-configures OAuth client credentials on startup. Upload
-            is not required.
+            By default, the Desktop app auto-configures OAuth client credentials on startup. Upload is not required.
           </div>
+          {gogError && <InlineError>{gogError}</InlineError>}
 
-          {gogError ? (
-            <div className="CardSubtitle" style={{ color: "rgba(255, 122, 0, 0.95)" }}>
-              {gogError}
+          <div className="UiSettingsSubsection">
+            <div className="UiSectionSubtitle" style={{ margin: 0 }}>
+              1) Add an account
             </div>
-          ) : null}
-
-          <div style={{ display: "grid", gap: 10, marginTop: 10 }}>
-            <div style={{ display: "grid", gap: 6 }}>
-              <div className="CardSubtitle" style={{ margin: 0, opacity: 0.85 }}>
-                1) Add an account
-              </div>
-              <div style={{ display: "flex", gap: 10 }}>
-                <input
-                  type="text"
-                  value={gogAccount}
-                  onChange={(e) => setGogAccount(e.target.value)}
-                  placeholder="you@gmail.com"
-                  autoCapitalize="none"
-                  autoCorrect="off"
-                  spellCheck={false}
-                  style={{
-                    width: "100%",
-                    borderRadius: 10,
-                    border: "1px solid rgba(230,237,243,0.16)",
-                    background: "rgba(230,237,243,0.06)",
-                    color: "var(--text)",
-                    padding: "8px 10px",
-                  }}
-                />
-              </div>
-              <div className="CardSubtitle" style={{ margin: 0, opacity: 0.75 }}>
-                Services are passed as <code>--services</code> (comma-separated). Using:{" "}
-                <code>{gogServices}</code>.
-              </div>
-              <button
-                className="primary"
+            <TextInput
+              type="text"
+              value={gogAccount}
+              onChange={setGogAccount}
+              placeholder="you@gmail.com"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
+            />
+            <div className="UiSectionSubtitle" style={{ margin: 0 }}>
+              Services are passed as <code>--services</code> (comma-separated). Using: <code>{gogServices}</code>.
+            </div>
+            <ButtonRow>
+              <ActionButton
+                variant="primary"
                 disabled={gogBusy || !gogAccount.trim()}
                 onClick={() =>
                   void runGog(async () => {
@@ -565,14 +528,16 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
                 }
               >
                 {gogBusy ? "Running…" : "Run gog auth add"}
-              </button>
-            </div>
+              </ActionButton>
+            </ButtonRow>
+          </div>
 
-            <div style={{ display: "grid", gap: 6 }}>
-              <div className="CardSubtitle" style={{ margin: 0, opacity: 0.85 }}>
-                2) Verify
-              </div>
-              <button
+          <div className="UiSettingsSubsection">
+            <div className="UiSectionSubtitle" style={{ margin: 0 }}>
+              2) Verify
+            </div>
+            <ButtonRow>
+              <ActionButton
                 disabled={gogBusy}
                 onClick={() =>
                   void runGog(async () => {
@@ -585,29 +550,28 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
                 }
               >
                 {gogBusy ? "Running…" : "Run gog auth list"}
-              </button>
-            </div>
-
-            {gogOutput ? (
-              <pre style={{ marginTop: 6, whiteSpace: "pre-wrap" }}>{gogOutput}</pre>
-            ) : null}
+              </ActionButton>
+            </ButtonRow>
           </div>
-        </div>
 
-        <div style={{ marginTop: 18 }}>
-          <div className="CardTitle">Danger zone</div>
-          <div className="CardSubtitle" style={{ marginTop: 6 }}>
-            This will wipe the app's local state and remove all <code>gog</code> authorizations.
-            The app will then close.
+          {gogOutput && <pre>{gogOutput}</pre>}
+        </section>
+
+        {/* Danger Zone */}
+        <section className="UiSettingsSection UiSettingsSection--danger">
+          <div className="UiSectionTitle">Danger zone</div>
+          <div className="UiSectionSubtitle">
+            This will wipe the app's local state and remove all <code>gog</code> authorizations. The app will then
+            close.
           </div>
-          <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
-            <button className="primary" disabled={resetBusy} onClick={() => void resetAndClose()}>
+          <ButtonRow>
+            <ActionButton variant="primary" disabled={resetBusy} onClick={() => void resetAndClose()}>
               {resetBusy ? "Resetting…" : "Reset and close"}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+            </ActionButton>
+          </ButtonRow>
+        </section>
+      </GlassCard>
+    </HeroPageLayout>
   );
 }
 

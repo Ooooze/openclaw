@@ -136,6 +136,12 @@ export const sendChatMessage = createAsyncThunk(
       });
       thunkApi.dispatch(chatActions.markUserMessageDelivered({ localId }));
     } catch (err) {
+      console.error("[Chat] sendChatMessage failed:", {
+        error: err,
+        sessionKey,
+        runId,
+        message: message.slice(0, 100),
+      });
       thunkApi.dispatch(chatActions.markUserMessageDelivered({ localId }));
       thunkApi.dispatch(chatActions.streamCleared({ runId }));
       thunkApi.dispatch(chatActions.setError(String(err)));

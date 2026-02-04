@@ -6,9 +6,11 @@ import { setOnboarded } from "../store/slices/onboardingSlice";
 import { ActionButton, ButtonRow, GlassCard, HeroPageLayout, InlineError, PrimaryButton, TextInput } from "./kit";
 import type { GatewayState } from "../../../src/main/types";
 import { routes } from "./routes";
-import { AnthropicPage } from "./onboarding/AnthropicPage";
+import { ApiKeyPage } from "./onboarding/ApiKeyPage";
 import { GogPage } from "./onboarding/GogPage";
 import { IntroPage } from "./onboarding/IntroPage";
+import { ModelSelectPage, type ModelEntry } from "./onboarding/ModelSelectPage";
+import { ProviderSelectPage, type Provider } from "./onboarding/ProviderSelectPage";
 import { TelegramTokenPage } from "./onboarding/TelegramTokenPage";
 import { TelegramUserPage } from "./onboarding/TelegramUserPage";
 
@@ -31,7 +33,16 @@ type GogExecResult = {
   stderr: string;
 };
 
-const DEFAULT_ANTHROPIC_MODEL = "anthropic/claude-sonnet-4-5";
+type ModelsListResult = {
+  models?: Array<{
+    id: string;
+    name?: string;
+    provider: string;
+    contextWindow?: number;
+    reasoning?: boolean;
+  }>;
+};
+
 const DEFAULT_GOG_SERVICES = "gmail,calendar,drive,docs,sheets,contacts";
 
 function inferWorkspaceDirFromConfigPath(configPath: string | undefined): string {
@@ -76,13 +87,17 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
   const [status, setStatus] = React.useState<string | null>(null);
   const [error, setError] = React.useState<string | null>(null);
 
-  const [anthropicKey, setAnthropicKey] = React.useState("");
   const [telegramToken, setTelegramToken] = React.useState("");
   const [telegramUserId, setTelegramUserId] = React.useState("");
   const [gogAccount, setGogAccount] = React.useState("");
   const [gogBusy, setGogBusy] = React.useState(false);
   const [gogError, setGogError] = React.useState<string | null>(null);
   const [gogOutput, setGogOutput] = React.useState<string | null>(null);
+  const [selectedProvider, setSelectedProvider] = React.useState<Provider | null>(null);
+  const [apiKeyBusy, setApiKeyBusy] = React.useState(false);
+  const [models, setModels] = React.useState<ModelEntry[]>([]);
+  const [modelsLoading, setModelsLoading] = React.useState(false);
+  const [modelsError, setModelsError] = React.useState<string | null>(null);
 
   const [configPath, setConfigPath] = React.useState<string | null>(null);
   const [channelsProbe, setChannelsProbe] = React.useState<ChannelsStatusResult | null>(null);
@@ -171,52 +186,101 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
     setStatus("Config updated.");
   }, [gw, loadConfig, state.port, state.token]);
 
-  const saveAnthropic = React.useCallback(async (): Promise<boolean> => {
-    const key = anthropicKey.trim();
-    if (!key) {
-      setError("Anthropic API key is required.");
-      return false;
-    }
-    setError(null);
-    setStatus("Saving Anthropic API key…");
-    await window.openclawDesktop?.setAnthropicApiKey(key);
-    const snap = await loadConfig();
-    const baseHash = typeof snap.hash === "string" && snap.hash.trim() ? snap.hash.trim() : null;
-    if (!baseHash) {
-      throw new Error("Config base hash missing. Reload and try again.");
-    }
-    await gw.request("config.patch", {
-      baseHash,
-      raw: JSON.stringify(
-        {
-          auth: {
-            profiles: {
-              "anthropic:default": { provider: "anthropic", mode: "api_key" },
-            },
-            order: {
-              anthropic: ["anthropic:default"],
-            },
-          },
-          agents: {
-            defaults: {
-              model: {
-                primary: DEFAULT_ANTHROPIC_MODEL,
+  const saveApiKey = React.useCallback(
+    async (provider: Provider, apiKey: string): Promise<boolean> => {
+      if (!apiKey.trim()) {
+        setError("API key is required.");
+        return false;
+      }
+      setError(null);
+      setStatus(`Saving ${provider} API key…`);
+      await window.openclawDesktop?.setApiKey(provider, apiKey.trim());
+
+      // Update config with auth profile
+      const snap = await loadConfig();
+      const baseHash = typeof snap.hash === "string" && snap.hash.trim() ? snap.hash.trim() : null;
+      if (!baseHash) {
+        throw new Error("Config base hash missing. Reload and try again.");
+      }
+      const profileId = `${provider}:default`;
+      await gw.request("config.patch", {
+        baseHash,
+        raw: JSON.stringify(
+          {
+            auth: {
+              profiles: {
+                [profileId]: { provider, mode: "api_key" },
               },
-              models: {
-                [DEFAULT_ANTHROPIC_MODEL]: {},
+              order: {
+                [provider]: [profileId],
               },
             },
           },
-        },
-        null,
-        2,
-      ),
-      note: "Welcome: enable Anthropic api_key profile + default model",
-    });
-    setAnthropicKey("");
-    setStatus("Anthropic configured.");
-    return true;
-  }, [anthropicKey, gw, loadConfig]);
+          null,
+          2,
+        ),
+        note: `Welcome: enable ${provider} api_key profile`,
+      });
+      setStatus(`${provider} API key saved.`);
+      return true;
+    },
+    [gw, loadConfig],
+  );
+
+  const loadModels = React.useCallback(async () => {
+    setModelsLoading(true);
+    setModelsError(null);
+    try {
+      const result = (await gw.request("models.list", {})) as ModelsListResult;
+      const entries: ModelEntry[] = (result.models ?? []).map((m) => ({
+        id: m.id,
+        name: m.name ?? m.id,
+        provider: m.provider,
+        contextWindow: m.contextWindow,
+        reasoning: m.reasoning,
+      }));
+      setModels(entries);
+    } catch (err) {
+      setModelsError(String(err));
+    } finally {
+      setModelsLoading(false);
+    }
+  }, [gw]);
+
+  const saveDefaultModel = React.useCallback(
+    async (modelId: string): Promise<boolean> => {
+      setError(null);
+      setStatus("Setting default model…");
+      const snap = await loadConfig();
+      const baseHash = typeof snap.hash === "string" && snap.hash.trim() ? snap.hash.trim() : null;
+      if (!baseHash) {
+        throw new Error("Config base hash missing. Reload and try again.");
+      }
+      await gw.request("config.patch", {
+        baseHash,
+        raw: JSON.stringify(
+          {
+            agents: {
+              defaults: {
+                model: {
+                  primary: modelId,
+                },
+                models: {
+                  [modelId]: {},
+                },
+              },
+            },
+          },
+          null,
+          2,
+        ),
+        note: "Welcome: set default model",
+      });
+      setStatus("Default model configured.");
+      return true;
+    },
+    [gw, loadConfig],
+  );
 
   const saveTelegramToken = React.useCallback(async (): Promise<boolean> => {
     const token = telegramToken.trim();
@@ -377,7 +441,7 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
     setStartBusy(true);
     try {
       await ensureExtendedConfig();
-      navigate(`${routes.welcome}/anthropic`);
+      navigate(`${routes.welcome}/provider-select`);
     } catch (err) {
       setError(String(err));
     } finally {
@@ -385,23 +449,56 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
     }
   }, [ensureExtendedConfig, navigate]);
 
+  const goApiKey = React.useCallback(() => navigate(`${routes.welcome}/api-key`), [navigate]);
+  const goModelSelect = React.useCallback(() => navigate(`${routes.welcome}/model-select`), [navigate]);
   const goTelegramToken = React.useCallback(() => navigate(`${routes.welcome}/telegram-token`), [navigate]);
   const goTelegramUser = React.useCallback(() => navigate(`${routes.welcome}/telegram-user`), [navigate]);
   const goGog = React.useCallback(() => navigate(`${routes.welcome}/gog`), [navigate]);
+  const goProviderSelect = React.useCallback(() => navigate(`${routes.welcome}/provider-select`), [navigate]);
 
-  const onAnthropicNext = React.useCallback(async () => {
-    setError(null);
-    setStatus(null);
-    try {
-      const ok = await saveAnthropic();
-      if (ok) {
-        goTelegramToken();
-      }
-    } catch (err) {
-      setError(String(err));
+  const onProviderSelect = React.useCallback(
+    (provider: Provider) => {
+      setSelectedProvider(provider);
+      setError(null);
       setStatus(null);
-    }
-  }, [goTelegramToken, saveAnthropic]);
+      goApiKey();
+    },
+    [goApiKey],
+  );
+
+  const onApiKeySubmit = React.useCallback(
+    async (apiKey: string) => {
+      if (!selectedProvider) return;
+      setApiKeyBusy(true);
+      setError(null);
+      try {
+        const ok = await saveApiKey(selectedProvider, apiKey);
+        if (ok) {
+          // Load models after saving API key
+          await loadModels();
+          goModelSelect();
+        }
+      } catch (err) {
+        setError(String(err));
+      } finally {
+        setApiKeyBusy(false);
+      }
+    },
+    [selectedProvider, saveApiKey, loadModels, goModelSelect],
+  );
+
+  const onModelSelect = React.useCallback(
+    async (modelId: string) => {
+      setError(null);
+      try {
+        await saveDefaultModel(modelId);
+        goTelegramToken();
+      } catch (err) {
+        setError(String(err));
+      }
+    },
+    [saveDefaultModel, goTelegramToken],
+  );
 
   const onTelegramTokenNext = React.useCallback(async () => {
     setError(null);
@@ -447,15 +544,39 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
       />
 
       <Route
-        path="anthropic"
+        path="provider-select"
+        element={<ProviderSelectPage error={error} onSelect={onProviderSelect} />}
+      />
+
+      <Route
+        path="api-key"
         element={
-          <AnthropicPage
-            status={status}
-            error={error}
-            anthropicKey={anthropicKey}
-            setAnthropicKey={setAnthropicKey}
-            onNext={() => void onAnthropicNext()}
-            onSkip={() => finish()}
+          selectedProvider ? (
+            <ApiKeyPage
+              provider={selectedProvider}
+              status={status}
+              error={error}
+              busy={apiKeyBusy}
+              onSubmit={onApiKeySubmit}
+              onBack={goProviderSelect}
+            />
+          ) : (
+            <Navigate to={`${routes.welcome}/provider-select`} replace />
+          )
+        }
+      />
+
+      <Route
+        path="model-select"
+        element={
+          <ModelSelectPage
+            models={models}
+            filterProvider={selectedProvider ?? undefined}
+            loading={modelsLoading}
+            error={modelsError}
+            onSelect={(modelId) => void onModelSelect(modelId)}
+            onBack={goApiKey}
+            onRetry={() => void loadModels()}
           />
         }
       />

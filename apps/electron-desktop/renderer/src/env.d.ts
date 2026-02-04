@@ -16,7 +16,7 @@ declare global {
       acceptConsent: () => Promise<{ ok: true }>;
       startGateway: () => Promise<{ ok: true }>;
       openExternal: (url: string) => Promise<void>;
-      setAnthropicApiKey: (apiKey: string) => Promise<{ ok: true }>;
+      setApiKey: (provider: string, apiKey: string) => Promise<{ ok: true }>;
       gogAuthList: () => Promise<GogExecResult>;
       gogAuthAdd: (params: {
         account: string;

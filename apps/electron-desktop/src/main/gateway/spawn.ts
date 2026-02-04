@@ -31,7 +31,8 @@ export function spawnGateway(params: {
   const script = path.join(openclawDir, "openclaw.mjs");
   // Important: first-run embedded app starts without a config file. Allow the Gateway to start
   // so the Control UI/WebChat + wizard flows can create config.
-  const args = [script, "gateway", "--bind", "loopback", "--port", String(port), "--allow-unconfigured"];
+  // --verbose enables debug-level logging to help diagnose provider/model errors.
+  const args = [script, "gateway", "--bind", "loopback", "--port", String(port), "--allow-unconfigured", "--verbose"];
 
   const envPath = typeof process.env.PATH === "string" ? process.env.PATH : "";
   const extraBinDir = gogBin ? path.dirname(gogBin) : "";

@@ -111,8 +111,9 @@ export class GatewayClient {
       this.opts.onClose?.({ code: ev.code, reason });
       this.scheduleReconnect();
     });
-    this.ws.addEventListener("error", () => {
-      // ignored; close handler will fire
+    this.ws.addEventListener("error", (ev) => {
+      // Log the error for debugging; close handler will fire after this
+      console.error("[GatewayClient] WebSocket error:", ev);
     });
   }
 
@@ -192,7 +193,8 @@ export class GatewayClient {
     let frame: GatewayFrame;
     try {
       frame = JSON.parse(text) as GatewayFrame;
-    } catch {
+    } catch (err) {
+      console.error("[GatewayClient] Failed to parse message:", err, "Raw text:", text.slice(0, 500));
       return;
     }
     if (!frame || typeof frame !== "object") {
@@ -211,7 +213,12 @@ export class GatewayClient {
       if (frame.ok) {
         pending.resolve(frame.payload);
       } else {
-        pending.reject(frame.error ?? new Error("gateway request failed"));
+        const error = frame.error ?? { code: "UNKNOWN", message: "gateway request failed" };
+        console.error("[GatewayClient] Request failed:", {
+          requestId: frame.id,
+          error,
+        });
+        pending.reject(error);
       }
     }
   }
