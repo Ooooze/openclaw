@@ -1,7 +1,7 @@
 {
-  "name": "openclaw-electron-desktop",
+  "name": "atomicbot-desktop",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Atomic Bot makes things for you",
   "type": "commonjs",
   "main": "dist/main.js",
@@ -20,7 +20,9 @@
     "reset:local": "node scripts/reset-local-state.mjs",
     "reset:local:yes": "node scripts/reset-local-state.mjs --yes",
     "dist:local": "CSC_IDENTITY_AUTO_DISCOVERY=false npm run dist -- --publish never",
-    "dist": "npm run build && npm run build:renderer && npm run prepare:openclaw && npm run prepare:node && npm run fetch:gog && npm run prepare:gog:credentials && npm run prepare:gog && electron-builder"
+    "dist": "npm run build && npm run build:renderer && npm run prepare:openclaw && npm run prepare:node && npm run fetch:gog && npm run prepare:gog:credentials && npm run prepare:gog && electron-builder",
+    "dist:env": "npm run build && npm run build:renderer && npm run prepare:openclaw && npm run prepare:node && npm run fetch:gog && npm run prepare:gog:credentials && npm run prepare:gog && node --env-file=.env ./node_modules/electron-builder/out/cli/cli.js",
+    "dist:env:local": "CSC_IDENTITY_AUTO_DISCOVERY=false npm run dist:env -- --publish never"
   },
   "devDependencies": {
     "@reduxjs/toolkit": "^2.9.0",
@@ -45,6 +47,8 @@
   "build": {
     "appId": "ai.atomicbot.desktop",
     "productName": "Atomic Bot",
+    "afterPack": "scripts/electron-builder.afterPack-sign-extra-resources.cjs",
+    "afterSign": "scripts/electron-builder.afterSign-notarize.cjs",
     "directories": {
       "output": "release"
     },
