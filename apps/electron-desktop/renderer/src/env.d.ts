@@ -11,6 +11,14 @@ type MemoExecResult = {
   resolvedPath: string | null;
 };
 
+type RemindctlExecResult = {
+  ok: boolean;
+  code: number | null;
+  stdout: string;
+  stderr: string;
+  resolvedPath: string | null;
+};
+
 declare global {
   interface Window {
     openclawDesktop?: {
@@ -36,6 +44,8 @@ declare global {
         filename?: string;
       }) => Promise<GogExecResult>;
       memoCheck: () => Promise<MemoExecResult>;
+      remindctlAuthorize: () => Promise<RemindctlExecResult>;
+      remindctlTodayJson: () => Promise<RemindctlExecResult>;
       onGatewayState: (cb: (state: GatewayState) => void) => () => void;
     };
   }

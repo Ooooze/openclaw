@@ -39,6 +39,12 @@ export function resolveBundledMemoBin(): string {
   return path.join(process.resourcesPath, "memo", `${platform}-${arch}`, "memo");
 }
 
+export function resolveBundledRemindctlBin(): string {
+  const platform = process.platform;
+  const arch = process.arch;
+  return path.join(process.resourcesPath, "remindctl", `${platform}-${arch}`, "remindctl");
+}
+
 export function resolveDownloadedGogBin(mainDir: string): string {
   const platform = process.platform;
   const arch = process.arch;
@@ -64,6 +70,15 @@ export function resolveDownloadedMemoBin(mainDir: string): string {
   // We keep the built memo runtime next to the Electron app sources.
   const appDir = path.resolve(mainDir, "..");
   return path.join(appDir, ".memo-runtime", `${platform}-${arch}`, "memo");
+}
+
+export function resolveDownloadedRemindctlBin(mainDir: string): string {
+  const platform = process.platform;
+  const arch = process.arch;
+  // In dev, the entry file compiles to apps/electron-desktop/dist/main.js.
+  // We keep the downloaded remindctl runtime next to the Electron app sources.
+  const appDir = path.resolve(mainDir, "..");
+  return path.join(appDir, ".remindctl-runtime", `${platform}-${arch}`, "remindctl");
 }
 
 export function resolveBundledGogCredentialsPath(): string {

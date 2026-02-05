@@ -5,6 +5,7 @@ vendor/
 .gog-runtime/
 .jq-runtime/
 .memo-runtime/
+.remindctl-runtime/
 .env
 .env.*
 .DS_Store

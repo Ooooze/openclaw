@@ -8,6 +8,7 @@ import { routes } from "../../routes";
 import type { Provider } from "../ProviderSelectPage";
 import { useWelcomeApiKey } from "./useWelcomeApiKey";
 import { useWelcomeAppleNotes } from "./useWelcomeAppleNotes";
+import { useWelcomeAppleReminders } from "./useWelcomeAppleReminders";
 import { useWelcomeConfig } from "./useWelcomeConfig";
 import { useWelcomeGog } from "./useWelcomeGog";
 import { useWelcomeModels } from "./useWelcomeModels";
@@ -22,7 +23,14 @@ type WelcomeStateInput = {
   navigate: NavigateFunction;
 };
 
-type SkillId = "google-workspace" | "media-understanding" | "web-search" | "notion" | "trello" | "apple-notes";
+type SkillId =
+  | "google-workspace"
+  | "media-understanding"
+  | "web-search"
+  | "notion"
+  | "trello"
+  | "apple-notes"
+  | "apple-reminders";
 type SkillStatus = "connect" | "connected";
 
 export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
@@ -40,6 +48,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
   const [webSearchBusy, setWebSearchBusy] = React.useState(false);
   const [mediaUnderstandingBusy, setMediaUnderstandingBusy] = React.useState(false);
   const [appleNotesBusy, setAppleNotesBusy] = React.useState(false);
+  const [appleRemindersBusy, setAppleRemindersBusy] = React.useState(false);
   const [hasOpenAiProvider, setHasOpenAiProvider] = React.useState(false);
   const [skills, setSkills] = React.useState<Record<SkillId, SkillStatus>>({
     "google-workspace": "connect",
@@ -48,6 +57,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
     notion: "connect",
     trello: "connect",
     "apple-notes": "connect",
+    "apple-reminders": "connect",
   });
 
   const { configPath, ensureExtendedConfig, loadConfig } = useWelcomeConfig({
@@ -58,6 +68,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
   });
   const { saveApiKey } = useWelcomeApiKey({ gw, loadConfig, setError, setStatus });
   const { enableAppleNotes } = useWelcomeAppleNotes({ gw, loadConfig, setError, setStatus });
+  const { enableAppleReminders } = useWelcomeAppleReminders({ gw, loadConfig, setError, setStatus });
   const { saveNotionApiKey } = useWelcomeNotion({ gw, loadConfig, setError, setStatus });
   const { saveTrello } = useWelcomeTrello({ gw, loadConfig, setError, setStatus });
   const { saveWebSearch } = useWelcomeWebSearch({ gw, loadConfig, setError, setStatus });
@@ -118,6 +129,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
   const goGogGoogleWorkspace = React.useCallback(() => navigate(`${routes.welcome}/gog-google-workspace`), [navigate]);
   const goProviderSelect = React.useCallback(() => navigate(`${routes.welcome}/provider-select`), [navigate]);
   const goAppleNotes = React.useCallback(() => navigate(`${routes.welcome}/apple-notes`), [navigate]);
+  const goAppleReminders = React.useCallback(() => navigate(`${routes.welcome}/apple-reminders`), [navigate]);
 
   const markSkillConnected = React.useCallback((skillId: SkillId) => {
     setSkills((prev) => {
@@ -343,6 +355,44 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
     }
   }, [enableAppleNotes, goSkills, markSkillConnected]);
 
+  const onAppleRemindersAuthorizeAndEnable = React.useCallback(async () => {
+    setAppleRemindersBusy(true);
+    setError(null);
+    setStatus("Authorizing remindctl…");
+    try {
+      const api = window.openclawDesktop;
+      if (!api) {
+        throw new Error("Desktop API not available");
+      }
+      const authorizeRes = await api.remindctlAuthorize();
+      if (!authorizeRes.ok) {
+        const stderr = authorizeRes.stderr?.trim();
+        const stdout = authorizeRes.stdout?.trim();
+        throw new Error(stderr || stdout || "remindctl authorize failed");
+      }
+
+      setStatus("Checking Reminders access…");
+      const todayRes = await api.remindctlTodayJson();
+      if (!todayRes.ok) {
+        const stderr = todayRes.stderr?.trim();
+        const stdout = todayRes.stdout?.trim();
+        throw new Error(stderr || stdout || "remindctl check failed");
+      }
+
+      const resolvedPath = todayRes.resolvedPath ?? authorizeRes.resolvedPath ?? null;
+      const ok = await enableAppleReminders({ remindctlResolvedPath: resolvedPath });
+      if (ok) {
+        markSkillConnected("apple-reminders");
+        goSkills();
+      }
+    } catch (err) {
+      setError(String(err));
+      setStatus(null);
+    } finally {
+      setAppleRemindersBusy(false);
+    }
+  }, [enableAppleReminders, goSkills, markSkillConnected]);
+
   const onTelegramTokenNext = React.useCallback(async () => {
     setError(null);
     setStatus(null);
@@ -373,6 +423,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
 
   return {
     appleNotesBusy,
+    appleRemindersBusy,
     apiKeyBusy,
     channelsProbe,
     configPath,
@@ -382,6 +433,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
     goGog,
     goGogGoogleWorkspace,
     goAppleNotes,
+    goAppleReminders,
     goModelSelect,
     goMediaUnderstanding,
     goWebSearch,
@@ -410,6 +462,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
     onNotionApiKeySubmit,
     onTrelloSubmit,
     onAppleNotesCheckAndEnable,
+    onAppleRemindersAuthorizeAndEnable,
     onApiKeySubmit,
     onGogAuthAdd,
     onGogAuthList,

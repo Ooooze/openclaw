@@ -10,7 +10,7 @@ type SkillEntry = {
   description: string;
   status: SkillStatus;
   iconText: string;
-  iconVariant: "google" | "notion" | "trello" | "gemini" | "nano-banana" | "sag" | "apple";
+  iconVariant: "google" | "notion" | "trello" | "gemini" | "nano-banana" | "sag" | "apple" | "reminders";
 };
 
 const SKILLS: SkillEntry[] = [
@@ -61,6 +61,14 @@ const SKILLS: SkillEntry[] = [
     status: "connect",
     iconText: "",
     iconVariant: "apple",
+  },
+  {
+    id: "apple-reminders",
+    name: "Apple Reminders",
+    description: "Add, list and complete reminders without opening the Reminders app",
+    status: "connect",
+    iconText: "✓",
+    iconVariant: "reminders",
   },
   {
     id: "gemini",
@@ -129,6 +137,8 @@ export function SkillsSetupPage(props: {
   onTrelloConnect: () => void;
   appleNotesStatus: Exclude<SkillStatus, "coming-soon">;
   onAppleNotesConnect: () => void;
+  appleRemindersStatus: Exclude<SkillStatus, "coming-soon">;
+  onAppleRemindersConnect: () => void;
   onBack: () => void;
   onSkip: () => void;
   onContinue: () => void;
@@ -167,6 +177,8 @@ export function SkillsSetupPage(props: {
                       ? props.trelloStatus
                     : skill.id === "apple-notes"
                       ? props.appleNotesStatus
+                    : skill.id === "apple-reminders"
+                      ? props.appleRemindersStatus
                     : skill.status;
               const onConnect =
                 skill.id === "google-workspace"
@@ -181,6 +193,8 @@ export function SkillsSetupPage(props: {
                       ? props.onTrelloConnect
                     : skill.id === "apple-notes"
                       ? props.onAppleNotesConnect
+                    : skill.id === "apple-reminders"
+                      ? props.onAppleRemindersConnect
                     : undefined;
               const effectiveStatus: SkillStatus =
                 onConnect || status === "connected" ? status : "coming-soon";

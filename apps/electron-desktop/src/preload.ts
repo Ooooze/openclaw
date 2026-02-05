@@ -11,6 +11,14 @@ type MemoExecResult = {
   resolvedPath: string | null;
 };
 
+type RemindctlExecResult = {
+  ok: boolean;
+  code: number | null;
+  stdout: string;
+  stderr: string;
+  resolvedPath: string | null;
+};
+
 type OpenclawDesktopApi = {
   version: string;
   openLogs: () => Promise<void>;
@@ -27,6 +35,8 @@ type OpenclawDesktopApi = {
   gogAuthAdd: (params: { account: string; services?: string; noInput?: boolean }) => Promise<GogExecResult>;
   gogAuthCredentials: (params: { credentialsJson: string; filename?: string }) => Promise<GogExecResult>;
   memoCheck: () => Promise<MemoExecResult>;
+  remindctlAuthorize: () => Promise<RemindctlExecResult>;
+  remindctlTodayJson: () => Promise<RemindctlExecResult>;
   onGatewayState: (cb: (state: GatewayState) => void) => () => void;
 };
 
@@ -50,6 +60,8 @@ const api: OpenclawDesktopApi = {
   gogAuthCredentials: async (params: { credentialsJson: string; filename?: string }) =>
     ipcRenderer.invoke("gog-auth-credentials", params),
   memoCheck: async () => ipcRenderer.invoke("memo-check"),
+  remindctlAuthorize: async () => ipcRenderer.invoke("remindctl-authorize"),
+  remindctlTodayJson: async () => ipcRenderer.invoke("remindctl-today-json"),
   onGatewayState: (cb: (state: GatewayState) => void) => {
     const handler = (_evt: unknown, state: GatewayState) => cb(state);
     ipcRenderer.on("gateway-state", handler);

@@ -12,7 +12,8 @@
     "prepare:gog:all": "npm run fetch:gog && npm run prepare:gog:credentials && npm run prepare:gog",
     "prepare:jq:all": "npm run fetch:jq && npm run prepare:jq",
     "prepare:memo:all": "npm run fetch:memo && npm run build:memo && npm run prepare:memo",
-    "prepare:runtimes": "npm run prepare:node && npm run prepare:gog:all && npm run prepare:jq:all && npm run prepare:memo:all",
+    "prepare:remindctl:all": "npm run fetch:remindctl && npm run prepare:remindctl",
+    "prepare:runtimes": "npm run prepare:node && npm run prepare:gog:all && npm run prepare:jq:all && npm run prepare:memo:all && npm run prepare:remindctl:all",
     "dev": "npm run build:all && npm run fetch:gog && npm run fetch:jq && npm run fetch:memo && npm run prepare:gog:credentials && cross-env ELECTRON_RUN_AS_NODE= electron .",
     "build": "tsc -p tsconfig.json",
     "build:renderer": "vite build --config renderer/vite.config.ts",
@@ -22,11 +23,13 @@
     "fetch:gog": "node scripts/fetch-gog-runtime.mjs",
     "fetch:jq": "node scripts/fetch-jq-runtime.mjs",
     "fetch:memo": "node scripts/fetch-memo-runtime.mjs",
+    "fetch:remindctl": "node scripts/fetch-remindctl-runtime.mjs",
     "build:memo": "node scripts/build-memo-runtime.mjs",
     "prepare:gog:credentials": "node --env-file=.env scripts/prepare-gog-credentials.mjs",
     "prepare:gog": "node scripts/prepare-gog-runtime.mjs",
     "prepare:jq": "node scripts/prepare-jq-runtime.mjs",
     "prepare:memo": "node scripts/prepare-memo-runtime.mjs",
+    "prepare:remindctl": "node scripts/prepare-remindctl-runtime.mjs",
     "reset:local": "node scripts/reset-local-state.mjs",
     "reset:local:yes": "node scripts/reset-local-state.mjs --yes",
     "dist:local": "CSC_IDENTITY_AUTO_DISCOVERY=false npm run dist -- --publish never",
@@ -110,6 +113,10 @@
         "to": "memo"
       },
       {
+        "from": "vendor/remindctl",
+        "to": "remindctl"
+      },
+      {
         "from": ".gog-runtime/credentials",
         "to": "gog-credentials"
       }
@@ -119,7 +126,10 @@
       "category": "public.app-category.productivity",
       "target": [
         "zip"
-      ]
+      ],
+      "extendInfo": {
+        "NSRemindersUsageDescription": "Atomic Bot needs access to Reminders to create, list, and complete reminders on your behalf."
+      }
     }
   }
 }

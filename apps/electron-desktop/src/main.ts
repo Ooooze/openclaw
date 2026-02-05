@@ -11,11 +11,13 @@ import {
   resolveBundledGogBin,
   resolveBundledJqBin,
   resolveBundledMemoBin,
+  resolveBundledRemindctlBin,
   resolveBundledNodeBin,
   resolveBundledOpenClawDir,
   resolveDownloadedGogBin,
   resolveDownloadedJqBin,
   resolveDownloadedMemoBin,
+  resolveDownloadedRemindctlBin,
   resolvePreloadPath,
   resolveRendererIndex,
   resolveRepoRoot,
@@ -189,6 +191,9 @@ app.whenReady().then(async () => {
   const gogBin = app.isPackaged ? resolveBundledGogBin() : resolveDownloadedGogBin(MAIN_DIR);
   const jqBin = app.isPackaged ? resolveBundledJqBin() : resolveDownloadedJqBin(MAIN_DIR);
   const memoBin = app.isPackaged ? resolveBundledMemoBin() : resolveDownloadedMemoBin(MAIN_DIR);
+  const remindctlBin = app.isPackaged
+    ? resolveBundledRemindctlBin()
+    : resolveDownloadedRemindctlBin(MAIN_DIR);
 
   const port = await pickPort(DEFAULT_PORT);
   const url = `http://127.0.0.1:${port}/`;
@@ -228,6 +233,7 @@ app.whenReady().then(async () => {
       gogBin,
       jqBin,
       memoBin,
+      remindctlBin,
       electronRunAsNode: nodeBin === process.execPath,
       stderrTail,
     });
@@ -269,6 +275,7 @@ app.whenReady().then(async () => {
     openclawDir,
     gogBin,
     memoBin,
+    remindctlBin,
     stopGatewayChild,
   });
 

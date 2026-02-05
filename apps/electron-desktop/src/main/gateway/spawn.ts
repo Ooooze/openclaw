@@ -16,6 +16,7 @@ export function spawnGateway(params: {
   gogBin?: string;
   jqBin?: string;
   memoBin?: string;
+  remindctlBin?: string;
   electronRunAsNode?: boolean;
   stderrTail: TailBuffer;
 }): ChildProcess {
@@ -30,6 +31,7 @@ export function spawnGateway(params: {
     gogBin,
     jqBin,
     memoBin,
+    remindctlBin,
     electronRunAsNode,
     stderrTail,
   } = params;
@@ -49,7 +51,7 @@ export function spawnGateway(params: {
   const args = [script, "gateway", "--bind", "loopback", "--port", String(port), "--allow-unconfigured", "--verbose"];
 
   const envPath = typeof process.env.PATH === "string" ? process.env.PATH : "";
-  const extraBinDirs = [jqBin, gogBin, memoBin]
+  const extraBinDirs = [jqBin, gogBin, memoBin, remindctlBin]
     .map((bin) => (bin ? path.dirname(bin) : ""))
     .filter(Boolean);
   const uniqueExtraBinDirs = Array.from(new Set(extraBinDirs));

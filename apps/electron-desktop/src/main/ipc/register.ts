@@ -1,11 +1,94 @@
 import { app, ipcMain, shell, type BrowserWindow } from "electron";
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import fs from "node:fs";
 
 import { upsertApiKeyProfile } from "../keys/apiKeys";
 import { registerGogIpcHandlers } from "../gog/ipc";
 import { registerResetAndCloseIpcHandler } from "../reset/ipc";
 import type { GatewayState } from "../types";
+
+type ExecResult = {
+  ok: boolean;
+  code: number | null;
+  stdout: string;
+  stderr: string;
+  resolvedPath: string | null;
+};
+
+function runCommandWithTimeout(params: {
+  bin: string;
+  args: string[];
+  cwd?: string;
+  timeoutMs: number;
+}): Promise<ExecResult> {
+  return new Promise((resolve) => {
+    const child = spawn(params.bin, params.args, {
+      cwd: params.cwd,
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    let stdout = "";
+    let stderr = "";
+    const onStdout = (chunk: Buffer | string) => {
+      stdout += String(chunk);
+    };
+    const onStderr = (chunk: Buffer | string) => {
+      stderr += String(chunk);
+    };
+    child.stdout?.on("data", onStdout);
+    child.stderr?.on("data", onStderr);
+
+    let settled = false;
+    const settle = (result: ExecResult) => {
+      if (settled) {
+        return;
+      }
+      settled = true;
+      try {
+        child.stdout?.off("data", onStdout);
+        child.stderr?.off("data", onStderr);
+      } catch {
+        // ignore
+      }
+      resolve(result);
+    };
+
+    const timer = setTimeout(() => {
+      try {
+        child.kill("SIGKILL");
+      } catch {
+        // ignore
+      }
+      settle({
+        ok: false,
+        code: null,
+        stdout,
+        stderr: `${stderr}${stderr.trim() ? "\n" : ""}timeout after ${params.timeoutMs}ms`,
+        resolvedPath: params.bin,
+      });
+    }, params.timeoutMs);
+
+    child.on("close", (code) => {
+      clearTimeout(timer);
+      settle({
+        ok: code === 0,
+        code: typeof code === "number" ? code : null,
+        stdout,
+        stderr,
+        resolvedPath: params.bin,
+      });
+    });
+    child.on("error", (err) => {
+      clearTimeout(timer);
+      settle({
+        ok: false,
+        code: null,
+        stdout,
+        stderr: `${stderr}${stderr.trim() ? "\n" : ""}${String(err)}`,
+        resolvedPath: params.bin,
+      });
+    });
+  });
+}
 
 export function registerIpcHandlers(params: {
   getMainWindow: () => BrowserWindow | null;
@@ -20,6 +103,7 @@ export function registerIpcHandlers(params: {
   openclawDir: string;
   gogBin: string;
   memoBin: string;
+  remindctlBin: string;
   stopGatewayChild: () => Promise<void>;
 }) {
   ipcMain.handle("open-logs", async () => {
@@ -108,6 +192,50 @@ export function registerIpcHandlers(params: {
       stderr,
       resolvedPath: memoBin,
     } as const;
+  });
+
+  ipcMain.handle("remindctl-authorize", async () => {
+    const remindctlBin = params.remindctlBin;
+    if (!fs.existsSync(remindctlBin)) {
+      return {
+        ok: false,
+        code: null,
+        stdout: "",
+        stderr:
+          `remindctl binary not found at: ${remindctlBin}\n` +
+          "Run: cd apps/electron-desktop && npm run prepare:remindctl:all",
+        resolvedPath: null,
+      } satisfies ExecResult;
+    }
+    // `authorize` triggers the macOS permission prompt. Give it a generous timeout.
+    return await runCommandWithTimeout({
+      bin: remindctlBin,
+      args: ["authorize"],
+      cwd: params.openclawDir,
+      timeoutMs: 120_000,
+    });
+  });
+
+  ipcMain.handle("remindctl-today-json", async () => {
+    const remindctlBin = params.remindctlBin;
+    if (!fs.existsSync(remindctlBin)) {
+      return {
+        ok: false,
+        code: null,
+        stdout: "",
+        stderr:
+          `remindctl binary not found at: ${remindctlBin}\n` +
+          "Run: cd apps/electron-desktop && npm run prepare:remindctl:all",
+        resolvedPath: null,
+      } satisfies ExecResult;
+    }
+    // End-to-end check: should return JSON if permission is granted.
+    return await runCommandWithTimeout({
+      bin: remindctlBin,
+      args: ["today", "--json"],
+      cwd: params.openclawDir,
+      timeoutMs: 20_000,
+    });
   });
 
   registerGogIpcHandlers({
