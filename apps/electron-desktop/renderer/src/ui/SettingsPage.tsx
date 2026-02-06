@@ -55,6 +55,13 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
     return DEFAULT_TAB;
   }, [location.pathname]);
 
+  React.useEffect(() => {
+    if (configError) {
+      addToastError(configError);
+      dispatch(configActions.setError(null));
+    }
+  }, [configError, dispatch]);
+
   // Redirect bare /settings to /settings/model-providers so the NavLink highlights
   const needsRedirect = React.useMemo(() => {
     const path = (location.pathname || "").replace(/\/+$/, "");
@@ -64,13 +71,6 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
   if (needsRedirect) {
     return <Navigate to={`/settings/${DEFAULT_TAB}`} replace />;
   }
-
-  React.useEffect(() => {
-    if (configError) {
-      addToastError(configError);
-      dispatch(configActions.setError(null));
-    }
-  }, [configError, dispatch]);
 
   return (
     <HeroPageLayout title="SETTINGS" variant="compact" align="center" aria-label="Settings page" hideTopbar>
