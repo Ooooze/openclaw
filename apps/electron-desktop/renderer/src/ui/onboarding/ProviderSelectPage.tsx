@@ -2,63 +2,9 @@ import React from "react";
 
 import { GlassCard, HeroPageLayout, InlineError, PrimaryButton } from "../kit";
 
-export type Provider = "anthropic" | "google" | "openai" | "openrouter" | "zai" | "minimax";
+import { MODEL_PROVIDERS, type ModelProvider, resolveProviderIconUrl } from "../models/providers";
 
-type ProviderInfo = {
-  id: Provider;
-  name: string;
-  description: string;
-  recommended?: boolean;
-};
-
-const PROVIDER_ICONS: Record<Provider, string> = {
-  anthropic: "anthropic.svg",
-  openai: "opeanai.svg",
-  google: "gemini.svg",
-  minimax: "minimax.svg",
-  zai: "zai.svg",
-  openrouter: "openrouter.svg",
-};
-
-function resolveProviderIconUrl(provider: Provider): string {
-  // Resolve relative to renderer's index.html (renderer/dist/index.html -> ../../assets/)
-  return new URL(`../../assets/ai-providers/${PROVIDER_ICONS[provider]}`, document.baseURI).toString();
-}
-
-const PROVIDERS: ProviderInfo[] = [
-  {
-    id: "anthropic",
-    name: "Anthropic (Claude)",
-    description: "Claude models with excellent reasoning, coding, and instruction-following capabilities.",
-    recommended: true,
-  },
-  {
-    id: "openrouter",
-    name: "OpenRouter",
-    description: "Access to 200+ models from multiple providers through a single API.",
-    recommended: true,
-  },
-  {
-    id: "google",
-    name: "Google (Gemini)",
-    description: "Gemini models with strong multimodal understanding and large context windows.",
-  },
-  {
-    id: "openai",
-    name: "OpenAI (GPT)",
-    description: "GPT models with broad capabilities and extensive tool use support.",
-  },
-  {
-    id: "zai",
-    name: "Z.ai (GLM)",
-    description: "Budget-friendly models built for efficient, scalable AI workloads.",
-  },
-  {
-    id: "minimax",
-    name: "MiniMax",
-    description: "Models designed for strong conversational AI and creative generation.",
-  },
-];
+export type Provider = ModelProvider;
 
 export function ProviderSelectPage(props: {
   error: string | null;
@@ -87,7 +33,7 @@ export function ProviderSelectPage(props: {
         </div>
         {props.error ? <InlineError>{props.error}</InlineError> : null}
         <div className="UiProviderList">
-          {PROVIDERS.map((provider) => (
+          {MODEL_PROVIDERS.map((provider) => (
             <label
               key={provider.id}
               className={`UiProviderOption ${selected === provider.id ? "UiProviderOption--selected" : ""}`}

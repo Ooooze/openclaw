@@ -173,7 +173,7 @@ function ReadyRoutes({ state }: { state: Extract<GatewayState, { kind: "ready" }
         <Route path={`${routes.welcome}/*`} element={<WelcomePage state={state} />} />
         <Route path={routes.legacy} element={<LegacyScreen state={state} />} />
         <Route path={routes.chat} element={<ChatPage state={state} />} />
-        <Route path={routes.settings} element={<SettingsPage state={state} />} />
+        <Route path={`${routes.settings}/*`} element={<SettingsPage state={state} />} />
         <Route path="*" element={<Navigate to={routes.chat} replace />} />
       </Routes>
     </GatewayRpcProvider>

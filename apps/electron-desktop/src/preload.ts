@@ -47,6 +47,7 @@ type OpenclawDesktopApi = {
   startGateway: () => Promise<{ ok: true }>;
   openExternal: (url: string) => Promise<void>;
   setApiKey: (provider: string, apiKey: string) => Promise<{ ok: true }>;
+  authHasApiKey: (provider: string) => Promise<{ configured: boolean }>;
   gogAuthList: () => Promise<GogExecResult>;
   gogAuthAdd: (params: { account: string; services?: string; noInput?: boolean }) => Promise<GogExecResult>;
   gogAuthCredentials: (params: { credentialsJson: string; filename?: string }) => Promise<GogExecResult>;
@@ -78,6 +79,7 @@ const api: OpenclawDesktopApi = {
   startGateway: async () => ipcRenderer.invoke("gateway-start"),
   openExternal: async (url: string) => ipcRenderer.invoke("open-external", { url }),
   setApiKey: async (provider: string, apiKey: string) => ipcRenderer.invoke("auth-set-api-key", { provider, apiKey }),
+  authHasApiKey: async (provider: string) => ipcRenderer.invoke("auth-has-api-key", { provider }),
   gogAuthList: async () => ipcRenderer.invoke("gog-auth-list"),
   gogAuthAdd: async (params: { account: string; services?: string; noInput?: boolean }) =>
     ipcRenderer.invoke("gog-auth-add", params),

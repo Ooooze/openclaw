@@ -43,8 +43,19 @@ rmrfStrict(outDir);
 fs.mkdirSync(path.dirname(outDir), { recursive: true });
 
 // Build OpenClaw + Control UI (required for the embedded UI).
-run(PNPM, ["-C", repoRoot, "ui:build"]);
+//
+// Important: `pnpm build` can recreate/clean `dist/` (depending on the bundler configuration).
+// If we build the UI first, it may be wiped by the subsequent build step, leaving the
+// packaged app without `dist/control-ui` and breaking the embedded "legacy" tab.
 run(PNPM, ["-C", repoRoot, "build"]);
+run(PNPM, ["-C", repoRoot, "ui:build"]);
+
+const controlUiIndex = path.join(repoRoot, "dist", "control-ui", "index.html");
+if (!fs.existsSync(controlUiIndex)) {
+  throw new Error(
+    `[electron-desktop] Control UI assets missing after build: ${controlUiIndex}. Did ui:build output change?`,
+  );
+}
 
 // Deploy the workspace package into outDir, excluding devDependencies.
 // --legacy avoids requiring inject-workspace-packages configuration.

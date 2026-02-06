@@ -1,7 +1,7 @@
 {
   "name": "atomicbot-desktop",
   "private": true,
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Atomic Bot makes things for you",
   "type": "commonjs",
   "main": "dist/main.js",
@@ -39,8 +39,8 @@
     "reset:local": "node scripts/reset-local-state.mjs",
     "reset:local:yes": "node scripts/reset-local-state.mjs --yes",
     "dist:local": "CSC_IDENTITY_AUTO_DISCOVERY=false npm run dist -- --publish never",
-    "dist": "npm run build:all && npm run prepare:all && electron-builder",
-    "dist:env": "npm run build:all && npm run prepare:all && node --env-file=.env ./node_modules/electron-builder/out/cli/cli.js",
+    "dist": "npm run build:all && electron-builder",
+    "dist:env": "npm run build:all &&  node --env-file=.env ./node_modules/electron-builder/out/cli/cli.js",
     "dist:env:local": "CSC_IDENTITY_AUTO_DISCOVERY=false npm run dist:env -- --publish never"
   },
   "devDependencies": {

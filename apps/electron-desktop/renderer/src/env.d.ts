@@ -47,6 +47,7 @@ declare global {
       startGateway: () => Promise<{ ok: true }>;
       openExternal: (url: string) => Promise<void>;
       setApiKey: (provider: string, apiKey: string) => Promise<{ ok: true }>;
+      authHasApiKey: (provider: string) => Promise<{ configured: boolean }>;
       gogAuthList: () => Promise<GogExecResult>;
       gogAuthAdd: (params: {
         account: string;

@@ -15,6 +15,11 @@ body {
   height: 100%;
 }
 
+html {
+  /* Prevent layout shift when content toggles page scrollability. */
+  scrollbar-gutter: stable;
+}
+
 body {
   margin: 0;
   height: 100vh;
@@ -1741,7 +1746,7 @@ pre {
     flex-direction: column;
     gap: 12px;
     margin: 18px 0;
-    max-height: 440px;
+    max-height: 380px;
     overflow-y: auto;
     padding-right: 4px;
   }
@@ -1990,7 +1995,83 @@ pre {
 
   /* Settings page styles */
 
-  .UiSettingsSection {
+  .UiSettingsShell {
+  display: flex;
+  gap: 18px;
+}
+
+.UiSettingsSidebar {
+  width: 240px;
+  flex: 0 0 auto;
+}
+
+.UiSettingsNav {
+  position: sticky;
+  top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.UiSettingsNavItem {
+  display: block;
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  text-decoration: none;
+  color: rgba(230, 237, 243, 0.55);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  position: relative;
+  transition:
+    background 120ms ease,
+    color 120ms ease;
+}
+
+.UiSettingsNavItem:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(230, 237, 243, 0.88);
+}
+
+.UiSettingsNavItem-active {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-weight: 700;
+}
+
+/* Left accent bar on active item */
+.UiSettingsNavItem-active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--accent-color, #a3e635);
+}
+
+.UiSettingsContent {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.UiSettingsContentInner {
+  margin-top: 12px;
+}
+
+.UiSettingsTabTitle {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(230, 237, 243, 0.62);
+  margin: 2px 0 8px;
+}
+
+.UiSettingsSection {
     padding: 16px 0;
     border-bottom: 1px solid rgba(230, 237, 243, 0.08);
   }
@@ -2035,7 +2116,36 @@ pre {
     flex: 1 1 auto;
   }
 
-  /* New Chat UI styles */
+  @media (max-width: 860px) {
+  .UiSettingsShell {
+    flex-direction: column;
+  }
+  .UiSettingsSidebar {
+    width: 100%;
+  }
+  .UiSettingsNav {
+    position: static;
+    top: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 6px;
+  }
+  .UiSettingsNavItem {
+    flex: 1 1 auto;
+    text-align: center;
+    padding: 8px 12px;
+  }
+  /* In horizontal layout, use bottom accent instead of left */
+  .UiSettingsNavItem-active::before {
+    left: 8px;
+    right: 8px;
+    top: auto;
+    bottom: 0;
+    width: auto;
+    height: 3px;
+  }
+}/* New Chat UI styles */
 
   .UiChatShell {
     height: 100%;
@@ -2420,3 +2530,391 @@ pre {
       animation: none;
     }
   }
+
+/* ── Modal ────────────────────────────────────────────── */
+
+.UiModalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: uiModalFadeIn 150ms ease;
+}
+
+@keyframes uiModalFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.UiModalCard {
+  position: relative;
+  width: 420px;
+  max-width: 92vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(22, 22, 26, 0.96);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
+  padding: 28px 24px 24px;
+  animation: uiModalSlideUp 200ms ease;
+}
+
+@keyframes uiModalSlideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.UiModalClose {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: rgba(230, 237, 243, 0.55);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: color 120ms ease, background 120ms ease;
+}
+
+.UiModalClose:hover {
+  color: rgba(230, 237, 243, 0.92);
+  background: rgba(230, 237, 243, 0.08);
+}
+
+/* ── Provider tiles (settings) ────────────────────────── */
+
+.UiProviderTilesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.UiProviderTile {
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.18);
+  padding: 14px 14px 12px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+  position: relative;
+}
+
+.UiProviderTile:hover {
+  border-color: rgba(255, 255, 255, 0.24);
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.UiProviderTile--configured {
+  border-color: rgba(34, 197, 94, 0.45);
+  background: rgba(34, 197, 94, 0.06);
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.10) inset;
+}
+
+.UiProviderTile--configured:hover {
+  border-color: rgba(34, 197, 94, 0.62);
+  background: rgba(34, 197, 94, 0.08);
+}
+
+.UiProviderTileTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.UiProviderTileIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.UiProviderTileIcon img {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.UiProviderTileCheck {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  background: rgba(34, 197, 94, 0.18);
+  color: rgba(208, 255, 224, 0.98);
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.UiProviderTileName {
+  margin-top: 10px;
+  font-weight: 650;
+  font-size: 14px;
+  color: #fff;
+}
+
+.UiProviderTileDesc {
+  margin-top: 3px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.4;
+}
+
+/* Modal inner layout for API key entry */
+.UiModalProviderHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.UiModalProviderIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.UiModalProviderIcon img {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.UiModalProviderName {
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+}
+
+.UiModalHelpText {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.60);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.UiModalInputRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.UiModalInputRow .UiInput {
+  flex: 1;
+}
+
+.UiModalActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* ── Provider filter chips (model selection) ──────────── */
+
+.UiProviderFilterRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.UiProviderFilterChip {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(230, 237, 243, 0.70);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease,
+    color 120ms ease;
+}
+
+.UiProviderFilterChip:hover {
+  border-color: rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(230, 237, 243, 0.92);
+}
+
+.UiProviderFilterChip--active {
+  border-color: var(--accent-color, #a3e635);
+  background: rgba(163, 230, 53, 0.10);
+  color: rgba(230, 237, 243, 0.95);
+}
+
+.UiProviderFilterChip--active:hover {
+  background: rgba(163, 230, 53, 0.16);
+}
+
+.UiProviderFilterChipIcon {
+  width: 14px;
+  height: 14px;
+  display: block;
+  flex-shrink: 0;
+}
+
+/* ── Active model card ────────────────────────────────── */
+
+/* ── Inner tab bar (within settings content) ──────────── */
+
+.UiInnerTabBar {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 16px;
+}
+
+.UiInnerTab {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: rgba(230, 237, 243, 0.50);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 16px;
+  cursor: pointer;
+  position: relative;
+  transition:
+    color 120ms ease;
+}
+
+.UiInnerTab:hover {
+  color: rgba(230, 237, 243, 0.80);
+}
+
+.UiInnerTab--active {
+  color: #fff;
+}
+
+.UiInnerTab--active::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: -1px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--accent-color, #a3e635);
+}
+
+/* Inline link button (styled as text link) */
+.UiLinkButton {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--accent-color, #a3e635);
+  font-size: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-decoration-color: rgba(163, 230, 53, 0.35);
+  text-underline-offset: 2px;
+}
+
+.UiLinkButton:hover {
+  text-decoration-color: var(--accent-color, #a3e635);
+}
+
+/* "Add Provider" chip variant */
+.UiProviderFilterChip--add {
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.18);
+  color: rgba(230, 237, 243, 0.60);
+}
+
+.UiProviderFilterChip--add:hover {
+  border-color: var(--accent-color, #a3e635);
+  color: var(--accent-color, #a3e635);
+  background: rgba(163, 230, 53, 0.06);
+}
+
+.UiActiveModelCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid rgba(163, 230, 53, 0.25);
+  border-radius: 14px;
+  background: rgba(163, 230, 53, 0.04);
+  margin-bottom: 14px;
+}
+
+.UiActiveModelIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.UiActiveModelIcon img {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.UiActiveModelInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.UiActiveModelNameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.UiActiveModelName {
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.UiActiveModelProvider {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

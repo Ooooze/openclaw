@@ -8,6 +8,7 @@ export {
   GlassCard,
   HeroPageLayout,
   InlineError,
+  Modal,
   PrimaryButton,
   ScrollBox,
   SecondaryButton,

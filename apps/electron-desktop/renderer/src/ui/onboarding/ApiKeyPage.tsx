@@ -2,45 +2,7 @@ import React from "react";
 
 import { GlassCard, HeroPageLayout, InlineError, PrimaryButton, TextInput } from "../kit";
 import type { Provider } from "./ProviderSelectPage";
-
-type ProviderMeta = {
-  placeholder: string;
-  helpUrl?: string;
-  helpText?: string;
-};
-
-const PROVIDER_META: Record<Provider, ProviderMeta> = {
-  anthropic: {
-    placeholder: "sk-ant-...",
-    helpUrl: "https://console.anthropic.com/settings/keys",
-    helpText: "Get your API key from the Anthropic Console.",
-  },
-  google: {
-    placeholder: "AIza...",
-    helpUrl: "https://aistudio.google.com/apikey",
-    helpText: "Get your API key from Google AI Studio.",
-  },
-  openai: {
-    placeholder: "sk-...",
-    helpUrl: "https://platform.openai.com/api-keys",
-    helpText: "Get your API key from the OpenAI Platform.",
-  },
-  openrouter: {
-    placeholder: "sk-or-...",
-    helpUrl: "https://openrouter.ai/keys",
-    helpText: "Get your API key from OpenRouter.",
-  },
-  zai: {
-    placeholder: "sk-...",
-    helpUrl: "https://z.ai/manage-apikey/apikey-list",
-    helpText: "Get your API key from the Z.AI Platform.",
-  },
-  minimax: {
-    placeholder: "sk-...",
-    helpUrl: "https://platform.minimax.io/user-center/basic-information/interface-key",
-    helpText: "Get your API key from the MiniMax Platform.",
-  },
-};
+import { MODEL_PROVIDER_BY_ID } from "../models/providers";
 
 export function ApiKeyPage(props: {
   provider: Provider;
@@ -51,7 +13,7 @@ export function ApiKeyPage(props: {
   onBack: () => void;
 }) {
   const [apiKey, setApiKey] = React.useState("");
-  const meta = PROVIDER_META[props.provider];
+  const meta = MODEL_PROVIDER_BY_ID[props.provider];
   const totalSteps = 5;
   const activeStep = 1;
 

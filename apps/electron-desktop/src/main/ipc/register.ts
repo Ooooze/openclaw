@@ -5,6 +5,7 @@ import os from "node:os";
 import path from "node:path";
 
 import { upsertApiKeyProfile } from "../keys/apiKeys";
+import { readAuthProfilesStore, resolveAuthProfilesPath } from "../keys/authProfilesStore";
 import { registerGogIpcHandlers } from "../gog/ipc";
 import { registerResetAndCloseIpcHandler } from "../reset/ipc";
 import type { GatewayState } from "../types";
@@ -296,6 +297,19 @@ export function registerIpcHandlers(params: {
     }
     upsertApiKeyProfile({ stateDir: params.stateDir, provider, key: apiKey, profileName: "default" });
     return { ok: true } as const;
+  });
+
+  ipcMain.handle("auth-has-api-key", async (_evt, p: { provider?: unknown }) => {
+    const provider = typeof p?.provider === "string" ? p.provider.trim().toLowerCase() : "";
+    if (!provider) {
+      throw new Error("provider is required");
+    }
+    const authProfilesPath = resolveAuthProfilesPath({ stateDir: params.stateDir });
+    const store = readAuthProfilesStore({ authProfilesPath });
+    const configured = Object.values(store.profiles).some(
+      (profile) => profile.type === "api_key" && profile.provider === provider && profile.key.trim().length > 0,
+    );
+    return { configured } as const;
   });
 
   ipcMain.handle("memo-check", async () => {
