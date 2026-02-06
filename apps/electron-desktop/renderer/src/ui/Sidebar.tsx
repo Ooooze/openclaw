@@ -27,8 +27,24 @@ type SessionWithTitle = {
 const SESSIONS_LIST_LIMIT = 50;
 const TITLE_MAX_LEN = 48;
 
+/** Extract only the message text from derivedTitle, e.g. "[Fri 2026-02-06 …] привет [message_id:…" → "привет". */
+function messageTextFromDerivedTitle(derivedTitle: string | undefined): string {
+  const raw = derivedTitle?.trim();
+  if (!raw) return "";
+  let s = raw;
+  const afterBracket = s.indexOf("] ");
+  if (afterBracket >= 0) {
+    s = s.slice(afterBracket + 2);
+  }
+  const beforeMeta = s.indexOf(" [");
+  if (beforeMeta >= 0) {
+    s = s.slice(0, beforeMeta);
+  }
+  return s.trim();
+}
+
 function titleFromRow(row: SessionsListResult["sessions"][number]): string {
-  const raw = row.derivedTitle?.trim();
+  const raw = messageTextFromDerivedTitle(row.derivedTitle);
   if (raw) {
     return raw.length > TITLE_MAX_LEN ? `${raw.slice(0, TITLE_MAX_LEN)}…` : raw;
   }
