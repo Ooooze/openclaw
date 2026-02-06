@@ -3,7 +3,7 @@ import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../store/hooks";
 import type { GatewayState } from "../../../src/main/types";
 import { routes } from "./routes";
-import { GlassCard, HeroPageLayout, InlineError, PrimaryButton } from "./kit";
+import { GlassCard, HeroPageLayout, PrimaryButton } from "./kit";
 import { LoadingScreen } from "./LoadingScreen";
 import { ApiKeyPage } from "./onboarding/ApiKeyPage";
 import { AppleNotesConnectPage } from "./onboarding/AppleNotesConnectPage";
@@ -46,7 +46,6 @@ function WelcomeAutoStart(props: { startBusy: boolean; error: string | null; onS
           <div className="UiIntroInner">
             <div className="UiSectionTitle">Setup failed.</div>
             <div className="UiSectionSubtitle">Please retry to continue onboarding.</div>
-            <InlineError>{props.error}</InlineError>
             <PrimaryButton onClick={props.onStart}>Retry</PrimaryButton>
           </div>
         </GlassCard>

@@ -9,6 +9,7 @@ import {
   SecondaryButton,
   TextInput,
 } from "../kit";
+import { addToastError } from "../toast";
 
 type MediaUnderstandingSettings = {
   image: boolean;
@@ -77,7 +78,6 @@ export function MediaUnderstandingPage(props: {
         </div>
 
         {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
-        {props.error ? <InlineError>{props.error}</InlineError> : null}
 
         <div className="UiGoogleWorkspaceServices" style={{ marginTop: 10 }}>
           <CheckboxRow
@@ -146,7 +146,7 @@ export function MediaUnderstandingPage(props: {
                         setAddKey("");
                       }
                     } catch (err) {
-                      setAddError(String(err));
+                      addToastError(String(err));
                       setAddHighlight(true);
                       focusKey();
                     } finally {
@@ -174,7 +174,7 @@ export function MediaUnderstandingPage(props: {
               onClick={() => {
                 if (hasMissing) {
                   setAddHighlight(true);
-                  setAddError("OpenAI API key is required. Paste it above and click Save key.");
+                  addToastError("OpenAI API key is required. Paste it above and click Save key.");
                   focusKey();
                   return;
                 }

@@ -1,0 +1,249 @@
+/* Chat composer: input bar at bottom, + / input / mic / send */
+.UiChatComposer {
+  flex-shrink: 0;
+  width: 100%;
+  padding: 16px 24px 20px;
+}
+
+.UiChatFileInput {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.UiChatAttachButton {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 120ms ease, background 120ms ease;
+}
+
+.UiChatAttachButton:hover {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.UiChatAttachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 800px;
+  margin: 0 auto 10px;
+}
+
+.UiChatAttachment {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.UiChatAttachmentImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.UiChatAttachmentFile {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 10px;
+}
+
+.UiChatAttachmentFileIcon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.UiChatAttachmentFileLabel {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.UiChatAttachmentRemove {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.UiChatAttachmentRemove:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* Attachments inside a chat message (history) */
+.UiChatMessageAttachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.UiChatMessageAttachment {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.UiChatMessageAttachmentImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.UiChatMessageAttachmentFile {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 10px;
+}
+
+.UiChatComposerInner {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-direction: column;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 12px 8px 8px 8px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #272727;
+  box-shadow: 0 80px 22px 0 rgba(0, 0, 0, 0.00), 0 51px 20px 0 rgba(0, 0, 0, 0.00), 0 29px 17px 0 rgba(0, 0, 0, 0.01), 0 13px 13px 0 rgba(0, 0, 0, 0.02), 0 3px 7px 0 rgba(0, 0, 0, 0.02);
+}
+
+.UiChatComposerButtonBlock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.UiChatInput {
+  flex: 1 1 auto;
+  resize: none;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: #fff;
+  font-size: 15px;
+  line-height: 28px;
+  min-height: 28px;
+  max-height: 180px;
+  width: 100%;
+  padding: 0 8px;
+  box-sizing: border-box;
+  font-family: var(--font-body);
+  overflow-y: auto;
+}
+
+.UiChatInput:focus {
+  outline: none;
+}
+
+.UiChatInput::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.UiChatMicButton {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: color 120ms ease, background 120ms ease;
+}
+
+.UiChatMicButton:hover {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.UiChatMicButton svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.UiChatSendButton {
+  flex-shrink: 0;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: #AEFF00;
+  color: #1E1E1E;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.UiChatSendButton:hover:not(:disabled) {
+  opacity: 0.8;
+}
+
+.UiChatSendButton:disabled {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.9);
+  opacity: 0.4;
+  cursor: default;
+}
+
+.UiChatSendButton svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}

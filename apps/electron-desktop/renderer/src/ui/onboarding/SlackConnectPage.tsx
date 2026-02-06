@@ -229,7 +229,6 @@ export function SlackConnectPage(props: {
         </details>
 
         {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
-        {props.error ? <InlineError>{props.error}</InlineError> : null}
 
         <div className="UiApiKeyInputRow">
           <div className="UiSectionSubtitle" style={{ marginBottom: 8 }}>

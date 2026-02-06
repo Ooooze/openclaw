@@ -20,6 +20,7 @@ import { useWelcomeTrello } from "./useWelcomeTrello";
 import { useWelcomeTelegram } from "./useWelcomeTelegram";
 import { useWelcomeWebSearch, type WebSearchProvider } from "./useWelcomeWebSearch";
 import { getObject } from "./utils";
+import { addToastError } from "../../toast";
 
 type WelcomeStateInput = {
   state: Extract<GatewayState, { kind: "ready" }>;
@@ -52,7 +53,14 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
 
   const [startBusy, setStartBusy] = React.useState(false);
   const [status, setStatus] = React.useState<string | null>(null);
-  const [error, setError] = React.useState<string | null>(null);
+  const [error, setErrorState] = React.useState<string | null>(null);
+
+  const setError = React.useCallback((value: string | null) => {
+    if (value) {
+      addToastError(value);
+    }
+    setErrorState(value);
+  }, []);
 
   const [selectedProvider, setSelectedProvider] = React.useState<Provider | null>(null);
   const [apiKeyBusy, setApiKeyBusy] = React.useState(false);

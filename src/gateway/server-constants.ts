@@ -1,4 +1,5 @@
-export const MAX_PAYLOAD_BYTES = 512 * 1024; // cap incoming frame size
+/** Max incoming WebSocket frame size. Must allow chat.send with image attachments (base64); matches attachment parser limit (5MB). */
+export const MAX_PAYLOAD_BYTES = 5 * 1024 * 1024;
 export const MAX_BUFFERED_BYTES = 1.5 * 1024 * 1024; // per-connection send buffer limit
 
 const DEFAULT_MAX_CHAT_HISTORY_MESSAGES_BYTES = 6 * 1024 * 1024; // keep history responses comfortably under client WS limits

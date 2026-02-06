@@ -1,6 +1,8 @@
 import React from "react";
-import { Navigate, NavLink, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Navigate, NavLink, Outlet, Route, Routes, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ChatPage } from "./ChatPage";
+import { StartChatPage } from "./StartChatPage";
+import { Sidebar } from "./Sidebar";
 import { SettingsPage } from "./SettingsPage";
 import { WelcomePage } from "./WelcomePage";
 import { ConsentScreen, type ConsentDesktopApi } from "./ConsentScreen";
@@ -12,6 +14,34 @@ import { initGatewayState } from "../store/slices/gatewaySlice";
 import { loadOnboardingFromStorage } from "../store/slices/onboardingSlice";
 import type { GatewayState } from "../../../src/main/types";
 import { isBootstrapPath, routes } from "./routes";
+import { OptimisticSessionProvider, OptimisticSessionSync } from "./optimisticSessionContext";
+
+function ChatRoute({ state }: { state: Extract<GatewayState, { kind: "ready" }> }) {
+  const [searchParams] = useSearchParams();
+  const session = searchParams.get("session");
+  if (session?.trim()) {
+    return <ChatPage state={state} />;
+  }
+  return <StartChatPage state={state} />;
+}
+
+function SidebarLayout({ state }: { state: Extract<GatewayState, { kind: "ready" }> }) {
+  return (
+    <GatewayRpcProvider url={state.url} token={state.token}>
+      <OptimisticSessionProvider>
+        <OptimisticSessionSync />
+        <div className="UiAppShell">
+          <div className="UiAppPage UiChatLayout">
+            <Sidebar />
+            <div className="UiChatLayoutMain">
+              <Outlet />
+            </div>
+          </div>
+        </div>
+      </OptimisticSessionProvider>
+    </GatewayRpcProvider>
+  );
+}
 
 function Topbar() {
   const api = window.openclawDesktop;
@@ -172,8 +202,6 @@ function ReadyRoutes({ state }: { state: Extract<GatewayState, { kind: "ready" }
         <Route path={routes.error} element={<Navigate to={routes.chat} replace />} />
         <Route path={`${routes.welcome}/*`} element={<WelcomePage state={state} />} />
         <Route path={routes.legacy} element={<LegacyScreen state={state} />} />
-        <Route path={routes.chat} element={<ChatPage state={state} />} />
-        <Route path={`${routes.settings}/*`} element={<SettingsPage state={state} />} />
         <Route path="*" element={<Navigate to={routes.chat} replace />} />
       </Routes>
     </GatewayRpcProvider>
@@ -283,6 +311,11 @@ export function App() {
             </GatewayRpcProvider>
           }
         />
+        <Route path="/" element={<SidebarLayout state={state} />}>
+          <Route index element={<Navigate to={routes.chat} replace />} />
+          <Route path="chat" element={<ChatRoute state={state} />} />
+          <Route path={`${routes.settings}/*`} element={<SettingsPage state={state} />} />
+        </Route>
         <Route
           path="*"
           element={

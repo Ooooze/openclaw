@@ -1,6 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
+export type UiMessageAttachment = {
+  type: string;
+  mimeType?: string;
+  dataUrl?: string;
+};
+
 export type UiMessage = {
   id: string;
   role: "user" | "assistant" | "system" | "unknown";
@@ -8,6 +14,8 @@ export type UiMessage = {
   ts?: number;
   runId?: string;
   pending?: boolean;
+  /** Attachments (images/files) from history; shown before message text. */
+  attachments?: UiMessageAttachment[];
 };
 
 export type ChatSliceState = {
@@ -25,6 +33,20 @@ const initialState: ChatSliceState = {
 };
 
 export type GatewayRequest = <T = unknown>(method: string, params?: unknown) => Promise<T>;
+
+export type ChatAttachmentInput = {
+  id: string;
+  dataUrl: string;
+  mimeType: string;
+};
+
+export function dataUrlToBase64(dataUrl: string): { content: string; mimeType: string } | null {
+  const match = /^data:([^;]+);base64,(.+)$/.exec(dataUrl);
+  if (!match) {
+    return null;
+  }
+  return { mimeType: match[1], content: match[2] };
+}
 
 type ChatHistoryResult = {
   sessionKey: string;
@@ -64,6 +86,65 @@ export function extractText(msg: unknown): string {
   }
 }
 
+/** Extract attachment blocks from a history message for display (images as dataUrl, others as icon). */
+export function extractAttachmentsFromMessage(msg: unknown): UiMessageAttachment[] {
+  const out: UiMessageAttachment[] = [];
+  try {
+    if (!msg || typeof msg !== "object") {
+      return out;
+    }
+    const m = msg as { content?: unknown };
+    const content = m.content;
+    if (!Array.isArray(content)) {
+      return out;
+    }
+    for (const p of content) {
+      if (!p || typeof p !== "object") {
+        continue;
+      }
+      const part = p as {
+        type?: unknown;
+        text?: unknown;
+        data?: unknown;
+        mimeType?: unknown;
+        source?: { type?: unknown; data?: unknown; media_type?: unknown };
+      };
+      const type = typeof part.type === "string" ? part.type : "";
+      if (type === "text") {
+        continue;
+      }
+      let dataUrl: string | undefined;
+      let mimeType: string | undefined;
+      if (type === "image" && (typeof part.data === "string" || part.source)) {
+        const data =
+          typeof part.data === "string"
+            ? part.data
+            : typeof part.source?.data === "string"
+              ? part.source.data
+              : undefined;
+        const mediaType =
+          typeof part.mimeType === "string"
+            ? part.mimeType
+            : typeof part.source?.media_type === "string"
+              ? part.source.media_type
+              : "image/png";
+        if (data) {
+          dataUrl = `data:${mediaType};base64,${data}`;
+          mimeType = mediaType;
+        }
+      }
+      out.push({
+        type: type || "file",
+        mimeType: mimeType || (typeof part.mimeType === "string" ? part.mimeType : undefined),
+        dataUrl,
+      });
+    }
+  } catch {
+    // ignore
+  }
+  return out;
+}
+
 function parseRole(value: unknown): UiMessage["role"] {
   const raw = typeof value === "string" ? value.trim().toLowerCase() : "";
   if (raw === "user" || raw === "assistant" || raw === "system") {
@@ -82,15 +163,18 @@ export function parseHistoryMessages(raw: unknown[]): UiMessage[] {
     const msg = item as { role?: unknown; timestamp?: unknown };
     const role = parseRole(msg.role);
     const text = extractText(item);
-    if (!text) {
+    const attachments = extractAttachmentsFromMessage(item);
+    const hasAttachments = attachments.length > 0;
+    if (!text && !hasAttachments) {
       continue;
     }
     const ts = typeof msg.timestamp === "number" && Number.isFinite(msg.timestamp) ? Math.floor(msg.timestamp) : undefined;
     out.push({
       id: `h-${ts ?? 0}-${i}`,
       role,
-      text,
+      text: text || (hasAttachments ? `[${attachments.length} file(s)]` : ""),
       ts,
+      attachments: hasAttachments ? attachments : undefined,
     });
   }
   return out;
@@ -107,9 +191,23 @@ export const loadChatHistory = createAsyncThunk(
 
 export const sendChatMessage = createAsyncThunk(
   "chat/sendChatMessage",
-  async ({ request, sessionKey, message }: { request: GatewayRequest; sessionKey: string; message: string }, thunkApi) => {
+  async (
+    {
+      request,
+      sessionKey,
+      message,
+      attachments,
+    }: {
+      request: GatewayRequest;
+      sessionKey: string;
+      message: string;
+      attachments?: ChatAttachmentInput[];
+    },
+    thunkApi,
+  ) => {
     const trimmed = message.trim();
-    if (!trimmed) {
+    const hasAttachments = Boolean(attachments?.length);
+    if (!trimmed && !hasAttachments) {
       return;
     }
 
@@ -118,14 +216,33 @@ export const sendChatMessage = createAsyncThunk(
 
     const localId = `u-${crypto.randomUUID()}`;
     const runId = crypto.randomUUID();
+    const displayMessage = trimmed || (hasAttachments ? `[${attachments!.length} file(s)]` : "");
 
     thunkApi.dispatch(
       chatActions.userMessageQueued({
         localId,
-        message: trimmed,
+        message: displayMessage,
       }),
     );
     thunkApi.dispatch(chatActions.ensureStreamRun({ runId }));
+
+    const apiAttachments =
+      attachments
+        ?.map((att) => {
+          const parsed = dataUrlToBase64(att.dataUrl);
+          if (!parsed) {
+            return null;
+          }
+          const isImage = parsed.mimeType.startsWith("image/");
+          return {
+            type: isImage ? "image" : "file",
+            mimeType: parsed.mimeType,
+            content: parsed.content,
+          };
+        })
+        .filter(
+          (a): a is { type: "image" | "file"; mimeType: string; content: string } => a !== null,
+        ) ?? [];
 
     try {
       await request("chat.send", {
@@ -133,6 +250,7 @@ export const sendChatMessage = createAsyncThunk(
         message: trimmed,
         deliver: false,
         idempotencyKey: runId,
+        ...(apiAttachments.length > 0 ? { attachments: apiAttachments } : {}),
       });
       thunkApi.dispatch(chatActions.markUserMessageDelivered({ localId }));
     } catch (err) {

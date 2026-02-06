@@ -1,6 +1,6 @@
 import React from "react";
 
-import { CheckboxRow, GlassCard, HeroPageLayout, InlineError, PrimaryButton, TextInput } from "../kit";
+import { CheckboxRow, GlassCard, HeroPageLayout, PrimaryButton, TextInput } from "../kit";
 import { DEFAULT_GOG_SERVICES } from "./welcome/constants";
 
 type ServiceOption = {
@@ -103,9 +103,7 @@ export function GogPage(props: {
             ✓ Connected
           </div>
         ) : null}
-        {props.gogError ? <InlineError>{props.gogError}</InlineError> : null}
         {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
-        {props.error ? <InlineError>{props.error}</InlineError> : null}
 
         <div className="UiGoogleWorkspaceForm">
           <div className="UiSectionSubtitle" style={{ margin: 0 }}>

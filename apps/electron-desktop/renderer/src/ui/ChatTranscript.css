@@ -1,0 +1,100 @@
+/* Chat shell and transcript container */
+.UiChatShell {
+  min-width: 500px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #1e1e1e;
+}
+
+.UiChatTranscript {
+  width: min(680px, 680px);
+  padding: 24px 56px;
+  margin: 0 auto;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.UiChatTranscriptInner {
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.UiChatEmpty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  padding: 40px 20px;
+  animation: uiChatEmptyEnter 260ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+}
+
+.UiChatEmptyLogo {
+  width: 243px;
+  height: 135px;
+  border-radius: 16px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+}
+
+.UiChatEmptyTitle {
+  font-size: 26px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.UiChatEmptySubtitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  max-width: 280px;
+}
+
+.UiChatRow {
+  display: flex;
+  margin-bottom: 24px;
+  padding: 0 24px;
+  animation: uiChatBubbleEnter 180ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+}
+
+.UiChatRow:first-child {
+  margin-top: 0;
+}
+
+@keyframes uiChatBubbleEnter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes uiChatEmptyEnter {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .UiChatRow {
+    animation: none;
+  }
+  .UiChatEmpty {
+    animation: none;
+  }
+}

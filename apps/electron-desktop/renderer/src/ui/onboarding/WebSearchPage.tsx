@@ -1,6 +1,6 @@
 import React from "react";
 
-import { GlassCard, HeroPageLayout, InlineError, PrimaryButton, SecondaryButton, TextInput } from "../kit";
+import { GlassCard, HeroPageLayout, PrimaryButton, SecondaryButton, TextInput } from "../kit";
 
 export type WebSearchProvider = "brave" | "perplexity";
 
@@ -120,7 +120,6 @@ export function WebSearchPage(props: {
         </div>
 
         {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
-        {props.error ? <InlineError>{props.error}</InlineError> : null}
 
         <div className="UiApiKeyInputRow">
           <TextInput

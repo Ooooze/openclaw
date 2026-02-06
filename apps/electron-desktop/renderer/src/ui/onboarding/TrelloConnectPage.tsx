@@ -1,6 +1,6 @@
 import React from "react";
 
-import { GlassCard, HeroPageLayout, InlineError, PrimaryButton, TextInput } from "../kit";
+import { GlassCard, HeroPageLayout, PrimaryButton, TextInput } from "../kit";
 
 export function TrelloConnectPage(props: {
   status: string | null;
@@ -64,7 +64,6 @@ export function TrelloConnectPage(props: {
         </div>
 
         {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
-        {props.error ? <InlineError>{props.error}</InlineError> : null}
 
         <div className="UiApiKeyInputRow" style={{ display: "grid", gap: 10 }}>
           <TextInput

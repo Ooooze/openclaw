@@ -1,7 +1,8 @@
 import React from "react";
 
-import { CheckboxRow, FooterText, HeroPageLayout, InlineError, PrimaryButton, SplashLogo } from "./kit";
+import { CheckboxRow, FooterText, HeroPageLayout, PrimaryButton, SplashLogo } from "./kit";
 import { LoadingScreen } from "./LoadingScreen";
+import { addToastError } from "./toast";
 
 export type ConsentDesktopApi = NonNullable<Window["openclawDesktop"]> & {
   getConsentInfo?: () => Promise<{ accepted: boolean }>;
@@ -14,7 +15,6 @@ export function ConsentScreen({ onAccepted }: { onAccepted: () => void }) {
   const [checked, setChecked] = React.useState(false);
   const [agreeRequired, setAgreeRequired] = React.useState(false);
   const [busy, setBusy] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
   const termsUrl = "https://atomicbot.ai/terms";
   const appVersion = api?.version?.trim() ? api.version.trim() : "0.0.0";
 
@@ -27,10 +27,9 @@ export function ConsentScreen({ onAccepted }: { onAccepted: () => void }) {
       return;
     }
     if (!api || typeof api.acceptConsent !== "function") {
-      setError("Desktop API is not available. Please restart the app.");
+      addToastError("Desktop API is not available. Please restart the app.");
       return;
     }
-    setError(null);
     setBusy(true);
     try {
       await api.acceptConsent();
@@ -40,7 +39,7 @@ export function ConsentScreen({ onAccepted }: { onAccepted: () => void }) {
       }
       onAccepted();
     } catch (err) {
-      setError(String(err));
+      addToastError(String(err));
     } finally {
       setBusy(false);
     }
@@ -100,8 +99,6 @@ export function ConsentScreen({ onAccepted }: { onAccepted: () => void }) {
               .
             </span>
           </CheckboxRow>
-
-          {error ? <InlineError>{error}</InlineError> : null}
 
           <PrimaryButton disabled={busy} onClick={() => void accept()}>
             Start

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { GlassCard, HeroPageLayout, InlineError, PrimaryButton } from "../kit";
+import { GlassCard, HeroPageLayout, PrimaryButton } from "../kit";
 
 import { MODEL_PROVIDERS, type ModelProvider, resolveProviderIconUrl } from "../models/providers";
 
@@ -31,7 +31,6 @@ export function ProviderSelectPage(props: {
         <div className="UiSectionSubtitle">
           Choose your preferred AI provider. You can configure additional providers later.
         </div>
-        {props.error ? <InlineError>{props.error}</InlineError> : null}
         <div className="UiProviderList">
           {MODEL_PROVIDERS.map((provider) => (
             <label

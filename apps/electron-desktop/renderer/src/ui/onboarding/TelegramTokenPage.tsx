@@ -1,6 +1,6 @@
 import React from "react";
 
-import { GlassCard, HeroPageLayout, InlineError, PrimaryButton, TextInput } from "../kit";
+import { GlassCard, HeroPageLayout, PrimaryButton, TextInput } from "../kit";
 
 export function TelegramTokenPage(props: {
   status: string | null;
@@ -56,7 +56,6 @@ export function TelegramTokenPage(props: {
         </div>
 
         {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
-        {props.error ? <InlineError>{props.error}</InlineError> : null}
 
         <div className="UiApiKeyInputRow">
           <TextInput
