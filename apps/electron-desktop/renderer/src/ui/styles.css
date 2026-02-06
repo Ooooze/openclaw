@@ -2157,6 +2157,14 @@ pre {
   flex-direction: column;
 }
 
+.UiChatLayout {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+}
+
 /* Markdown styles (chat and elsewhere) */
 .UiMarkdown {
   white-space: normal;
