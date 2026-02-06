@@ -61,7 +61,7 @@ apps/ios/*.dSYM.zip
 # provisioning profiles (local)
 apps/ios/*.mobileprovision
 .env
-
+.idea/**
 # Local untracked files
 .local/
 .vscode/
