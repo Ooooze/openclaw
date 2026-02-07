@@ -112,6 +112,7 @@
 
 .UiChatSidebarSettings {
   display: flex;
+  cursor: pointer;
   align-items: center;
   gap: 8px;
   height: 32px;

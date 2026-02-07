@@ -233,7 +233,7 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
                     <span className="UiChatPending">sending…</span>
                   </div>
                 )}
-                {attachmentsToShow.length > 0 && m.role === "user" ? (
+                {attachmentsToShow.length > 0 ? (
                   <div className="UiChatMessageAttachments">
                     {attachmentsToShow.map((att: UiMessageAttachment, idx: number) => {
                       const isImage = att.dataUrl && (att.mimeType?.startsWith("image/") ?? false);
@@ -245,8 +245,8 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
                         );
                       }
                       const mimeType = att.mimeType ?? "application/octet-stream";
-                      const thinkingType = att.type === "thinking";
-                      if (thinkingType) return null;
+                      const skipFile = ["toolCall", "thinking"].includes(att.type);
+                      if (skipFile) return null;
                       return (
                         <ChatAttachmentCard
                           key={`${m.id}-att-${idx}`}
@@ -287,6 +287,15 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
         {Object.values(streamByRun).map((m) => (
           <div key={m.id} className="UiChatRow UiChatRow-assistant">
             <div className="UiChatBubble UiChatBubble-assistant UiChatBubble-stream">
+              <div className="UiChatBubbleMeta">
+                <span className="UiChatPending">
+                  <span className="UiChatTypingDots" aria-label="typing">
+                    <span />
+                    <span />
+                    <span />
+                  </span>
+                </span>
+              </div>
               {m.text ? (
                 <div className="UiChatText UiMarkdown">
                   <Markdown>{m.text}</Markdown>
