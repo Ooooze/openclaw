@@ -23,7 +23,7 @@
 
 .UiSettingsOtherSectionTitle {
   letter-spacing: 0.01em;
-  color: rgba(255, 255, 255, 0.50);
+  color: rgba(255, 255, 255, 0.5);
   font-size: 13px;
   font-style: normal;
   font-weight: 500;
@@ -50,7 +50,7 @@
 }
 
 .UiSettingsOtherRow + .UiSettingsOtherRow {
-  border-top: 1px solid #1E1E1E;
+  border-top: 1px solid #1e1e1e;
 }
 
 .UiSettingsOtherRowLabel {
@@ -157,7 +157,7 @@
 }
 
 .UiSettingsOtherAppRowLabel {
-  color: rgba(255, 255, 255, 0.50);
+  color: rgba(255, 255, 255, 0.5);
   font-style: normal;
   font-weight: 500;
 }
