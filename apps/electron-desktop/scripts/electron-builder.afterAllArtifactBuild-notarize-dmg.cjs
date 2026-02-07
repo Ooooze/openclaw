@@ -79,28 +79,41 @@ module.exports = async function afterAllArtifactBuild(context) {
     return;
   }
 
-  const outDir = context.outDir && typeof context.outDir === "string" ? context.outDir : process.cwd();
+  const outDir =
+    context.outDir && typeof context.outDir === "string" ? context.outDir : process.cwd();
   const appOutDirGuess = path.join(outDir, `mac-${process.arch}`);
-  const appOutDir = (context.appOutDir && typeof context.appOutDir === "string" ? context.appOutDir : null) || appOutDirGuess;
+  const appOutDir =
+    (context.appOutDir && typeof context.appOutDir === "string" ? context.appOutDir : null) ||
+    appOutDirGuess;
   const appBundle = findFirstAppBundle(appOutDir);
   if (!appBundle) {
-    throw new Error(`[electron-desktop] afterAllArtifactBuild: app bundle not found in: ${appOutDir}`);
+    throw new Error(
+      `[electron-desktop] afterAllArtifactBuild: app bundle not found in: ${appOutDir}`
+    );
   }
 
   // Prefer the app's own package.json for stable artifact naming.
   // We've observed electron-builder context sometimes reporting version as "0.0.0".
   const pkg = readElectronDesktopPackageJson();
   const productName =
-    (pkg && pkg.build && typeof pkg.build.productName === "string" && pkg.build.productName.trim()) || "Atomic Bot";
+    (pkg &&
+      pkg.build &&
+      typeof pkg.build.productName === "string" &&
+      pkg.build.productName.trim()) ||
+    "Atomic Bot";
   const version = (pkg && typeof pkg.version === "string" && pkg.version.trim()) || "0.0.0";
 
   const dmgPath = path.join(outDir, `${productName}-${version}-${process.arch}.dmg`);
   const rebuildScript = path.resolve(__dirname, "build-dmg-from-app.sh");
   if (!fs.existsSync(rebuildScript)) {
-    throw new Error(`[electron-desktop] afterAllArtifactBuild: DMG build script missing: ${rebuildScript}`);
+    throw new Error(
+      `[electron-desktop] afterAllArtifactBuild: DMG build script missing: ${rebuildScript}`
+    );
   }
 
-  console.log(`[electron-desktop] afterAllArtifactBuild: building DMG from app: ${path.basename(appBundle)}`);
+  console.log(
+    `[electron-desktop] afterAllArtifactBuild: building DMG from app: ${path.basename(appBundle)}`
+  );
   run("bash", [rebuildScript, appBundle, dmgPath], {
     stdio: "inherit",
     env: {
@@ -117,24 +130,24 @@ module.exports = async function afterAllArtifactBuild(context) {
   const cscName = process.env.CSC_NAME && String(process.env.CSC_NAME).trim();
   if (cscName) {
     console.log(`[electron-desktop] afterAllArtifactBuild: signing DMG with CSC_NAME: ${cscName}`);
-    run("codesign", ["--force", "--sign", cscName, "--timestamp", dmgPath], { stdio: "inherit", env: process.env });
+    run("codesign", ["--force", "--sign", cscName, "--timestamp", dmgPath], {
+      stdio: "inherit",
+      env: process.env,
+    });
     run("codesign", ["--verify", "--verbose=4", dmgPath], { stdio: "inherit", env: process.env });
   } else {
-    console.log("[electron-desktop] afterAllArtifactBuild: CSC_NAME not set (skipping DMG signing)");
+    console.log(
+      "[electron-desktop] afterAllArtifactBuild: CSC_NAME not set (skipping DMG signing)"
+    );
   }
 
-  // If electron-builder previously created a .blockmap for a now-nonexistent DMG, delete it.
-  // We're not using electron-updater yet, so leaving a stale blockmap is more confusing than helpful.
-  const blockmapPath = `${dmgPath}.blockmap`;
-  try {
-    fs.rmSync(blockmapPath, { force: true });
-  } catch {
-    // ignore
-  }
+  // Keep blockmap files — electron-updater uses them for efficient differential updates.
 
   const notarizeEnabled = String(process.env.NOTARIZE || "").trim() === "1";
   if (!notarizeEnabled) {
-    console.log("[electron-desktop] afterAllArtifactBuild: NOTARIZE=1 not set (skipping DMG notarization)");
+    console.log(
+      "[electron-desktop] afterAllArtifactBuild: NOTARIZE=1 not set (skipping DMG notarization)"
+    );
     return;
   }
 
@@ -143,17 +156,18 @@ module.exports = async function afterAllArtifactBuild(context) {
       [
         "[electron-desktop] afterAllArtifactBuild: notary auth missing.",
         "Set NOTARYTOOL_PROFILE (keychain profile) OR NOTARYTOOL_KEY/NOTARYTOOL_KEY_ID/NOTARYTOOL_ISSUER (API key).",
-      ].join("\n"),
+      ].join("\n")
     );
   }
 
   const repoRoot = repoRootFromHere();
   const notarizeScript = path.join(repoRoot, "scripts", "notarize-mac-artifact.sh");
   if (!fs.existsSync(notarizeScript)) {
-    throw new Error(`[electron-desktop] afterAllArtifactBuild: notarize script not found: ${notarizeScript}`);
+    throw new Error(
+      `[electron-desktop] afterAllArtifactBuild: notarize script not found: ${notarizeScript}`
+    );
   }
 
   console.log(`[electron-desktop] afterAllArtifactBuild: notarizing DMG: ${dmgPath}`);
   run("bash", [notarizeScript, dmgPath], { stdio: "inherit", env: process.env });
 };
-

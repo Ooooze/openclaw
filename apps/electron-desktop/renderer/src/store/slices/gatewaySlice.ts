@@ -13,49 +13,52 @@ const initialState: GatewaySliceState = {
 let unsubGatewayState: (() => void) | null = null;
 let didInit = false;
 
-export const initGatewayState = createAsyncThunk("gateway/initGatewayState", async (_: void, thunkApi) => {
-  // Ensure we only register a single window subscription.
-  if (didInit) {
-    return;
-  }
-  const waitForApi = async (timeoutMs: number) => {
-    const start = Date.now();
-    while (Date.now() - start < timeoutMs) {
-      if (thunkApi.signal.aborted) {
-        return null;
-      }
-      const api = window.openclawDesktop;
-      if (api) {
-        return api;
-      }
-      await new Promise((r) => setTimeout(r, 50));
+export const initGatewayState = createAsyncThunk(
+  "gateway/initGatewayState",
+  async (_: void, thunkApi) => {
+    // Ensure we only register a single window subscription.
+    if (didInit) {
+      return;
     }
-    return window.openclawDesktop ?? null;
-  };
+    const waitForApi = async (timeoutMs: number) => {
+      const start = Date.now();
+      while (Date.now() - start < timeoutMs) {
+        if (thunkApi.signal.aborted) {
+          return null;
+        }
+        const api = window.openclawDesktop;
+        if (api) {
+          return api;
+        }
+        await new Promise((r) => setTimeout(r, 50));
+      }
+      return window.openclawDesktop ?? null;
+    };
 
-  const api = await waitForApi(2_000);
-  if (!api) {
-    // Do not lock init if preload is not ready yet.
-    return;
-  }
-  didInit = true;
+    const api = await waitForApi(2_000);
+    if (!api) {
+      // Do not lock init if preload is not ready yet.
+      return;
+    }
+    didInit = true;
 
-  try {
-    const info = await api.getGatewayInfo();
-    thunkApi.dispatch(gatewayActions.setGatewayState(info.state ?? null));
-  } catch {
-    // ignore
-  }
+    try {
+      const info = await api.getGatewayInfo();
+      thunkApi.dispatch(gatewayActions.setGatewayState(info.state ?? null));
+    } catch {
+      // ignore
+    }
 
-  try {
-    unsubGatewayState?.();
-  } catch {
-    // ignore
+    try {
+      unsubGatewayState?.();
+    } catch {
+      // ignore
+    }
+    unsubGatewayState = api.onGatewayState((next) => {
+      thunkApi.dispatch(gatewayActions.setGatewayState(next));
+    });
   }
-  unsubGatewayState = api.onGatewayState((next) => {
-    thunkApi.dispatch(gatewayActions.setGatewayState(next));
-  });
-});
+);
 
 const gatewaySlice = createSlice({
   name: "gateway",
@@ -69,4 +72,3 @@ const gatewaySlice = createSlice({
 
 export const gatewayActions = gatewaySlice.actions;
 export const gatewayReducer = gatewaySlice.reducer;
-

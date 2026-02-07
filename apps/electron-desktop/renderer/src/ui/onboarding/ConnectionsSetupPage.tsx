@@ -34,7 +34,13 @@ const CONNECTIONS: ConnectionEntry[] = [
   },
 ];
 
-function ConnectionCta({ status, onConnect }: { status: ConnectionStatus; onConnect?: () => void }) {
+function ConnectionCta({
+  status,
+  onConnect,
+}: {
+  status: ConnectionStatus;
+  onConnect?: () => void;
+}) {
   if (status === "connected") {
     return (
       <span className="UiSkillStatus UiSkillStatus--connected" aria-label="Connected">
@@ -80,13 +86,16 @@ export function ConnectionsSetupPage(props: {
           ))}
         </div>
         <div className="UiSectionTitle">Set Up Connections</div>
-        <div className="UiSectionSubtitle">Connect chat apps so you can talk to OpenClaw from anywhere</div>
+        <div className="UiSectionSubtitle">
+          Connect chat apps so you can talk to OpenClaw from anywhere
+        </div>
 
         <div className="UiProviderList UiListWithScroll">
           <div className="UiSkillsGrid">
             {CONNECTIONS.map((conn) => {
               const status = conn.id === "telegram" ? props.telegramStatus : props.slackStatus;
-              const onConnect = conn.id === "telegram" ? props.onTelegramConnect : props.onSlackConnect;
+              const onConnect =
+                conn.id === "telegram" ? props.onTelegramConnect : props.onSlackConnect;
               const connected = status === "connected";
               return (
                 <div
@@ -126,4 +135,3 @@ export function ConnectionsSetupPage(props: {
     </HeroPageLayout>
   );
 }
-

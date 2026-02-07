@@ -31,7 +31,8 @@ export function TelegramTokenPage(props: {
 
         <div className="UiApiKeyTitle">Connect Telegram</div>
         <div className="UiApiKeySubtitle">
-          Paste your bot token from <strong>@BotFather</strong>. We'll store it under <code>channels.telegram.botToken</code>.
+          Paste your bot token from <strong>@BotFather</strong>. We'll store it under{" "}
+          <code>channels.telegram.botToken</code>.
         </div>
 
         <div className="UiSectionSubtitle">
@@ -48,7 +49,9 @@ export function TelegramTokenPage(props: {
             className="UiLink"
             onClick={(e) => {
               e.preventDefault();
-              void window.openclawDesktop?.openExternal("https://docs.openclaw.ai/channels/telegram");
+              void window.openclawDesktop?.openExternal(
+                "https://docs.openclaw.ai/channels/telegram"
+              );
             }}
           >
             Telegram setup ↗
@@ -83,4 +86,3 @@ export function TelegramTokenPage(props: {
     </HeroPageLayout>
   );
 }
-

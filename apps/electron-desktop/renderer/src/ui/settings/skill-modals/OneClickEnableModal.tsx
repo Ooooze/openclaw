@@ -52,8 +52,8 @@ export function AppleNotesModalContent(props: {
     <div className="UiSkillModalContent">
       <div className="UiSectionTitle">Apple Notes</div>
       <div className="UiSectionSubtitle">
-        Create, search and organize notes without leaving your keyboard. This will check the
-        bundled memo binary and enable the skill.
+        Create, search and organize notes without leaving your keyboard. This will check the bundled
+        memo binary and enable the skill.
       </div>
       {error && <InlineError>{error}</InlineError>}
       {status && <div className="UiSkillModalStatus">{status}</div>}
@@ -110,9 +110,7 @@ export function AppleRemindersModalContent(props: {
       const authorizeRes = await api.remindctlAuthorize();
       if (!authorizeRes.ok) {
         throw new Error(
-          authorizeRes.stderr?.trim() ||
-            authorizeRes.stdout?.trim() ||
-            "remindctl authorize failed",
+          authorizeRes.stderr?.trim() || authorizeRes.stdout?.trim() || "remindctl authorize failed"
         );
       }
 
@@ -120,7 +118,7 @@ export function AppleRemindersModalContent(props: {
       const todayRes = await api.remindctlTodayJson();
       if (!todayRes.ok) {
         throw new Error(
-          todayRes.stderr?.trim() || todayRes.stdout?.trim() || "remindctl check failed",
+          todayRes.stderr?.trim() || todayRes.stdout?.trim() || "remindctl check failed"
         );
       }
 

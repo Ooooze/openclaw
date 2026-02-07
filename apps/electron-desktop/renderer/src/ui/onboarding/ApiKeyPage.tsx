@@ -81,7 +81,12 @@ export function ApiKeyPage(props: {
         <div className="UiApiKeySpacer" aria-hidden="true" />
 
         <div className="UiApiKeyButtonRow">
-          <button className="UiTextButton" disabled={props.busy} onClick={props.onBack} type="button">
+          <button
+            className="UiTextButton"
+            disabled={props.busy}
+            onClick={props.onBack}
+            type="button"
+          >
             Back
           </button>
           <PrimaryButton size={'sm'} disabled={!apiKey.trim() || props.busy} onClick={handleSubmit}>

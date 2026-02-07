@@ -7,6 +7,7 @@ import { registerIpcHandlers } from "./main/ipc/register";
 import { DEFAULT_PORT } from "./main/constants";
 import { ensureGatewayConfigFile, readGatewayTokenFromConfig } from "./main/gateway/config";
 import { spawnGateway } from "./main/gateway/spawn";
+import { initAutoUpdater, disposeAutoUpdater } from "./main/updater";
 import {
   resolveBundledGogBin,
   resolveBundledJqBin,
@@ -94,7 +95,10 @@ async function ensureMainWindow(): Promise<BrowserWindow | null> {
     return null;
   }
 
-  const nextWin = await createMainWindow({ preloadPath: preloadPathForWindow, rendererIndex: rendererIndexForWindow });
+  const nextWin = await createMainWindow({
+    preloadPath: preloadPathForWindow,
+    rendererIndex: rendererIndexForWindow,
+  });
   mainWindow = nextWin;
 
   nextWin.on("closed", () => {
@@ -177,6 +181,7 @@ app.on("activate", () => {
 });
 
 app.on("before-quit", async () => {
+  disposeAutoUpdater();
   await stopGatewayChild();
 });
 
@@ -210,13 +215,22 @@ void app.whenReady().then(async () => {
   const token = tokenFromConfig ?? randomBytes(24).toString("base64url");
   ensureGatewayConfigFile({ configPath, token });
 
-  const rendererIndex = resolveRendererIndex({ isPackaged: app.isPackaged, appPath: app.getAppPath(), mainDir: MAIN_DIR });
+  const rendererIndex = resolveRendererIndex({
+    isPackaged: app.isPackaged,
+    appPath: app.getAppPath(),
+    mainDir: MAIN_DIR,
+  });
   const preloadPath = resolvePreloadPath(MAIN_DIR);
   preloadPathForWindow = preloadPath;
   rendererIndexForWindow = rendererIndex;
 
   await ensureMainWindow();
   ensureTray();
+
+  // Initialize auto-updater in packaged builds only.
+  if (app.isPackaged) {
+    initAutoUpdater(() => mainWindow);
+  }
 
   // Consent is stored in the same per-user state dir as the embedded gateway config.
   const consentPath = path.join(stateDir, "consent.json");
@@ -323,4 +337,3 @@ function writeConsentAccepted(consentPath: string): void {
     // ignore
   }
 }
-

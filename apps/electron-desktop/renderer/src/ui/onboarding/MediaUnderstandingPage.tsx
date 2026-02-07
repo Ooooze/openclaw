@@ -1,6 +1,14 @@
 import React from "react";
 
-import { CheckboxRow, GlassCard, HeroPageLayout, InlineError, PrimaryButton, TextInput, } from "../kit";
+import {
+  CheckboxRow,
+  GlassCard,
+  HeroPageLayout,
+  InlineError,
+  PrimaryButton,
+  SecondaryButton,
+  TextInput,
+} from "../kit";
 import { addToastError } from "../toast";
 
 type MediaUnderstandingSettings = {

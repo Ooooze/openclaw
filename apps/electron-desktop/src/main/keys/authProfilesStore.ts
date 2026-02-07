@@ -74,7 +74,10 @@ export function readAuthProfilesStore(params: { authProfilesPath: string }): Aut
   return { version, profiles, order };
 }
 
-export function writeAuthProfilesStoreAtomic(params: { authProfilesPath: string; store: AuthProfilesStore }) {
+export function writeAuthProfilesStoreAtomic(params: {
+  authProfilesPath: string;
+  store: AuthProfilesStore;
+}) {
   ensureDir(path.dirname(params.authProfilesPath));
   const tmp = `${params.authProfilesPath}.${randomBytes(8).toString("hex")}.tmp`;
   fs.writeFileSync(tmp, `${JSON.stringify(params.store, null, 2)}\n`, { encoding: "utf-8" });
@@ -90,4 +93,3 @@ export function writeAuthProfilesStoreAtomic(params: { authProfilesPath: string;
     // ignore
   }
 }
-

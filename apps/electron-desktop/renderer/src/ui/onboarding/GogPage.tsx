@@ -43,7 +43,9 @@ const SERVICE_OPTIONS: ServiceOption[] = [
 ];
 
 function parseDefaultServicesCsv(): string[] {
-  return DEFAULT_GOG_SERVICES.split(",").map((v) => v.trim()).filter(Boolean);
+  return DEFAULT_GOG_SERVICES.split(",")
+    .map((v) => v.trim())
+    .filter(Boolean);
 }
 
 export function GogPage(props: {
@@ -72,7 +74,7 @@ export function GogPage(props: {
 
   const selectedServices = React.useMemo(
     () => SERVICE_OPTIONS.filter((s) => services[s.id]).map((s) => s.id),
-    [services],
+    [services]
   );
   const servicesCsv = selectedServices.join(",");
 

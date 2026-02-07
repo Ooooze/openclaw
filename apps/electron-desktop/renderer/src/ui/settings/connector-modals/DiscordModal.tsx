@@ -81,7 +81,11 @@ export function DiscordModalContent(props: {
       <div className="UiSectionTitle">Discord</div>
       <div className="UiSectionSubtitle">
         Connect your Discord bot. Create one in the{" "}
-        <a href="https://discord.com/developers/applications" target="_blank" rel="noopener noreferrer">
+        <a
+          href="https://discord.com/developers/applications"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Discord Developer Portal
         </a>{" "}
         and copy the bot token.

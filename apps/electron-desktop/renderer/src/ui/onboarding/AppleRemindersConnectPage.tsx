@@ -36,7 +36,8 @@ export function AppleRemindersConnectPage(props: {
           <ol>
             <li>macOS may prompt you to grant Automation access to Reminders.app.</li>
             <li>
-              If you deny access, Reminders actions will fail until you re-enable permissions in System Settings.
+              If you deny access, Reminders actions will fail until you re-enable permissions in
+              System Settings.
             </li>
           </ol>
         </div>
@@ -46,7 +47,12 @@ export function AppleRemindersConnectPage(props: {
         <div className="UiApiKeySpacer" aria-hidden="true" />
 
         <div className="UiApiKeyButtonRow">
-          <button className="UiTextButton" disabled={props.busy} onClick={props.onBack} type="button">
+          <button
+            className="UiTextButton"
+            disabled={props.busy}
+            onClick={props.onBack}
+            type="button"
+          >
             Back
           </button>
           <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
@@ -62,4 +68,3 @@ export function AppleRemindersConnectPage(props: {
     </HeroPageLayout>
   );
 }
-

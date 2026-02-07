@@ -47,7 +47,7 @@ type ExecApprovalsSnapshot = {
 
 function mergeAllowlistEntries(
   existing: ExecApprovalsAllowlistEntry[] | undefined,
-  patterns: string[],
+  patterns: string[]
 ): ExecApprovalsAllowlistEntry[] {
   const list = Array.isArray(existing) ? existing : [];
   const seen = new Set(list.map((e) => e.pattern.trim().toLowerCase()).filter(Boolean));
@@ -98,7 +98,7 @@ export function useWelcomeTrello({ gw, loadConfig, setError, setStatus }: UseWel
             },
           },
           null,
-          2,
+          2
         ),
         note: "Welcome: configure Trello skill credentials",
       });
@@ -108,7 +108,8 @@ export function useWelcomeTrello({ gw, loadConfig, setError, setStatus }: UseWel
       try {
         setStatus("Allowing curl and jq (exec defaults)…");
         const snap2 = await gw.request<ConfigSnapshot>("config.get", {});
-        const baseHash2 = typeof snap2.hash === "string" && snap2.hash.trim() ? snap2.hash.trim() : null;
+        const baseHash2 =
+          typeof snap2.hash === "string" && snap2.hash.trim() ? snap2.hash.trim() : null;
         if (baseHash2) {
           const cfg = getObject(snap2.config);
           const tools = getObject(cfg.tools);
@@ -174,9 +175,8 @@ export function useWelcomeTrello({ gw, loadConfig, setError, setStatus }: UseWel
       setStatus("Trello connected.");
       return true;
     },
-    [gw, loadConfig, setError, setStatus],
+    [gw, loadConfig, setError, setStatus]
   );
 
   return { saveTrello };
 }
-

@@ -10,7 +10,13 @@ type GatewayResponseFrame = {
   id: string;
   ok: boolean;
   payload?: unknown;
-  error?: { code: string; message: string; details?: unknown; retryable?: boolean; retryAfterMs?: number };
+  error?: {
+    code: string;
+    message: string;
+    details?: unknown;
+    retryable?: boolean;
+    retryAfterMs?: number;
+  };
 };
 
 type GatewayEventFrame = {
@@ -119,7 +125,8 @@ export class GatewayClient {
 
   private resolveReconnectMinDelayMs(): number {
     const value =
-      typeof this.opts.reconnectMinDelayMs === "number" && Number.isFinite(this.opts.reconnectMinDelayMs)
+      typeof this.opts.reconnectMinDelayMs === "number" &&
+      Number.isFinite(this.opts.reconnectMinDelayMs)
         ? Math.max(0, Math.floor(this.opts.reconnectMinDelayMs))
         : 250;
     return value;
@@ -127,7 +134,8 @@ export class GatewayClient {
 
   private resolveReconnectMaxDelayMs(): number {
     const value =
-      typeof this.opts.reconnectMaxDelayMs === "number" && Number.isFinite(this.opts.reconnectMaxDelayMs)
+      typeof this.opts.reconnectMaxDelayMs === "number" &&
+      Number.isFinite(this.opts.reconnectMaxDelayMs)
         ? Math.max(0, Math.floor(this.opts.reconnectMaxDelayMs))
         : 5000;
     return value;
@@ -185,7 +193,12 @@ export class GatewayClient {
       scopes: ["operator.admin", "operator.approvals", "operator.pairing"],
       auth: { token: this.opts.token },
     };
-    const frame: GatewayRequestFrame = { type: "req", id: "connect", method: "connect", params: connectParams };
+    const frame: GatewayRequestFrame = {
+      type: "req",
+      id: "connect",
+      method: "connect",
+      params: connectParams,
+    };
     this.ws.send(JSON.stringify(frame));
   }
 
@@ -194,7 +207,12 @@ export class GatewayClient {
     try {
       frame = JSON.parse(text) as GatewayFrame;
     } catch (err) {
-      console.error("[GatewayClient] Failed to parse message:", err, "Raw text:", text.slice(0, 500));
+      console.error(
+        "[GatewayClient] Failed to parse message:",
+        err,
+        "Raw text:",
+        text.slice(0, 500)
+      );
       return;
     }
     if (!frame || typeof frame !== "object") {
@@ -223,4 +241,3 @@ export class GatewayClient {
     }
   }
 }
-

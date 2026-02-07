@@ -12,7 +12,12 @@ export function Brand({
   return (
     <div className="UiBrand" aria-label={text}>
       {iconSrc ? (
-        <img className="UiBrandIcon" src={iconSrc} alt={iconAlt} aria-hidden={iconAlt ? undefined : true} />
+        <img
+          className="UiBrandIcon"
+          src={iconSrc}
+          alt={iconAlt}
+          aria-hidden={iconAlt ? undefined : true}
+        />
       ) : (
         <span className="UiBrandMark" aria-hidden="true">
           +
@@ -30,9 +35,18 @@ function useAppIconUrl(): string {
   }, []);
 }
 
-export function SplashLogo({ iconAlt = "" }: { iconAlt?: string }) {
+export function SplashLogo({ iconAlt = "", size = 64 }: { iconAlt?: string; size?: number }) {
   const iconUrl = useAppIconUrl();
-  return <img className="UiSplashLogo" src={iconUrl} alt={iconAlt} aria-hidden={iconAlt ? undefined : true} />;
+  return (
+    <img
+      className="UiSplashLogo"
+      src={iconUrl}
+      alt={iconAlt}
+      aria-hidden={iconAlt ? undefined : true}
+      width={size}
+      height={size}
+    />
+  );
 }
 
 export function SpinningSplashLogo({
@@ -42,9 +56,20 @@ export function SpinningSplashLogo({
   iconAlt?: string;
   className?: string;
 }) {
-  const merged = className ? `UiSplashLogo UiSplashLogo--spin ${className}` : "UiSplashLogo UiSplashLogo--spin";
+  const merged = className
+    ? `UiSplashLogo UiSplashLogo--spin ${className}`
+    : "UiSplashLogo UiSplashLogo--spin";
   const iconUrl = useAppIconUrl();
-  return <img className={merged} src={iconUrl} alt={iconAlt} aria-hidden={iconAlt ? undefined : true} />;
+  return (
+    <img
+      className={merged}
+      width={64}
+      height={64}
+      src={iconUrl}
+      alt={iconAlt}
+      aria-hidden={iconAlt ? undefined : true}
+    />
+  );
 }
 
 export function FullscreenShell(props: {
@@ -223,7 +248,8 @@ export function ActionButton(props: {
   onClick: () => void;
 }) {
   const variant = props.variant ?? "secondary";
-  const className = variant === "primary" ? "UiActionButton UiActionButton-primary" : "UiActionButton";
+  const className =
+    variant === "primary" ? "UiActionButton UiActionButton-primary" : "UiActionButton";
   return (
     <button className={className} disabled={props.disabled} onClick={props.onClick}>
       {props.children}
@@ -238,7 +264,8 @@ export function ToolbarButton(props: {
   onClick: () => void;
 }) {
   const variant = props.variant ?? "default";
-  const className = variant === "primary" ? "UiToolbarButton UiToolbarButton-primary" : "UiToolbarButton";
+  const className =
+    variant === "primary" ? "UiToolbarButton UiToolbarButton-primary" : "UiToolbarButton";
   return (
     <button className={className} disabled={props.disabled} onClick={props.onClick}>
       {props.children}
@@ -285,4 +312,3 @@ export function Modal(props: {
     </div>
   );
 }
-

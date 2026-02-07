@@ -101,7 +101,9 @@ export function SignalModalContent(props: {
           type="text"
           value={account}
           onChange={setAccount}
-          placeholder={existingAccount ? `${existingAccount}  (leave empty to keep)` : "+1234567890"}
+          placeholder={
+            existingAccount ? `${existingAccount}  (leave empty to keep)` : "+1234567890"
+          }
           autoCapitalize="none"
           autoCorrect="off"
           spellCheck={false}

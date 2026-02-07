@@ -168,7 +168,10 @@ export function parseHistoryMessages(raw: unknown[]): UiMessage[] {
     if (!text && !hasAttachments) {
       continue;
     }
-    const ts = typeof msg.timestamp === "number" && Number.isFinite(msg.timestamp) ? Math.floor(msg.timestamp) : undefined;
+    const ts =
+      typeof msg.timestamp === "number" && Number.isFinite(msg.timestamp)
+        ? Math.floor(msg.timestamp)
+        : undefined;
     out.push({
       id: `h-${ts ?? 0}-${i}`,
       role,
@@ -182,11 +185,18 @@ export function parseHistoryMessages(raw: unknown[]): UiMessage[] {
 
 export const loadChatHistory = createAsyncThunk(
   "chat/loadChatHistory",
-  async ({ request, sessionKey, limit = 200 }: { request: GatewayRequest; sessionKey: string; limit?: number }, thunkApi) => {
+  async (
+    {
+      request,
+      sessionKey,
+      limit = 200,
+    }: { request: GatewayRequest; sessionKey: string; limit?: number },
+    thunkApi
+  ) => {
     thunkApi.dispatch(chatActions.setError(null));
     const res = await request<ChatHistoryResult>("chat.history", { sessionKey, limit });
     thunkApi.dispatch(chatActions.historyLoaded(parseHistoryMessages(res.messages)));
-  },
+  }
 );
 
 export const sendChatMessage = createAsyncThunk(
@@ -203,7 +213,7 @@ export const sendChatMessage = createAsyncThunk(
       message: string;
       attachments?: ChatAttachmentInput[];
     },
-    thunkApi,
+    thunkApi
   ) => {
     const trimmed = message.trim();
     const hasAttachments = Boolean(attachments?.length);
@@ -222,7 +232,7 @@ export const sendChatMessage = createAsyncThunk(
       chatActions.userMessageQueued({
         localId,
         message: displayMessage,
-      }),
+      })
     );
     thunkApi.dispatch(chatActions.ensureStreamRun({ runId }));
 
@@ -241,7 +251,7 @@ export const sendChatMessage = createAsyncThunk(
           };
         })
         .filter(
-          (a): a is { type: "image" | "file"; mimeType: string; content: string } => a !== null,
+          (a): a is { type: "image" | "file"; mimeType: string; content: string } => a !== null
         ) ?? [];
 
     try {
@@ -266,7 +276,7 @@ export const sendChatMessage = createAsyncThunk(
     } finally {
       thunkApi.dispatch(chatActions.setSending(false));
     }
-  },
+  }
 );
 
 const chatSlice = createSlice({
@@ -293,7 +303,9 @@ const chatSlice = createSlice({
       });
     },
     markUserMessageDelivered(state, action: PayloadAction<{ localId: string }>) {
-      state.messages = state.messages.map((m) => (m.id === action.payload.localId ? { ...m, pending: false } : m));
+      state.messages = state.messages.map((m) =>
+        m.id === action.payload.localId ? { ...m, pending: false } : m
+      );
     },
     ensureStreamRun(state, action: PayloadAction<{ runId: string }>) {
       const runId = action.payload.runId;
@@ -318,7 +330,10 @@ const chatSlice = createSlice({
         ts: Date.now(),
       };
     },
-    streamFinalReceived(state, action: PayloadAction<{ runId: string; seq: number; text: string }>) {
+    streamFinalReceived(
+      state,
+      action: PayloadAction<{ runId: string; seq: number; text: string }>
+    ) {
       const { runId, seq, text } = action.payload;
       delete state.streamByRun[runId];
       if (!text) {
@@ -349,4 +364,3 @@ const chatSlice = createSlice({
 
 export const chatActions = chatSlice.actions;
 export const chatReducer = chatSlice.reducer;
-

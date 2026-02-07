@@ -1,8 +1,7 @@
 /* Chat composer: input bar at bottom, + / input / mic / send */
 .UiChatComposer {
   flex-shrink: 0;
-  width: 100%;
-  padding: 16px 24px 20px;
+  padding: 0 24px 20px;
 }
 
 .UiChatFileInput {
@@ -17,6 +16,7 @@
   flex-shrink: 0;
   width: 32px;
   height: 32px;
+  padding: 0;
   border-radius: 100%;
   display: flex;
   align-items: center;
@@ -27,7 +27,9 @@
   font-size: 20px;
   line-height: 1;
   cursor: pointer;
-  transition: color 120ms ease, background 120ms ease;
+  transition:
+    color 120ms ease,
+    background 120ms ease;
 }
 
 .UiChatAttachButton:hover {
@@ -144,16 +146,21 @@
 
 .UiChatComposerInner {
   display: flex;
-  gap: 10px;
   align-items: center;
   flex-direction: column;
   max-width: 680px;
   margin: 0 auto;
   padding: 12px 8px 8px 8px;
+  gap: 2px;
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: #272727;
-  box-shadow: 0 80px 22px 0 rgba(0, 0, 0, 0.00), 0 51px 20px 0 rgba(0, 0, 0, 0.00), 0 29px 17px 0 rgba(0, 0, 0, 0.01), 0 13px 13px 0 rgba(0, 0, 0, 0.02), 0 3px 7px 0 rgba(0, 0, 0, 0.02);
+  box-shadow:
+    0 80px 22px 0 rgba(0, 0, 0, 0),
+    0 51px 20px 0 rgba(0, 0, 0, 0),
+    0 29px 17px 0 rgba(0, 0, 0, 0.01),
+    0 13px 13px 0 rgba(0, 0, 0, 0.02),
+    0 3px 7px 0 rgba(0, 0, 0, 0.02);
 }
 
 .UiChatComposerButtonBlock {
@@ -170,7 +177,7 @@
   border-radius: 0;
   background: transparent;
   color: #fff;
-  font-size: 15px;
+  font-size: 16px;
   line-height: 28px;
   min-height: 28px;
   max-height: 180px;
@@ -201,7 +208,9 @@
   background: transparent;
   color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
-  transition: color 120ms ease, background 120ms ease;
+  transition:
+    color 120ms ease,
+    background 120ms ease;
 }
 
 .UiChatMicButton:hover {
@@ -225,10 +234,12 @@
   justify-content: center;
   border: none;
   border-radius: 50%;
-  background: #AEFF00;
-  color: #1E1E1E;
+  background: #aeff00;
+  color: #1e1e1e;
   cursor: pointer;
-  transition: background 120ms ease, color 120ms ease;
+  transition:
+    background 120ms ease,
+    color 120ms ease;
 }
 
 .UiChatSendButton:hover:not(:disabled) {

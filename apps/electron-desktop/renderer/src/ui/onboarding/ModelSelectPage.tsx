@@ -47,7 +47,9 @@ export function ModelSelectPage(props: {
             ))}
           </div>
           <div className="UiSectionTitle">Select AI Model</div>
-          <div className="UiSectionSubtitle">Fetching available models from your configured provider.</div>
+          <div className="UiSectionSubtitle">
+            Fetching available models from your configured provider.
+          </div>
         </GlassCard>
       </HeroPageLayout>
     );
@@ -96,8 +98,8 @@ export function ModelSelectPage(props: {
           </div>
           <div className="UiSectionTitle">Select AI Model</div>
           <div className="UiSectionSubtitle">
-            No models were found for your configured API key. The key may be invalid or the provider may be temporarily
-            unavailable.
+            No models were found for your configured API key. The key may be invalid or the provider
+            may be temporarily unavailable.
           </div>
           <div className="UiModelBottomRow">
             <button className="UiTextButton" onClick={props.onBack}>

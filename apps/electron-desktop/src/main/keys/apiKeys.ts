@@ -42,7 +42,10 @@ export function upsertApiKeyProfile(params: {
 
   const profileName = normalizeProfileName(params.profileName ?? "default");
   const profileId = makeProfileId({ provider, profileName });
-  const authProfilesPath = resolveAuthProfilesPath({ stateDir: params.stateDir, agentId: params.agentId });
+  const authProfilesPath = resolveAuthProfilesPath({
+    stateDir: params.stateDir,
+    agentId: params.agentId,
+  });
 
   const store = readAuthProfilesStore({ authProfilesPath });
   const next = applyUpsertApiKeyProfile(store, {
@@ -57,14 +60,15 @@ export function upsertApiKeyProfile(params: {
 
 export function applyUpsertApiKeyProfile(
   store: AuthProfilesStore,
-  params: { profileId: string; profile: ApiKeyProfile; setDefaultForProvider: boolean },
+  params: { profileId: string; profile: ApiKeyProfile; setDefaultForProvider: boolean }
 ): AuthProfilesStore {
   const profiles = { ...store.profiles, [params.profileId]: params.profile };
   const order = { ...store.order };
   if (params.setDefaultForProvider) {
-    const prev = Array.isArray(order[params.profile.provider]) ? order[params.profile.provider] : [];
+    const prev = Array.isArray(order[params.profile.provider])
+      ? order[params.profile.provider]
+      : [];
     order[params.profile.provider] = ensureOrderFront({ list: prev, id: params.profileId });
   }
   return { version: store.version, profiles, order };
 }
-

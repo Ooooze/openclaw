@@ -32,14 +32,16 @@ export function useWelcomeConfig({ gw, state, setError, setStatus }: UseWelcomeC
     const hooksInternal = getObject(hooks.internal);
     const hooksEntries = getObject(hooksInternal.entries);
 
-    const currentWorkspace = typeof defaults.workspace === "string" ? defaults.workspace.trim() : "";
+    const currentWorkspace =
+      typeof defaults.workspace === "string" ? defaults.workspace.trim() : "";
     const workspace = currentWorkspace || inferWorkspaceDirFromConfigPath(snap.path);
 
     const patch: Record<string, unknown> = {};
 
     const authToken = typeof gatewayAuth.token === "string" ? gatewayAuth.token.trim() : "";
     const authMode = typeof gatewayAuth.mode === "string" ? gatewayAuth.mode.trim() : "";
-    const port = typeof gateway.port === "number" && Number.isFinite(gateway.port) ? gateway.port : null;
+    const port =
+      typeof gateway.port === "number" && Number.isFinite(gateway.port) ? gateway.port : null;
     const bind = typeof gateway.bind === "string" ? gateway.bind.trim() : "";
     const mode = typeof gateway.mode === "string" ? gateway.mode.trim() : "";
     const needsGateway =

@@ -10,7 +10,12 @@ type UseWelcomeWebSearchInput = {
   setStatus: (value: string | null) => void;
 };
 
-export function useWelcomeWebSearch({ gw, loadConfig, setError, setStatus }: UseWelcomeWebSearchInput) {
+export function useWelcomeWebSearch({
+  gw,
+  loadConfig,
+  setError,
+  setStatus,
+}: UseWelcomeWebSearchInput) {
   const saveWebSearch = React.useCallback(
     async (provider: WebSearchProvider, apiKey: string): Promise<boolean> => {
       const trimmed = apiKey.trim();
@@ -61,9 +66,8 @@ export function useWelcomeWebSearch({ gw, loadConfig, setError, setStatus }: Use
       setStatus("Web search configured.");
       return true;
     },
-    [gw, loadConfig, setError, setStatus],
+    [gw, loadConfig, setError, setStatus]
   );
 
   return { saveWebSearch };
 }
-

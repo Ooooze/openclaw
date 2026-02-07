@@ -201,14 +201,18 @@ export function ModelProvidersTab(props: {
   const [modelSearch, setModelSearch] = React.useState("");
   const [modelBusy, setModelBusy] = React.useState(false);
   const [modelStatus, setModelStatus] = React.useState<string | null>(null);
-  const [keyConfiguredProviders, setKeyConfiguredProviders] = React.useState<Set<ModelProvider> | null>(null);
+  const [keyConfiguredProviders, setKeyConfiguredProviders] =
+    React.useState<Set<ModelProvider> | null>(null);
   // Provider filter for model list — null means "show all configured"
   const [providerFilter, setProviderFilter] = React.useState<Set<ModelProvider> | null>(null);
 
-  const activeModelId = React.useMemo(() => getDefaultModelPrimary(props.configSnap?.config), [props.configSnap?.config]);
+  const activeModelId = React.useMemo(
+    () => getDefaultModelPrimary(props.configSnap?.config),
+    [props.configSnap?.config]
+  );
   const configuredProviders = React.useMemo(
     () => getConfiguredProviders(props.configSnap?.config),
-    [props.configSnap?.config],
+    [props.configSnap?.config]
   );
   const strictConfiguredProviders = React.useMemo(() => {
     if (!keyConfiguredProviders) {
@@ -283,7 +287,7 @@ export function ModelProvidersTab(props: {
       const keyStored = keyConfiguredProviders ? keyConfiguredProviders.has(id) : null;
       return keyStored === null ? configEnabled : configEnabled && keyStored;
     },
-    [configuredProviders, keyConfiguredProviders],
+    [configuredProviders, keyConfiguredProviders]
   );
 
   const pasteFromClipboard = React.useCallback(async (): Promise<string> => {
@@ -334,7 +338,7 @@ export function ModelProvidersTab(props: {
               },
             },
             null,
-            2,
+            2
           ),
           note: `Settings: enable ${provider} api_key profile`,
         });
@@ -348,7 +352,7 @@ export function ModelProvidersTab(props: {
         setBusyProvider(null);
       }
     },
-    [props, loadFreshBaseHash, refreshKeyConfiguredProviders],
+    [props, loadFreshBaseHash, refreshKeyConfiguredProviders]
   );
 
   // Clear stored model overrides on all existing sessions so they pick up the
@@ -361,7 +365,7 @@ export function ModelProvidersTab(props: {
       const sessions = listResult.sessions ?? [];
       const withOverride = sessions.filter((s) => s.modelOverride);
       await Promise.all(
-        withOverride.map((s) => props.gw.request("sessions.patch", { key: s.key, model: null })),
+        withOverride.map((s) => props.gw.request("sessions.patch", { key: s.key, model: null }))
       );
     } catch {
       // Non-critical: if clearing overrides fails, the config default still
@@ -394,7 +398,7 @@ export function ModelProvidersTab(props: {
               },
             },
             null,
-            2,
+            2
           ),
           note: "Settings: set default model",
         });
@@ -409,7 +413,7 @@ export function ModelProvidersTab(props: {
         setModelBusy(false);
       }
     },
-    [props, loadFreshBaseHash, clearSessionModelOverrides],
+    [props, loadFreshBaseHash, clearSessionModelOverrides]
   );
 
   const sortedModels = React.useMemo(() => sortModelsByProviderTierName(models), [models]);
@@ -435,7 +439,7 @@ export function ModelProvidersTab(props: {
         return next;
       });
     },
-    [strictConfiguredProviders.size],
+    [strictConfiguredProviders.size]
   );
 
   // The effective set of providers shown in the model list
@@ -451,8 +455,8 @@ export function ModelProvidersTab(props: {
 
   // Resolve provider info for modal
   const modalProviderInfo = React.useMemo(
-    () => (modalProvider ? MODEL_PROVIDERS.find((p) => p.id === modalProvider) ?? null : null),
-    [modalProvider],
+    () => (modalProvider ? (MODEL_PROVIDERS.find((p) => p.id === modalProvider) ?? null) : null),
+    [modalProvider]
   );
 
   // Active model display info
@@ -464,7 +468,7 @@ export function ModelProvidersTab(props: {
 
   const activeProviderInfo = React.useMemo(
     () => (activeProviderKey ? (MODEL_PROVIDER_BY_ID[activeProviderKey] ?? null) : null),
-    [activeProviderKey],
+    [activeProviderKey]
   );
 
   const activeModelEntry = React.useMemo(() => {
@@ -474,12 +478,12 @@ export function ModelProvidersTab(props: {
 
   const activeModelTier = React.useMemo(
     () => (activeModelEntry ? getModelTier(activeModelEntry) : null),
-    [activeModelEntry],
+    [activeModelEntry]
   );
 
   const activeModelMeta = React.useMemo(
     () => (activeModelEntry ? formatModelMeta(activeModelEntry) : null),
-    [activeModelEntry],
+    [activeModelEntry]
   );
 
   return (
@@ -605,7 +609,11 @@ export function ModelProvidersTab(props: {
           {strictConfiguredProviders.size === 0 ? (
             <div className="UiSectionSubtitle" style={{ marginTop: 10 }}>
               No providers configured yet.{" "}
-              <button type="button" className="UiLinkButton" onClick={() => setInnerTab("providers")}>
+              <button
+                type="button"
+                className="UiLinkButton"
+                onClick={() => setInnerTab("providers")}
+              >
                 Add an API key
               </button>{" "}
               to unlock model choices.
@@ -633,7 +641,7 @@ export function ModelProvidersTab(props: {
                     (acc[m.provider] ??= []).push(m);
                     return acc;
                   },
-                  {} as Record<string, ModelEntry[]>,
+                  {} as Record<string, ModelEntry[]>
                 );
 
                 const groups = Object.entries(grouped) as Array<[string, ModelEntry[]]>;
@@ -654,7 +662,10 @@ export function ModelProvidersTab(props: {
                       const meta = formatModelMeta(model);
                       const selected = activeModelId === modelKey;
                       return (
-                        <label key={modelKey} className={`UiModelOption ${selected ? "UiModelOption--selected" : ""}`}>
+                        <label
+                          key={modelKey}
+                          className={`UiModelOption ${selected ? "UiModelOption--selected" : ""}`}
+                        >
                           <input
                             type="radio"
                             name="model"
@@ -712,7 +723,11 @@ export function ModelProvidersTab(props: {
       )}
 
       {/* ── API key modal ──────────────────────────────── */}
-      <Modal open={!!modalProviderInfo} onClose={() => setModalProvider(null)} aria-label="Enter API key">
+      <Modal
+        open={!!modalProviderInfo}
+        onClose={() => setModalProvider(null)}
+        aria-label="Enter API key"
+      >
         {modalProviderInfo ? (
           <ApiKeyModalContent
             provider={modalProviderInfo}

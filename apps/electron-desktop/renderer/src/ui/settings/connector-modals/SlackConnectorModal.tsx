@@ -35,7 +35,7 @@ function parseList(raw: string): string[] {
     raw
       .split(/[\n,;]+/g)
       .map((v) => v.trim())
-      .filter(Boolean),
+      .filter(Boolean)
   );
 }
 
@@ -176,7 +176,9 @@ export function SlackConnectorModalContent(props: {
 
       {/* ── Tokens ────────────────────────────────────────── */}
       <div className="UiSkillModalField">
-        <label className="UiSkillModalLabel">Bot token (<code>xoxb-...</code>)</label>
+        <label className="UiSkillModalLabel">
+          Bot token (<code>xoxb-...</code>)
+        </label>
         <TextInput
           type="password"
           value={botToken}
@@ -189,7 +191,9 @@ export function SlackConnectorModalContent(props: {
       </div>
 
       <div className="UiSkillModalField">
-        <label className="UiSkillModalLabel">App token (<code>xapp-...</code>)</label>
+        <label className="UiSkillModalLabel">
+          App token (<code>xapp-...</code>)
+        </label>
         <TextInput
           type="password"
           value={appToken}
@@ -221,7 +225,9 @@ export function SlackConnectorModalContent(props: {
 
       {groupPolicy === "allowlist" && (
         <div className="UiSkillModalField">
-          <label className="UiSkillModalLabel">Allowed channels (names or IDs, comma-separated)</label>
+          <label className="UiSkillModalLabel">
+            Allowed channels (names or IDs, comma-separated)
+          </label>
           <textarea
             className="UiSkillModalSelect"
             rows={2}
@@ -232,7 +238,11 @@ export function SlackConnectorModalContent(props: {
             autoCapitalize="none"
             autoCorrect="off"
             spellCheck={false}
-            style={{ resize: "vertical", fontFamily: "var(--font-mono, ui-monospace, monospace)", fontSize: 12 }}
+            style={{
+              resize: "vertical",
+              fontFamily: "var(--font-mono, ui-monospace, monospace)",
+              fontSize: 12,
+            }}
           />
         </div>
       )}
@@ -270,7 +280,11 @@ export function SlackConnectorModalContent(props: {
             autoCapitalize="none"
             autoCorrect="off"
             spellCheck={false}
-            style={{ resize: "vertical", fontFamily: "var(--font-mono, ui-monospace, monospace)", fontSize: 12 }}
+            style={{
+              resize: "vertical",
+              fontFamily: "var(--font-mono, ui-monospace, monospace)",
+              fontSize: 12,
+            }}
           />
           {dmPolicy === "allowlist" && parseList(dmAllowFromRaw).length === 0 && (
             <InlineError>At least one allowFrom entry is required for DM allowlist.</InlineError>

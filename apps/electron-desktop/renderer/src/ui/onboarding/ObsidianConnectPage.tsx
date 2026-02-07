@@ -48,7 +48,8 @@ export function ObsidianConnectPage(props: {
           <ol>
             <li>Select a vault below. We'll set it as the default for future commands.</li>
             <li>
-              Connected means <code>obsidian-cli print-default --path-only</code> returns a vault path that exists.
+              Connected means <code>obsidian-cli print-default --path-only</code> returns a vault
+              path that exists.
             </li>
           </ol>
         </div>
@@ -92,7 +93,12 @@ export function ObsidianConnectPage(props: {
         <div className="UiApiKeySpacer" aria-hidden="true" />
 
         <div className="UiApiKeyButtonRow">
-          <button className="UiTextButton" disabled={props.busy} onClick={props.onBack} type="button">
+          <button
+            className="UiTextButton"
+            disabled={props.busy}
+            onClick={props.onBack}
+            type="button"
+          >
             Back
           </button>
           <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
@@ -115,4 +121,3 @@ export function ObsidianConnectPage(props: {
     </HeroPageLayout>
   );
 }
-

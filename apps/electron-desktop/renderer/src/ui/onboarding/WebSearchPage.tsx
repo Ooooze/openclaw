@@ -139,7 +139,12 @@ export function WebSearchPage(props: {
         </div>
 
         <div className="UiApiKeyButtonRow">
-          <button className="UiTextButton" disabled={props.busy} onClick={props.onBack} type="button">
+          <button
+            className="UiTextButton"
+            disabled={props.busy}
+            onClick={props.onBack}
+            type="button"
+          >
             Back
           </button>
           <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
@@ -155,4 +160,3 @@ export function WebSearchPage(props: {
     </HeroPageLayout>
   );
 }
-

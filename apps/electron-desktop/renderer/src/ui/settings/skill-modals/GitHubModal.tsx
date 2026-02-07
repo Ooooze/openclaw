@@ -70,7 +70,7 @@ export function GitHubModalContent(props: {
       const loginRes = await api.ghAuthLoginPat({ pat });
       if (!loginRes.ok) {
         throw new Error(
-          loginRes.stderr?.trim() || loginRes.stdout?.trim() || "gh auth login failed",
+          loginRes.stderr?.trim() || loginRes.stdout?.trim() || "gh auth login failed"
         );
       }
 
@@ -78,15 +78,13 @@ export function GitHubModalContent(props: {
       const statusRes = await api.ghAuthStatus();
       if (!statusRes.ok) {
         throw new Error(
-          statusRes.stderr?.trim() || statusRes.stdout?.trim() || "gh auth status failed",
+          statusRes.stderr?.trim() || statusRes.stdout?.trim() || "gh auth status failed"
         );
       }
 
       const userRes = await api.ghApiUser();
       if (!userRes.ok) {
-        throw new Error(
-          userRes.stderr?.trim() || userRes.stdout?.trim() || "gh api user failed",
-        );
+        throw new Error(userRes.stderr?.trim() || userRes.stdout?.trim() || "gh api user failed");
       }
 
       const resolvedPath = checkRes.resolvedPath ?? loginRes.resolvedPath ?? null;
@@ -109,7 +107,8 @@ export function GitHubModalContent(props: {
         Work with issues, pull requests, and workflows via the bundled gh CLI.
         {ghUser && (
           <>
-            {" "}Currently authenticated as <strong>{ghUser}</strong>.
+            {" "}
+            Currently authenticated as <strong>{ghUser}</strong>.
           </>
         )}
       </div>

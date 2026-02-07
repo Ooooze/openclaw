@@ -50,7 +50,11 @@ async function downloadToFile(url, destPath) {
   if (fs.existsSync(destPath)) {
     try {
       const st = fs.statSync(destPath);
-      if (st.isFile() && st.size > 0 && String(process.env.MEMO_FORCE_DOWNLOAD || "").trim() !== "1") {
+      if (
+        st.isFile() &&
+        st.size > 0 &&
+        String(process.env.MEMO_FORCE_DOWNLOAD || "").trim() !== "1"
+      ) {
         return;
       }
     } catch {
@@ -110,7 +114,9 @@ function listDirSafe(p) {
 }
 
 function findSingleChildDir(rootDir) {
-  const dirs = listDirSafe(rootDir).filter((e) => e.isDirectory()).map((e) => e.name);
+  const dirs = listDirSafe(rootDir)
+    .filter((e) => e.isDirectory())
+    .map((e) => e.name);
   if (dirs.length === 1) {
     return path.join(rootDir, dirs[0]);
   }
@@ -122,7 +128,8 @@ async function main() {
     throw new Error("fetch-memo-runtime is macOS-only (darwin)");
   }
 
-  const repo = (process.env.MEMO_REPO && String(process.env.MEMO_REPO).trim()) || "antoniorodr/memo";
+  const repo =
+    (process.env.MEMO_REPO && String(process.env.MEMO_REPO).trim()) || "antoniorodr/memo";
   const tag = (process.env.MEMO_TAG && String(process.env.MEMO_TAG).trim()) || "latest";
   const apiUrl =
     tag === "latest"
@@ -132,7 +139,9 @@ async function main() {
   const release = await fetchJson(apiUrl);
   const tagName = typeof release?.tag_name === "string" ? release.tag_name : "";
   if (!tagName) {
-    throw new Error(`failed to resolve memo release tag_name from GitHub API (repo: ${repo}, tag: ${tag})`);
+    throw new Error(
+      `failed to resolve memo release tag_name from GitHub API (repo: ${repo}, tag: ${tag})`
+    );
   }
 
   const tarballUrl = typeof release?.tarball_url === "string" ? release.tarball_url : "";
@@ -157,7 +166,9 @@ async function main() {
   rmrf(srcDir);
   const root = findSingleChildDir(extractDir);
   if (!root) {
-    throw new Error(`unexpected memo tarball layout; could not find single root dir (dir: ${extractDir})`);
+    throw new Error(
+      `unexpected memo tarball layout; could not find single root dir (dir: ${extractDir})`
+    );
   }
   fs.renameSync(root, srcDir);
   rmrf(extractDir);
@@ -170,4 +181,3 @@ main().catch((err) => {
   console.error(String(err?.stack || err?.message || err));
   process.exitCode = 1;
 });
-

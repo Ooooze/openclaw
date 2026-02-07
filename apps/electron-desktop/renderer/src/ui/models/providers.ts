@@ -22,14 +22,18 @@ export const PROVIDER_ICONS: Record<ModelProvider, string> = {
 
 export function resolveProviderIconUrl(provider: ModelProvider): string {
   // Resolve relative to renderer's index.html (renderer/dist/index.html -> ../../assets/)
-  return new URL(`../../assets/ai-providers/${PROVIDER_ICONS[provider]}`, document.baseURI).toString();
+  return new URL(
+    `../../assets/ai-providers/${PROVIDER_ICONS[provider]}`,
+    document.baseURI
+  ).toString();
 }
 
 export const MODEL_PROVIDERS: ModelProviderInfo[] = [
   {
     id: "anthropic",
     name: "Anthropic (Claude)",
-    description: "Claude models with excellent reasoning, coding, and instruction-following capabilities.",
+    description:
+      "Claude models with excellent reasoning, coding, and instruction-following capabilities.",
     recommended: true,
     placeholder: "sk-ant-...",
     helpUrl: "https://console.anthropic.com/settings/keys",
@@ -86,4 +90,3 @@ export const MODEL_PROVIDER_BY_ID: Record<ModelProvider, ModelProviderInfo> = {
   zai: MODEL_PROVIDERS.find((p) => p.id === "zai")!,
   minimax: MODEL_PROVIDERS.find((p) => p.id === "minimax")!,
 };
-

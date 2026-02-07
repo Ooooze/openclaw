@@ -7,4 +7,3 @@ export type ResetAndCloseResult = {
   ok: true;
   warnings?: string[];
 };
-

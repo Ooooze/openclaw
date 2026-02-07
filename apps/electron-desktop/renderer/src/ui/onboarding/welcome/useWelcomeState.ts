@@ -99,7 +99,12 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
   });
   const { saveApiKey } = useWelcomeApiKey({ gw, loadConfig, setError, setStatus });
   const { enableAppleNotes } = useWelcomeAppleNotes({ gw, loadConfig, setError, setStatus });
-  const { enableAppleReminders } = useWelcomeAppleReminders({ gw, loadConfig, setError, setStatus });
+  const { enableAppleReminders } = useWelcomeAppleReminders({
+    gw,
+    loadConfig,
+    setError,
+    setStatus,
+  });
   const { enableObsidian } = useWelcomeObsidian({ gw, loadConfig, setError, setStatus });
   const { enableGitHub } = useWelcomeGitHub({ gw, loadConfig, setError, setStatus });
   const { saveNotionApiKey } = useWelcomeNotion({ gw, loadConfig, setError, setStatus });
@@ -121,9 +126,10 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
     telegramToken,
     telegramUserId,
   } = useWelcomeTelegram({ gw, loadConfig, setError, setStatus });
-  const { gogAccount, gogBusy, gogError, gogOutput, onGogAuthAdd, onGogAuthList, setGogAccount } = useWelcomeGog({
-    gw,
-  });
+  const { gogAccount, gogBusy, gogError, gogOutput, onGogAuthAdd, onGogAuthList, setGogAccount } =
+    useWelcomeGog({
+      gw,
+    });
 
   const finish = React.useCallback(() => {
     void dispatch(setOnboarded(true));
@@ -153,13 +159,10 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
   const goWebSearch = React.useCallback(() => {
     void navigate(`${routes.welcome}/web-search`);
   }, [navigate]);
-  const goMediaUnderstanding = React.useCallback(
-    () => {
-      void refreshProviderFlags();
-      void navigate(`${routes.welcome}/media-understanding`);
-    },
-    [navigate],
-  );
+  const goMediaUnderstanding = React.useCallback(() => {
+    void refreshProviderFlags();
+    void navigate(`${routes.welcome}/media-understanding`);
+  }, [navigate]);
   const goSkills = React.useCallback(() => {
     void navigate(`${routes.welcome}/skills`);
   }, [navigate]);
@@ -285,7 +288,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
       setStatus(null);
       goApiKey();
     },
-    [goApiKey],
+    [goApiKey]
   );
 
   const onApiKeySubmit = React.useCallback(
@@ -308,7 +311,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
         setApiKeyBusy(false);
       }
     },
-    [selectedProvider, saveApiKey, loadModels, goModelSelect],
+    [selectedProvider, saveApiKey, loadModels, goModelSelect]
   );
 
   const onModelSelect = React.useCallback(
@@ -321,7 +324,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
         setError(String(err));
       }
     },
-    [saveDefaultModel, goSkills],
+    [saveDefaultModel, goSkills]
   );
 
   const refreshProviderFlags = React.useCallback(async () => {
@@ -363,7 +366,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
         setWebSearchBusy(false);
       }
     },
-    [goSkills, markSkillConnected, saveWebSearch],
+    [goSkills, markSkillConnected, saveWebSearch]
   );
 
   const onMediaUnderstandingSubmit = React.useCallback(
@@ -373,7 +376,8 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
       setStatus("Saving media understanding settings…");
       try {
         const snap = await loadConfig();
-        const baseHash = typeof snap.hash === "string" && snap.hash.trim() ? snap.hash.trim() : null;
+        const baseHash =
+          typeof snap.hash === "string" && snap.hash.trim() ? snap.hash.trim() : null;
         if (!baseHash) {
           throw new Error("Config base hash missing. Reload and try again.");
         }
@@ -390,7 +394,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
               },
             },
             null,
-            2,
+            2
           ),
           note: "Welcome: configure media understanding",
         });
@@ -404,7 +408,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
         setMediaUnderstandingBusy(false);
       }
     },
-    [goSkills, gw, loadConfig, markSkillConnected, setError, setStatus],
+    [goSkills, gw, loadConfig, markSkillConnected, setError, setStatus]
   );
 
   const _mediaProvidersDetected = React.useMemo(() => {
@@ -424,7 +428,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
       }
       return ok;
     },
-    [loadModels, refreshProviderFlags, saveApiKey],
+    [loadModels, refreshProviderFlags, saveApiKey]
   );
 
   const onNotionApiKeySubmit = React.useCallback(
@@ -445,7 +449,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
         setNotionBusy(false);
       }
     },
-    [goSkills, markSkillConnected, saveNotionApiKey, setError, setStatus],
+    [goSkills, markSkillConnected, saveNotionApiKey, setError, setStatus]
   );
 
   const onTrelloSubmit = React.useCallback(
@@ -466,7 +470,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
         setTrelloBusy(false);
       }
     },
-    [goSkills, markSkillConnected, saveTrello, setError, setStatus],
+    [goSkills, markSkillConnected, saveTrello, setError, setStatus]
   );
 
   const onAppleNotesCheckAndEnable = React.useCallback(async () => {
@@ -620,7 +624,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
         setObsidianBusy(false);
       }
     },
-    [enableObsidian, goSkills, markSkillConnected],
+    [enableObsidian, goSkills, markSkillConnected]
   );
 
   const onGitHubConnect = React.useCallback(
@@ -677,7 +681,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
         setGitHubBusy(false);
       }
     },
-    [enableGitHub, goSkills, markSkillConnected],
+    [enableGitHub, goSkills, markSkillConnected]
   );
 
   const onSlackConnect = React.useCallback(
@@ -710,7 +714,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
         setSlackBusy(false);
       }
     },
-    [goConnections, goSkills, markSkillConnected, saveSlackConfig],
+    [goConnections, goSkills, markSkillConnected, saveSlackConfig]
   );
 
   const onTelegramTokenNext = React.useCallback(async () => {

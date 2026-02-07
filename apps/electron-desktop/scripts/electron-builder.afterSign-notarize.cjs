@@ -72,7 +72,7 @@ module.exports = async function afterSign(context) {
       [
         "[electron-desktop] afterSign: notary auth missing.",
         "Set NOTARYTOOL_PROFILE (keychain profile) OR NOTARYTOOL_KEY/NOTARYTOOL_KEY_ID/NOTARYTOOL_ISSUER (API key).",
-      ].join("\n"),
+      ].join("\n")
     );
   }
 
@@ -95,13 +95,18 @@ module.exports = async function afterSign(context) {
   try {
     console.log(`[electron-desktop] afterSign: creating notary zip: ${zipPath}`);
     // ditto is the canonical way to zip a .app for notarization (preserves resource forks)
-    run("ditto", ["-c", "-k", "--sequesterRsrc", "--keepParent", appBundle, zipPath], { stdio: "inherit" });
+    run("ditto", ["-c", "-k", "--sequesterRsrc", "--keepParent", appBundle, zipPath], {
+      stdio: "inherit",
+    });
 
     console.log("[electron-desktop] afterSign: submitting to notary service (xcrun notarytool) …");
     run(
       "bash",
-      ["-lc", `STAPLE_APP_PATH="${appBundle.replace(/"/g, '\\"')}" "${notarizeScript.replace(/"/g, '\\"')}" "${zipPath.replace(/"/g, '\\"')}"`],
-      { stdio: "inherit", env: process.env },
+      [
+        "-lc",
+        `STAPLE_APP_PATH="${appBundle.replace(/"/g, '\\"')}" "${notarizeScript.replace(/"/g, '\\"')}" "${zipPath.replace(/"/g, '\\"')}"`,
+      ],
+      { stdio: "inherit", env: process.env }
     );
   } finally {
     try {
@@ -111,4 +116,3 @@ module.exports = async function afterSign(context) {
     }
   }
 };
-

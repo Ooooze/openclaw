@@ -11,7 +11,10 @@ export type GatewayRpcLike = {
 };
 
 export type ChannelsStatusResult = {
-  channelAccounts?: Record<string, Array<{ accountId?: string; configured?: boolean; lastError?: string }>>;
+  channelAccounts?: Record<
+    string,
+    Array<{ accountId?: string; configured?: boolean; lastError?: string }>
+  >;
 };
 
 export type GogExecResult = {

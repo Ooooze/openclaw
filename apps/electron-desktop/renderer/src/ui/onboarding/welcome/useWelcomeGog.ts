@@ -54,7 +54,9 @@ export function useWelcomeGog({ gw }: UseWelcomeGogInput) {
 
     const host = typeof exec.host === "string" && exec.host.trim() ? exec.host.trim() : "gateway";
     const security =
-      typeof exec.security === "string" && exec.security.trim() ? exec.security.trim() : "allowlist";
+      typeof exec.security === "string" && exec.security.trim()
+        ? exec.security.trim()
+        : "allowlist";
     const ask = typeof exec.ask === "string" && exec.ask.trim() ? exec.ask.trim() : "on-miss";
 
     await gw.request("config.patch", {
@@ -71,29 +73,33 @@ export function useWelcomeGog({ gw }: UseWelcomeGogInput) {
           },
         },
         null,
-        2,
+        2
       ),
       note: "Welcome: ensure gog exec defaults",
     });
   }, [gw]);
 
-  const onGogAuthAdd = React.useCallback(async (services?: string) => {
-    const servicesCsv = typeof services === "string" && services.trim() ? services.trim() : DEFAULT_GOG_SERVICES;
-    return await runGog(async () => {
-      const api = window.openclawDesktop;
-      if (!api) {
-        throw new Error("Desktop API not available");
-      }
-      const res = await api.gogAuthAdd({
-        account: gogAccount.trim(),
-        services: servicesCsv,
+  const onGogAuthAdd = React.useCallback(
+    async (services?: string) => {
+      const servicesCsv =
+        typeof services === "string" && services.trim() ? services.trim() : DEFAULT_GOG_SERVICES;
+      return await runGog(async () => {
+        const api = window.openclawDesktop;
+        if (!api) {
+          throw new Error("Desktop API not available");
+        }
+        const res = await api.gogAuthAdd({
+          account: gogAccount.trim(),
+          services: servicesCsv,
+        });
+        if (res.ok) {
+          await ensureGogExecDefaults();
+        }
+        return res;
       });
-      if (res.ok) {
-        await ensureGogExecDefaults();
-      }
-      return res;
-    });
-  }, [ensureGogExecDefaults, gogAccount, runGog]);
+    },
+    [ensureGogExecDefaults, gogAccount, runGog]
+  );
 
   const onGogAuthList = React.useCallback(async () => {
     return await runGog(async () => {

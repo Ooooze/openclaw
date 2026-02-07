@@ -108,7 +108,11 @@ async function downloadToFile(url, destPath) {
   if (fs.existsSync(destPath)) {
     try {
       const st = fs.statSync(destPath);
-      if (st.isFile() && st.size > 0 && String(process.env.GOGCLI_FORCE_DOWNLOAD || "").trim() !== "1") {
+      if (
+        st.isFile() &&
+        st.size > 0 &&
+        String(process.env.GOGCLI_FORCE_DOWNLOAD || "").trim() !== "1"
+      ) {
         return;
       }
     } catch {
@@ -183,7 +187,8 @@ async function main() {
   const os = resolveGogcliOs(platform);
   const assetArch = resolveGogcliArch(arch);
 
-  const repo = (process.env.GOGCLI_REPO && String(process.env.GOGCLI_REPO).trim()) || "moltbot/gogcli";
+  const repo =
+    (process.env.GOGCLI_REPO && String(process.env.GOGCLI_REPO).trim()) || "moltbot/gogcli";
   const tag = (process.env.GOGCLI_TAG && String(process.env.GOGCLI_TAG).trim()) || "latest";
   const apiUrl =
     tag === "latest"
@@ -194,14 +199,17 @@ async function main() {
   const tagName = typeof release?.tag_name === "string" ? release.tag_name : "";
   const version = tagName && tagName.startsWith("v") ? tagName.slice(1) : tagName;
   if (!version) {
-    throw new Error(`failed to resolve gogcli version from GitHub release tag: ${tagName || "<missing>"}`);
+    throw new Error(
+      `failed to resolve gogcli version from GitHub release tag: ${tagName || "<missing>"}`
+    );
   }
 
   const isZip = os === "windows";
   const assetName = `gogcli_${version}_${os}_${assetArch}.${isZip ? "zip" : "tar.gz"}`;
   const assets = Array.isArray(release?.assets) ? release.assets : [];
   const match = assets.find((a) => a && typeof a.name === "string" && a.name === assetName);
-  const downloadUrl = match && typeof match.browser_download_url === "string" ? match.browser_download_url : "";
+  const downloadUrl =
+    match && typeof match.browser_download_url === "string" ? match.browser_download_url : "";
   if (!downloadUrl) {
     const known = assets
       .map((a) => (a && typeof a.name === "string" ? a.name : ""))
@@ -209,7 +217,7 @@ async function main() {
       .slice(0, 40)
       .join(", ");
     throw new Error(
-      `gogcli asset not found for ${platform}/${arch}. Expected ${assetName}. Known assets (first 40): ${known || "<none>"}`,
+      `gogcli asset not found for ${platform}/${arch}. Expected ${assetName}. Known assets (first 40): ${known || "<none>"}`
     );
   }
 
@@ -249,4 +257,3 @@ main().catch((err) => {
   console.error(String(err?.stack || err?.message || err));
   process.exitCode = 1;
 });
-

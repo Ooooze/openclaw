@@ -4,4 +4,3 @@ export type GogExecResult = {
   stdout: string;
   stderr: string;
 };
-

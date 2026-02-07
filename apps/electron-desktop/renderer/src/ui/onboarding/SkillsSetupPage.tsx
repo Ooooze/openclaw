@@ -214,7 +214,9 @@ export function SkillsSetupPage(props: {
           ))}
         </div>
         <div className="UiSectionTitle">Set Up Skills</div>
-        <div className="UiSectionSubtitle">Set up integrations to solve more tasks or do it later</div>
+        <div className="UiSectionSubtitle">
+          Set up integrations to solve more tasks or do it later
+        </div>
 
         <div className="UiProviderList UiListWithScroll">
           <div className="UiSkillsGrid">
@@ -224,45 +226,45 @@ export function SkillsSetupPage(props: {
                   ? props.googleWorkspaceStatus
                   : skill.id === "media-understanding"
                     ? props.mediaUnderstandingStatus
-                  : skill.id === "web-search"
-                    ? props.webSearchStatus
-                  : skill.id === "notion"
-                    ? props.notionStatus
-                    : skill.id === "trello"
-                      ? props.trelloStatus
-                    : skill.id === "apple-notes"
-                      ? props.appleNotesStatus
-                    : skill.id === "apple-reminders"
-                      ? props.appleRemindersStatus
-                    : skill.id === "obsidian"
-                      ? props.obsidianStatus
-                    : skill.id === "github"
-                      ? props.githubStatus
-                    : skill.id === "slack"
-                      ? props.slackStatus
-                    : skill.status;
+                    : skill.id === "web-search"
+                      ? props.webSearchStatus
+                      : skill.id === "notion"
+                        ? props.notionStatus
+                        : skill.id === "trello"
+                          ? props.trelloStatus
+                          : skill.id === "apple-notes"
+                            ? props.appleNotesStatus
+                            : skill.id === "apple-reminders"
+                              ? props.appleRemindersStatus
+                              : skill.id === "obsidian"
+                                ? props.obsidianStatus
+                                : skill.id === "github"
+                                  ? props.githubStatus
+                                  : skill.id === "slack"
+                                    ? props.slackStatus
+                                    : skill.status;
               const onConnect =
                 skill.id === "google-workspace"
                   ? props.onGoogleWorkspaceConnect
                   : skill.id === "media-understanding"
                     ? props.onMediaUnderstandingConnect
-                  : skill.id === "web-search"
-                    ? props.onWebSearchConnect
-                  : skill.id === "notion"
-                    ? props.onNotionConnect
-                    : skill.id === "trello"
-                      ? props.onTrelloConnect
-                    : skill.id === "apple-notes"
-                      ? props.onAppleNotesConnect
-                    : skill.id === "apple-reminders"
-                      ? props.onAppleRemindersConnect
-                    : skill.id === "obsidian"
-                      ? props.onObsidianConnect
-                    : skill.id === "github"
-                      ? props.onGitHubConnect
-                : skill.id === "slack"
-                      ? props.onSlackConnect
-                    : undefined;
+                    : skill.id === "web-search"
+                      ? props.onWebSearchConnect
+                      : skill.id === "notion"
+                        ? props.onNotionConnect
+                        : skill.id === "trello"
+                          ? props.onTrelloConnect
+                          : skill.id === "apple-notes"
+                            ? props.onAppleNotesConnect
+                            : skill.id === "apple-reminders"
+                              ? props.onAppleRemindersConnect
+                              : skill.id === "obsidian"
+                                ? props.onObsidianConnect
+                                : skill.id === "github"
+                                  ? props.onGitHubConnect
+                                  : skill.id === "slack"
+                                    ? props.onSlackConnect
+                                    : undefined;
               const effectiveStatus: SkillStatus =
                 onConnect || status === "connected" ? status : "coming-soon";
               const connected = effectiveStatus === "connected";
@@ -304,4 +306,3 @@ export function SkillsSetupPage(props: {
     </HeroPageLayout>
   );
 }
-

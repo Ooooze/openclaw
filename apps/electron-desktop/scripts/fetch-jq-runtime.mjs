@@ -81,7 +81,11 @@ async function downloadToFile(url, destPath) {
   if (fs.existsSync(destPath)) {
     try {
       const st = fs.statSync(destPath);
-      if (st.isFile() && st.size > 0 && String(process.env.JQ_FORCE_DOWNLOAD || "").trim() !== "1") {
+      if (
+        st.isFile() &&
+        st.size > 0 &&
+        String(process.env.JQ_FORCE_DOWNLOAD || "").trim() !== "1"
+      ) {
         return;
       }
     } catch {
@@ -127,7 +131,9 @@ function isTarGz(filename) {
 }
 
 function isZip(filename) {
-  return String(filename || "").toLowerCase().endsWith(".zip");
+  return String(filename || "")
+    .toLowerCase()
+    .endsWith(".zip");
 }
 
 function extractArchive(params) {
@@ -226,7 +232,7 @@ async function main() {
       .slice(0, 60)
       .join(", ");
     throw new Error(
-      `jq asset not found for ${platform}/${arch}. Known assets (first 60): ${known || "<none>"}`,
+      `jq asset not found for ${platform}/${arch}. Known assets (first 60): ${known || "<none>"}`
     );
   }
 
@@ -281,4 +287,3 @@ main().catch((err) => {
   console.error(String(err?.stack || err?.message || err));
   process.exitCode = 1;
 });
-

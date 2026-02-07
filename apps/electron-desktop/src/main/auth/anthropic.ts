@@ -7,6 +7,10 @@ import { upsertApiKeyProfile } from "../keys/apiKeys";
  * evolves towards provider-agnostic key management.
  */
 export function writeAuthProfilesAnthropicApiKey(params: { stateDir: string; apiKey: string }) {
-  upsertApiKeyProfile({ stateDir: params.stateDir, provider: "anthropic", key: params.apiKey, profileName: "default" });
+  upsertApiKeyProfile({
+    stateDir: params.stateDir,
+    provider: "anthropic",
+    key: params.apiKey,
+    profileName: "default",
+  });
 }
-

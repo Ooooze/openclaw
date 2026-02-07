@@ -48,22 +48,16 @@ export function IMessageModalContent(props: {
     <div className="UiSkillModalContent">
       <div className="UiSectionTitle">iMessage</div>
       <div className="UiSectionSubtitle">
-        Connect iMessage on macOS. Requires the bundled imsg CLI and Full Disk Access permission
-        for the Messages database.
+        Connect iMessage on macOS. Requires the bundled imsg CLI and Full Disk Access permission for
+        the Messages database.
       </div>
       {error && <InlineError>{error}</InlineError>}
       {status && <div className="UiSkillModalStatus">{status}</div>}
 
-      {props.isConnected && (
-        <div className="UiSkillModalStatus">iMessage is connected.</div>
-      )}
+      {props.isConnected && <div className="UiSkillModalStatus">iMessage is connected.</div>}
 
       <div className="UiSkillModalActions">
-        <ActionButton
-          variant="primary"
-          disabled={busy}
-          onClick={() => void handleEnable()}
-        >
+        <ActionButton variant="primary" disabled={busy} onClick={() => void handleEnable()}>
           {busy ? "Enabling…" : props.isConnected ? "Re-enable" : "Enable iMessage"}
         </ActionButton>
       </div>

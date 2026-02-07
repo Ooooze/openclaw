@@ -8,6 +8,7 @@ import { upsertApiKeyProfile } from "../keys/apiKeys";
 import { readAuthProfilesStore, resolveAuthProfilesPath } from "../keys/authProfilesStore";
 import { registerGogIpcHandlers } from "../gog/ipc";
 import { registerResetAndCloseIpcHandler } from "../reset/ipc";
+import { checkForUpdates, downloadUpdate, installUpdate } from "../updater";
 import type { GatewayState } from "../types";
 
 type ExecResult = {
@@ -295,7 +296,12 @@ export function registerIpcHandlers(params: {
     if (!provider) {
       throw new Error("provider is required");
     }
-    upsertApiKeyProfile({ stateDir: params.stateDir, provider, key: apiKey, profileName: "default" });
+    upsertApiKeyProfile({
+      stateDir: params.stateDir,
+      provider,
+      key: apiKey,
+      profileName: "default",
+    });
     return { ok: true } as const;
   });
 
@@ -307,7 +313,8 @@ export function registerIpcHandlers(params: {
     const authProfilesPath = resolveAuthProfilesPath({ stateDir: params.stateDir });
     const store = readAuthProfilesStore({ authProfilesPath });
     const configured = Object.values(store.profiles).some(
-      (profile) => profile.type === "api_key" && profile.provider === provider && profile.key.trim().length > 0,
+      (profile) =>
+        profile.type === "api_key" && profile.provider === provider && profile.key.trim().length > 0
     );
     return { configured } as const;
   });
@@ -480,7 +487,13 @@ export function registerIpcHandlers(params: {
 
   ipcMain.handle("obsidian-vaults-list", async () => {
     // Obsidian stores vaults config here on macOS.
-    const cfgPath = path.join(os.homedir(), "Library", "Application Support", "obsidian", "obsidian.json");
+    const cfgPath = path.join(
+      os.homedir(),
+      "Library",
+      "Application Support",
+      "obsidian",
+      "obsidian.json"
+    );
     try {
       if (!fs.existsSync(cfgPath)) {
         return {
@@ -664,6 +677,22 @@ export function registerIpcHandlers(params: {
     });
   });
 
+  // Auto-updater IPC handlers.
+  ipcMain.handle("updater-check", async () => {
+    await checkForUpdates();
+    return { ok: true } as const;
+  });
+
+  ipcMain.handle("updater-download", async () => {
+    await downloadUpdate();
+    return { ok: true } as const;
+  });
+
+  ipcMain.handle("updater-install", async () => {
+    installUpdate();
+    return { ok: true } as const;
+  });
+
   registerGogIpcHandlers({
     gogBin: params.gogBin,
     openclawDir: params.openclawDir,
@@ -681,4 +710,3 @@ export function registerIpcHandlers(params: {
     stopGatewayChild: params.stopGatewayChild,
   });
 }
-

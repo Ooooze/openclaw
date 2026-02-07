@@ -1,0 +1,12 @@
+dist
+node_modules
+release
+vendor
+renderer/dist
+.gog-runtime
+.jq-runtime
+.memo-runtime
+.remindctl-runtime
+.obsidian-cli-runtime
+.gh-runtime
+package-lock.json

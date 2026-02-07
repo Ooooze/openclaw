@@ -17,7 +17,15 @@ import { addToastError } from "./toast";
 
 function CopyIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
       <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
     </svg>
@@ -73,7 +81,12 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
         return;
       }
       if (payload.state === "error") {
-        dispatch(chatActions.streamErrorReceived({ runId: payload.runId, errorMessage: payload.errorMessage }));
+        dispatch(
+          chatActions.streamErrorReceived({
+            runId: payload.runId,
+            errorMessage: payload.errorMessage,
+          })
+        );
         return;
       }
       if (payload.state === "aborted") {
@@ -120,20 +133,17 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
     const toSend = attachments.length > 0 ? [...attachments] : undefined;
     setInput("");
     setAttachments([]);
-    void dispatch(sendChatMessage({ request: gw.request, sessionKey, message, attachments: toSend }));
+    void dispatch(
+      sendChatMessage({ request: gw.request, sessionKey, message, attachments: toSend })
+    );
   }, [dispatch, gw.request, input, sessionKey, attachments]);
 
   const allMessages =
     optimisticFirstMessage != null
-      ? [
-          { id: "opt-first", role: "user" as const, text: optimisticFirstMessage },
-          ...messages,
-        ]
+      ? [{ id: "opt-first", role: "user" as const, text: optimisticFirstMessage }, ...messages]
       : messages;
 
-  const displayMessages = allMessages.filter(
-    (m) => m.role === "user" || m.role === "assistant",
-  );
+  const displayMessages = allMessages.filter((m) => m.role === "user" || m.role === "assistant");
 
   return (
     <div className="UiChatShell">
@@ -141,22 +151,20 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
         {displayMessages.map((m) => (
           <div key={m.id} className={`UiChatRow UiChatRow-${m.role}`}>
             <div className={`UiChatBubble UiChatBubble-${m.role}`}>
-              {m.pending && (<div className="UiChatBubbleMeta">
+              {m.pending && (
+                <div className="UiChatBubbleMeta">
                   <span className="UiChatPending">sending…</span>
-                </div>)}
+                </div>
+              )}
               {m.attachments && m.attachments.length > 0 ? (
                 <div className="UiChatMessageAttachments">
                   {m.attachments.map((att: UiMessageAttachment, idx: number) => {
                     const isImage = att.dataUrl && (att.mimeType?.startsWith("image/") ?? false);
-                    if (!isImage) return null
+                    if (!isImage) return null;
                     return (
                       <div key={`${m.id}-att-${idx}`} className="UiChatMessageAttachment">
                         {isImage && att.dataUrl && (
-                          <img
-                            src={att.dataUrl}
-                            alt=""
-                            className="UiChatMessageAttachmentImg"
-                          />
+                          <img src={att.dataUrl} alt="" className="UiChatMessageAttachmentImg" />
                         )}
                       </div>
                     );
@@ -216,4 +224,3 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
     </div>
   );
 }
-

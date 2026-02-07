@@ -96,8 +96,7 @@ export function MediaUnderstandingModalContent(props: {
     setStatus("Saving media understanding settings…");
     try {
       const snap = await props.loadConfig();
-      const baseHash =
-        typeof snap.hash === "string" && snap.hash.trim() ? snap.hash.trim() : null;
+      const baseHash = typeof snap.hash === "string" && snap.hash.trim() ? snap.hash.trim() : null;
       if (!baseHash) {
         throw new Error("Config base hash missing. Reload and try again.");
       }
@@ -114,7 +113,7 @@ export function MediaUnderstandingModalContent(props: {
             },
           },
           null,
-          2,
+          2
         ),
         note: "Settings: configure media understanding",
       });

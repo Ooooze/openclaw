@@ -52,7 +52,16 @@ export function spawnGateway(params: {
   // Important: first-run embedded app starts without a config file. Allow the Gateway to start
   // so the Control UI/WebChat + wizard flows can create config.
   // --verbose enables debug-level logging to help diagnose provider/model errors.
-  const args = [script, "gateway", "--bind", "loopback", "--port", String(port), "--allow-unconfigured", "--verbose"];
+  const args = [
+    script,
+    "gateway",
+    "--bind",
+    "loopback",
+    "--port",
+    String(port),
+    "--allow-unconfigured",
+    "--verbose",
+  ];
 
   const envPath = typeof process.env.PATH === "string" ? process.env.PATH : "";
   const extraBinDirs = [jqBin, gogBin, memoBin, remindctlBin, obsidianCliBin, ghBin]
@@ -107,4 +116,3 @@ export function spawnGateway(params: {
 
   return child;
 }
-

@@ -16,14 +16,9 @@ const OptimisticSessionContext = React.createContext<ContextValue | null>(null);
 
 export function OptimisticSessionProvider({ children }: { children: React.ReactNode }) {
   const [optimistic, setOptimistic] = React.useState<OptimisticSession | null>(null);
-  const value = React.useMemo(
-    () => ({ optimistic, setOptimistic }),
-    [optimistic],
-  );
+  const value = React.useMemo(() => ({ optimistic, setOptimistic }), [optimistic]);
   return (
-    <OptimisticSessionContext.Provider value={value}>
-      {children}
-    </OptimisticSessionContext.Provider>
+    <OptimisticSessionContext.Provider value={value}>{children}</OptimisticSessionContext.Provider>
   );
 }
 

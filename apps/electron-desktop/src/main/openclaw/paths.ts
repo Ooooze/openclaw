@@ -129,12 +129,18 @@ export function resolveGogCredentialsPaths(): string[] {
   }
   paths.push(path.join(os.homedir(), ".config", "gogcli", "credentials.json"));
   if (process.platform === "darwin") {
-    paths.push(path.join(os.homedir(), "Library", "Application Support", "gogcli", "credentials.json"));
+    paths.push(
+      path.join(os.homedir(), "Library", "Application Support", "gogcli", "credentials.json")
+    );
   }
   return paths;
 }
 
-export function resolveRendererIndex(params: { isPackaged: boolean; appPath: string; mainDir: string }): string {
+export function resolveRendererIndex(params: {
+  isPackaged: boolean;
+  appPath: string;
+  mainDir: string;
+}): string {
   if (params.isPackaged) {
     return path.join(params.appPath, "renderer", "dist", "index.html");
   }
@@ -145,4 +151,3 @@ export function resolveRendererIndex(params: { isPackaged: boolean; appPath: str
 export function resolvePreloadPath(mainDir: string): string {
   return path.join(mainDir, "preload.js");
 }
-

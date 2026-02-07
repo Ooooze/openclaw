@@ -110,4 +110,3 @@ export function ConsentScreen({ onAccepted }: { onAccepted: () => void }) {
     </HeroPageLayout>
   );
 }
-

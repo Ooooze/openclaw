@@ -8,7 +8,6 @@
 }
 
 .UiChatTranscript {
-  width: min(680px, 680px);
   padding: 24px 56px;
   margin: 0 auto;
   flex: 1 1 auto;
