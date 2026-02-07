@@ -46,7 +46,7 @@ async function main() {
         "downloaded jq binary not found.",
         `Expected: ${downloadedBin}`,
         "Run: cd apps/electron-desktop && npm run fetch:jq",
-      ].join("\n"),
+      ].join("\n")
     );
   }
 
@@ -68,4 +68,3 @@ main().catch((err) => {
   console.error(String(err?.stack || err?.message || err));
   process.exitCode = 1;
 });
-

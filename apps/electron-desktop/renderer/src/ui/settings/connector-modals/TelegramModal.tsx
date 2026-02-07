@@ -15,7 +15,10 @@ function getStringArray(value: unknown): string[] {
 
 /** Normalize a user-typed Telegram ID (strip tg:/telegram: prefix). */
 function normalizeId(raw: string): string {
-  const stripped = raw.trim().replace(/^(telegram|tg):/i, "").trim();
+  const stripped = raw
+    .trim()
+    .replace(/^(telegram|tg):/i, "")
+    .trim();
   return /^\d+$/.test(stripped) ? stripped : raw.trim();
 }
 
@@ -75,7 +78,7 @@ export function TelegramModalContent(props: {
         note,
       });
     },
-    [props.gw, props.loadConfig],
+    [props.gw, props.loadConfig]
   );
 
   // ── Bot token save ──────────────────────────────────────────
@@ -121,7 +124,7 @@ export function TelegramModalContent(props: {
       const merged = [...allowList, id];
       await patchTelegram(
         { enabled: true, dmPolicy: "allowlist", allowFrom: merged },
-        "Settings: add Telegram allowFrom entry",
+        "Settings: add Telegram allowFrom entry"
       );
       setAllowList(merged);
       setDmPolicy("allowlist");
@@ -144,10 +147,7 @@ export function TelegramModalContent(props: {
       setStatus(`Removing ${id}…`);
       try {
         const filtered = allowList.filter((v) => v !== id);
-        await patchTelegram(
-          { allowFrom: filtered },
-          "Settings: remove Telegram allowFrom entry",
-        );
+        await patchTelegram({ allowFrom: filtered }, "Settings: remove Telegram allowFrom entry");
         setAllowList(filtered);
         setStatus(`Removed ${id}.`);
       } catch (err) {
@@ -157,7 +157,7 @@ export function TelegramModalContent(props: {
         setBusy(false);
       }
     },
-    [allowList, patchTelegram],
+    [allowList, patchTelegram]
   );
 
   // ── DM policy change ───────────────────────────────────────
@@ -178,7 +178,7 @@ export function TelegramModalContent(props: {
         setBusy(false);
       }
     },
-    [patchTelegram],
+    [patchTelegram]
   );
 
   return (
@@ -188,7 +188,8 @@ export function TelegramModalContent(props: {
         Connect your Telegram bot. Get a token from{" "}
         <a href="https://t.me/BotFather" target="_blank" rel="noopener noreferrer">
           @BotFather
-        </a>.
+        </a>
+        .
       </div>
       {error && <InlineError>{error}</InlineError>}
       {status && <div className="UiSkillModalStatus">{status}</div>}
@@ -207,7 +208,9 @@ export function TelegramModalContent(props: {
               type="password"
               value={botToken}
               onChange={setBotToken}
-              placeholder={hasExistingToken ? "••••••••  (leave empty to keep)" : "123456:ABCDEF..."}
+              placeholder={
+                hasExistingToken ? "••••••••  (leave empty to keep)" : "123456:ABCDEF..."
+              }
               autoCapitalize="none"
               autoCorrect="off"
               spellCheck={false}
@@ -279,10 +282,7 @@ export function TelegramModalContent(props: {
               spellCheck={false}
             />
           </div>
-          <ActionButton
-            disabled={busy || !newId.trim()}
-            onClick={() => void handleAddId()}
-          >
+          <ActionButton disabled={busy || !newId.trim()} onClick={() => void handleAddId()}>
             Add
           </ActionButton>
         </div>

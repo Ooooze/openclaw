@@ -3,9 +3,15 @@ import type { ChatAttachmentInput } from "../store/slices/chatSlice";
 
 function SendIcon() {
   return (
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M10 15.5017L10 4.83171M10 4.83171L5.42711 9.4046M10 4.83171L14.5729 9.4046" stroke="currentColor" stroke-width="1.5243" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path
+        d="M10 15.5017L10 4.83171M10 4.83171L5.42711 9.4046M10 4.83171L14.5729 9.4046"
+        stroke="currentColor"
+        stroke-width="1.5243"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
   );
 }
 
@@ -13,7 +19,9 @@ export type ChatComposerProps = {
   value: string;
   onChange: (value: string) => void;
   attachments: ChatAttachmentInput[];
-  onAttachmentsChange: (next: ChatAttachmentInput[] | ((prev: ChatAttachmentInput[]) => ChatAttachmentInput[])) => void;
+  onAttachmentsChange: (
+    next: ChatAttachmentInput[] | ((prev: ChatAttachmentInput[]) => ChatAttachmentInput[])
+  ) => void;
   onSend: () => void;
   disabled?: boolean;
   sendLabel?: string;
@@ -82,14 +90,14 @@ export function ChatComposer({
         reader.readAsDataURL(file);
       }
     },
-    [onAttachmentsChange],
+    [onAttachmentsChange]
   );
 
   const removeAttachment = React.useCallback(
     (id: string) => {
       onAttachmentsChange((prev) => prev.filter((a) => a.id !== id));
     },
-    [onAttachmentsChange],
+    [onAttachmentsChange]
   );
 
   const canSend = value.trim().length > 0 || attachments.length > 0;
@@ -155,27 +163,27 @@ export function ChatComposer({
           }}
         />
 
-          <div className="UiChatComposerButtonBlock">
+        <div className="UiChatComposerButtonBlock">
           <button
-              type="button"
-              className="UiChatAttachButton"
-              onClick={() => fileInputRef.current?.click()}
-              aria-label="Attach file"
-              title="Attach file or image"
+            type="button"
+            className="UiChatAttachButton"
+            onClick={() => fileInputRef.current?.click()}
+            aria-label="Attach file"
+            title="Attach file or image"
           >
-              +
+            +
           </button>
-        <button
-          type="button"
-          className="UiChatSendButton"
-          onClick={onSend}
-          disabled={disabled || !canSend}
-          aria-label={disabled ? sendingLabel : sendLabel}
-          title={disabled ? sendingLabel : sendLabel}
-        >
-          <SendIcon />
-        </button>
-          </div>
+          <button
+            type="button"
+            className="UiChatSendButton"
+            onClick={onSend}
+            disabled={disabled || !canSend}
+            aria-label={disabled ? sendingLabel : sendLabel}
+            title={disabled ? sendingLabel : sendLabel}
+          >
+            <SendIcon />
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -54,7 +54,11 @@ export function ensureGatewayConfigFile(params: { configPath: string; token: str
 
   if (!fs.existsSync(params.configPath)) {
     // Write JSON (JSON5-compatible) to keep it simple and deterministic.
-    fs.writeFileSync(params.configPath, `${JSON.stringify(minimal(params.token), null, 2)}\n`, "utf-8");
+    fs.writeFileSync(
+      params.configPath,
+      `${JSON.stringify(minimal(params.token), null, 2)}\n`,
+      "utf-8"
+    );
     return;
   }
 
@@ -97,4 +101,3 @@ export function ensureGatewayConfigFile(params: { configPath: string; token: str
     // ignore
   }
 }
-

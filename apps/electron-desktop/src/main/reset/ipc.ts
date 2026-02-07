@@ -67,4 +67,3 @@ export function registerResetAndCloseIpcHandler(params: {
     return res;
   });
 }
-

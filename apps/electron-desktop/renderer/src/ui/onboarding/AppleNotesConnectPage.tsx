@@ -35,7 +35,9 @@ export function AppleNotesConnectPage(props: {
           Notes:
           <ol>
             <li>macOS may prompt you to grant Automation access to Notes.app.</li>
-            <li>If you deny access, Apple Notes actions will fail until you re-enable permissions.</li>
+            <li>
+              If you deny access, Apple Notes actions will fail until you re-enable permissions.
+            </li>
           </ol>
         </div>
 
@@ -44,7 +46,12 @@ export function AppleNotesConnectPage(props: {
         <div className="UiApiKeySpacer" aria-hidden="true" />
 
         <div className="UiApiKeyButtonRow">
-          <button className="UiTextButton" disabled={props.busy} onClick={props.onBack} type="button">
+          <button
+            className="UiTextButton"
+            disabled={props.busy}
+            onClick={props.onBack}
+            type="button"
+          >
             Back
           </button>
           <SecondaryButton disabled={props.busy} onClick={props.onCheckAndEnable}>
@@ -58,4 +65,3 @@ export function AppleNotesConnectPage(props: {
     </HeroPageLayout>
   );
 }
-

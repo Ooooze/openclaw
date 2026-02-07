@@ -32,24 +32,28 @@ export function TelegramUserPage(props: {
 
         <div className="UiApiKeyTitle">Allow Telegram DMs</div>
         <div className="UiApiKeySubtitle">
-          Add your Telegram user id to the DM allowlist. This configures <code>channels.telegram.dmPolicy</code> to{" "}
-          <code>allowlist</code> and appends to <code>channels.telegram.allowFrom</code>.
+          Add your Telegram user id to the DM allowlist. This configures{" "}
+          <code>channels.telegram.dmPolicy</code> to <code>allowlist</code> and appends to{" "}
+          <code>channels.telegram.allowFrom</code>.
         </div>
 
         <div className="UiSectionSubtitle">
           Steps:
           <ol>
             <li>Send a DM to your bot (so it can see your account).</li>
-            <li>Paste your numeric Telegram user id (<code>message.from.id</code>) below.</li>
+            <li>
+              Paste your numeric Telegram user id (<code>message.from.id</code>) below.
+            </li>
           </ol>
           Tips:
           <ul>
             <li>
-              Accepted forms: <code>123456789</code>, <code>tg:123456789</code>, <code>telegram:123456789</code>.
+              Accepted forms: <code>123456789</code>, <code>tg:123456789</code>,{" "}
+              <code>telegram:123456789</code>.
             </li>
             <li>
-              If you're unsure, you can inspect the probe output (below) after saving, or use a Telegram “user info” bot
-              to read your id.
+              If you're unsure, you can inspect the probe output (below) after saving, or use a
+              Telegram “user info” bot to read your id.
             </li>
           </ul>
           Docs:{" "}
@@ -60,7 +64,9 @@ export function TelegramUserPage(props: {
             className="UiLink"
             onClick={(e) => {
               e.preventDefault();
-              void window.openclawDesktop?.openExternal("https://docs.openclaw.ai/channels/telegram");
+              void window.openclawDesktop?.openExternal(
+                "https://docs.openclaw.ai/channels/telegram"
+              );
             }}
           >
             Telegram setup ↗
@@ -82,10 +88,14 @@ export function TelegramUserPage(props: {
 
         {props.channelsProbe ? (
           <details className="UiGoogleWorkspaceDetails" style={{ marginTop: 10 }}>
-            <summary className="UiGoogleWorkspaceDetailsSummary">Troubleshooting: channels.status (probe)</summary>
+            <summary className="UiGoogleWorkspaceDetailsSummary">
+              Troubleshooting: channels.status (probe)
+            </summary>
             <div className="UiSectionSubtitle" style={{ marginTop: 10 }}>
               <div className="UiPill">channels.status (probe)</div>
-              <pre style={{ maxHeight: 240, overflow: "auto" }}>{JSON.stringify(props.channelsProbe, null, 2)}</pre>
+              <pre style={{ maxHeight: 240, overflow: "auto" }}>
+                {JSON.stringify(props.channelsProbe, null, 2)}
+              </pre>
             </div>
           </details>
         ) : null}
@@ -104,4 +114,3 @@ export function TelegramUserPage(props: {
     </HeroPageLayout>
   );
 }
-

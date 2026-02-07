@@ -1,7 +1,12 @@
 import React from "react";
 
 import { ActionButton, ButtonRow, Modal } from "../kit";
-import { useConnectorsStatus, disableConnector, type ConnectorId, type ConnectorStatus } from "./useConnectorsStatus";
+import {
+  useConnectorsStatus,
+  disableConnector,
+  type ConnectorId,
+  type ConnectorStatus,
+} from "./useConnectorsStatus";
 import { TelegramModalContent, SlackConnectorModalContent } from "./connector-modals";
 
 type GatewayRpc = {
@@ -169,7 +174,7 @@ export function ConnectorsTab(props: {
       void refresh();
       setActiveModal(null);
     },
-    [markConnected, refresh],
+    [markConnected, refresh]
   );
 
   const handleDisabled = React.useCallback(
@@ -184,7 +189,7 @@ export function ConnectorsTab(props: {
         props.onError(String(err));
       }
     },
-    [loadConfig, markDisabled, props, refresh],
+    [loadConfig, markDisabled, props, refresh]
   );
 
   const tileClass = (status: ConnectorStatus) => {
@@ -200,7 +205,7 @@ export function ConnectorsTab(props: {
       return;
     }
     const ok = window.confirm(
-      "Reset and close will delete the app's local state (including onboarding + logs) and remove all Google Workspace authorizations from the keystore. Continue?",
+      "Reset and close will delete the app's local state (including onboarding + logs) and remove all Google Workspace authorizations from the keystore. Continue?"
     );
     if (!ok) return;
     props.onError(null);
@@ -277,7 +282,8 @@ export function ConnectorsTab(props: {
       <section className="UiSettingsSection UiSettingsSection--danger" style={{ marginTop: 24 }}>
         <div className="UiSectionTitle">Danger zone</div>
         <div className="UiSectionSubtitle">
-          This will wipe the app's local state and remove all Google Workspace authorizations. The app will then close.
+          This will wipe the app's local state and remove all Google Workspace authorizations. The
+          app will then close.
         </div>
         <ButtonRow>
           <ActionButton variant="primary" disabled={resetBusy} onClick={() => void resetAndClose()}>

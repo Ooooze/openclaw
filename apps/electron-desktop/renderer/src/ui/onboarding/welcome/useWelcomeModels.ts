@@ -59,14 +59,14 @@ export function useWelcomeModels({ gw, loadConfig, setError, setStatus }: UseWel
             },
           },
           null,
-          2,
+          2
         ),
         note: "Welcome: set default model",
       });
       setStatus("Default model configured.");
       return true;
     },
-    [gw, loadConfig, setError, setStatus],
+    [gw, loadConfig, setError, setStatus]
   );
 
   return {

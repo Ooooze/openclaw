@@ -101,7 +101,7 @@ export function useWelcomeSlack({ gw, loadConfig, setError, setStatus }: UseWelc
             },
           },
           null,
-          2,
+          2
         ),
         note: "Welcome: configure Slack tokens and access",
       });
@@ -109,9 +109,8 @@ export function useWelcomeSlack({ gw, loadConfig, setError, setStatus }: UseWelc
       setStatus("Slack configured.");
       return true;
     },
-    [gw, loadConfig, setError, setStatus],
+    [gw, loadConfig, setError, setStatus]
   );
 
   return { saveSlackConfig };
 }
-

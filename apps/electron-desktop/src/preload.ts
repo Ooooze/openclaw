@@ -49,8 +49,15 @@ type OpenclawDesktopApi = {
   setApiKey: (provider: string, apiKey: string) => Promise<{ ok: true }>;
   authHasApiKey: (provider: string) => Promise<{ configured: boolean }>;
   gogAuthList: () => Promise<GogExecResult>;
-  gogAuthAdd: (params: { account: string; services?: string; noInput?: boolean }) => Promise<GogExecResult>;
-  gogAuthCredentials: (params: { credentialsJson: string; filename?: string }) => Promise<GogExecResult>;
+  gogAuthAdd: (params: {
+    account: string;
+    services?: string;
+    noInput?: boolean;
+  }) => Promise<GogExecResult>;
+  gogAuthCredentials: (params: {
+    credentialsJson: string;
+    filename?: string;
+  }) => Promise<GogExecResult>;
   memoCheck: () => Promise<MemoExecResult>;
   remindctlAuthorize: () => Promise<RemindctlExecResult>;
   remindctlTodayJson: () => Promise<RemindctlExecResult>;
@@ -78,7 +85,8 @@ const api: OpenclawDesktopApi = {
   acceptConsent: async () => ipcRenderer.invoke("consent-accept"),
   startGateway: async () => ipcRenderer.invoke("gateway-start"),
   openExternal: async (url: string) => ipcRenderer.invoke("open-external", { url }),
-  setApiKey: async (provider: string, apiKey: string) => ipcRenderer.invoke("auth-set-api-key", { provider, apiKey }),
+  setApiKey: async (provider: string, apiKey: string) =>
+    ipcRenderer.invoke("auth-set-api-key", { provider, apiKey }),
   authHasApiKey: async (provider: string) => ipcRenderer.invoke("auth-has-api-key", { provider }),
   gogAuthList: async () => ipcRenderer.invoke("gog-auth-list"),
   gogAuthAdd: async (params: { account: string; services?: string; noInput?: boolean }) =>
@@ -91,9 +99,11 @@ const api: OpenclawDesktopApi = {
   obsidianCliCheck: async () => ipcRenderer.invoke("obsidian-cli-check"),
   obsidianCliPrintDefaultPath: async () => ipcRenderer.invoke("obsidian-cli-print-default-path"),
   obsidianVaultsList: async () => ipcRenderer.invoke("obsidian-vaults-list"),
-  obsidianCliSetDefault: async (params: { vaultName: string }) => ipcRenderer.invoke("obsidian-cli-set-default", params),
+  obsidianCliSetDefault: async (params: { vaultName: string }) =>
+    ipcRenderer.invoke("obsidian-cli-set-default", params),
   ghCheck: async () => ipcRenderer.invoke("gh-check"),
-  ghAuthLoginPat: async (params: { pat: string }) => ipcRenderer.invoke("gh-auth-login-pat", params),
+  ghAuthLoginPat: async (params: { pat: string }) =>
+    ipcRenderer.invoke("gh-auth-login-pat", params),
   ghAuthStatus: async () => ipcRenderer.invoke("gh-auth-status"),
   ghApiUser: async () => ipcRenderer.invoke("gh-api-user"),
   onGatewayState: (cb: (state: GatewayState) => void) => {
@@ -106,4 +116,3 @@ const api: OpenclawDesktopApi = {
 };
 
 contextBridge.exposeInMainWorld("openclawDesktop", api);
-

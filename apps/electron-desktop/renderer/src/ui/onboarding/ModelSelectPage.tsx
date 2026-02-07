@@ -46,7 +46,9 @@ export function ModelSelectPage(props: {
             ))}
           </div>
           <div className="UiSectionTitle">Select AI Model</div>
-          <div className="UiSectionSubtitle">Fetching available models from your configured provider.</div>
+          <div className="UiSectionSubtitle">
+            Fetching available models from your configured provider.
+          </div>
         </GlassCard>
       </HeroPageLayout>
     );
@@ -95,8 +97,8 @@ export function ModelSelectPage(props: {
           </div>
           <div className="UiSectionTitle">Select AI Model</div>
           <div className="UiSectionSubtitle">
-            No models were found for your configured API key. The key may be invalid or the provider may be temporarily
-            unavailable.
+            No models were found for your configured API key. The key may be invalid or the provider
+            may be temporarily unavailable.
           </div>
           <div className="UiModelBottomRow">
             <button className="UiTextButton" onClick={props.onBack}>
@@ -123,7 +125,9 @@ export function ModelSelectPage(props: {
           ))}
         </div>
         <div className="UiSectionTitle">Select AI Model</div>
-        <div className="UiSectionSubtitle">Choose your preferred model. You can change this later in settings.</div>
+        <div className="UiSectionSubtitle">
+          Choose your preferred model. You can change this later in settings.
+        </div>
         <div className="UiModelList">
           {filteredModels.map((model) => {
             const modelKey = `${model.provider}/${model.id}`;
@@ -146,7 +150,9 @@ export function ModelSelectPage(props: {
                   <div className="UiModelNameRow">
                     <span className="UiModelName">{model.name || model.id}</span>
                     {tier ? (
-                      <span className={`UiModelTierBadge UiModelTierBadge--${tier}`}>{TIER_INFO[tier].label}</span>
+                      <span className={`UiModelTierBadge UiModelTierBadge--${tier}`}>
+                        {TIER_INFO[tier].label}
+                      </span>
                     ) : null}
                   </div>
                   {meta ? <div className="UiModelMeta">{meta}</div> : null}

@@ -46,9 +46,13 @@ function parsePythonVersion(raw) {
 }
 
 function readPythonVersion(pythonBin) {
-  const res = spawnSync(pythonBin, ["-c", "import sys; print('.'.join(map(str, sys.version_info[:3])))"], {
-    encoding: "utf-8",
-  });
+  const res = spawnSync(
+    pythonBin,
+    ["-c", "import sys; print('.'.join(map(str, sys.version_info[:3])))"],
+    {
+      encoding: "utf-8",
+    }
+  );
   if (res.status !== 0) {
     return null;
   }
@@ -86,7 +90,7 @@ function resolvePythonForMemo() {
       "memo build requires Python >= 3.13.",
       `Tried: ${candidates.join(", ")}`,
       `Hint: install python3.13 and re-run (or set ${hint}).`,
-    ].join("\n"),
+    ].join("\n")
   );
 }
 
@@ -137,7 +141,7 @@ async function main() {
         "memo source not found.",
         `Expected a cache entry under: ${path.join(runtimeRoot, "_cache")}`,
         "Run: cd apps/electron-desktop && npm run fetch:memo",
-      ].join("\n"),
+      ].join("\n")
     );
   }
 
@@ -151,13 +155,17 @@ async function main() {
 
   const resolvedPython = resolvePythonForMemo();
   const python = resolvedPython.bin;
-  console.log(`[electron-desktop] Using Python for memo build: ${python} (${resolvedPython.version.raw})`);
+  console.log(
+    `[electron-desktop] Using Python for memo build: ${python} (${resolvedPython.version.raw})`
+  );
 
   // Create venv if missing.
   const venvPython = path.join(venvDir, "bin", "python");
   const existingVenvPython = fs.existsSync(venvPython) ? venvPython : null;
   const existingVenvVersion = existingVenvPython ? readPythonVersion(existingVenvPython) : null;
-  const shouldRecreateVenv = existingVenvVersion ? !isPythonAtLeast(existingVenvVersion, 3, 13) : false;
+  const shouldRecreateVenv = existingVenvVersion
+    ? !isPythonAtLeast(existingVenvVersion, 3, 13)
+    : false;
 
   if (!existingVenvPython || shouldRecreateVenv) {
     const reason = !existingVenvPython
@@ -182,21 +190,17 @@ async function main() {
   });
 
   console.log(`[electron-desktop] Installing memo from source: ${srcDir}`);
-  run(venvPython, ["-m", "pip", "install", "--upgrade", srcDir], { stdio: ["ignore", "pipe", "pipe"] });
+  run(venvPython, ["-m", "pip", "install", "--upgrade", srcDir], {
+    stdio: ["ignore", "pipe", "pipe"],
+  });
 
   // The upstream module defines click commands but does not run them when imported.
   // Build a tiny entry script that invokes the console_script target.
   const entryScript = path.join(buildRoot, "memo-entry.py");
   fs.writeFileSync(
     entryScript,
-    [
-      "from memo.memo import cli",
-      "",
-      "if __name__ == '__main__':",
-      "    cli()",
-      "",
-    ].join("\n"),
-    { encoding: "utf-8" },
+    ["from memo.memo import cli", "", "if __name__ == '__main__':", "    cli()", ""].join("\n"),
+    { encoding: "utf-8" }
   );
 
   // Build a single-file executable.
@@ -205,7 +209,9 @@ async function main() {
   rmrf(pyDist);
   rmrf(pyBuild);
 
-  console.log(`[electron-desktop] Building memo binary with PyInstaller (entry: ${path.relative(buildRoot, entryScript)})`);
+  console.log(
+    `[electron-desktop] Building memo binary with PyInstaller (entry: ${path.relative(buildRoot, entryScript)})`
+  );
   run(
     venvPython,
     [
@@ -222,7 +228,7 @@ async function main() {
       pyBuild,
       entryScript,
     ],
-    { cwd: buildRoot, stdio: ["ignore", "pipe", "pipe"] },
+    { cwd: buildRoot, stdio: ["ignore", "pipe", "pipe"] }
   );
 
   const builtBin = path.join(pyDist, "memo");
@@ -249,4 +255,3 @@ main().catch((err) => {
   console.error(String(err?.stack || err?.message || err));
   process.exitCode = 1;
 });
-

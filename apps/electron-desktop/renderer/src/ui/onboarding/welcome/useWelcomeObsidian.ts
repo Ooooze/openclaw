@@ -47,7 +47,7 @@ type ExecApprovalsSnapshot = {
 
 function mergeAllowlistEntries(
   existing: ExecApprovalsAllowlistEntry[] | undefined,
-  patterns: string[],
+  patterns: string[]
 ): ExecApprovalsAllowlistEntry[] {
   const list = Array.isArray(existing) ? existing : [];
   const seen = new Set(list.map((e) => e.pattern.trim().toLowerCase()).filter(Boolean));
@@ -63,7 +63,12 @@ function mergeAllowlistEntries(
   return next;
 }
 
-export function useWelcomeObsidian({ gw, loadConfig, setError, setStatus }: UseWelcomeObsidianInput) {
+export function useWelcomeObsidian({
+  gw,
+  loadConfig,
+  setError,
+  setStatus,
+}: UseWelcomeObsidianInput) {
   const enableObsidian = React.useCallback(
     async (params?: { obsidianCliResolvedPath?: string | null }): Promise<boolean> => {
       setError(null);
@@ -80,7 +85,9 @@ export function useWelcomeObsidian({ gw, loadConfig, setError, setStatus }: UseW
       const exec = getObject(tools.exec);
       const existingSafeBins = getStringArray(exec.safeBins);
       // `head` is commonly used for piping/previewing output without introducing file-path args.
-      const safeBins = unique([...existingSafeBins, "obsidian-cli", "which", "head"].map((v) => v.toLowerCase()));
+      const safeBins = unique(
+        [...existingSafeBins, "obsidian-cli", "which", "head"].map((v) => v.toLowerCase())
+      );
 
       const hostRaw = typeof exec.host === "string" ? exec.host.trim() : "";
       // Obsidian uses a bundled binary that is guaranteed on the gateway host PATH. In sandbox
@@ -112,7 +119,7 @@ export function useWelcomeObsidian({ gw, loadConfig, setError, setStatus }: UseW
             },
           },
           null,
-          2,
+          2
         ),
         note: "Welcome: enable Obsidian (obsidian-cli) skill",
       });
@@ -124,10 +131,13 @@ export function useWelcomeObsidian({ gw, loadConfig, setError, setStatus }: UseW
         const agents = file.agents ?? {};
 
         const resolvedPath =
-          typeof params?.obsidianCliResolvedPath === "string" && params.obsidianCliResolvedPath.trim()
+          typeof params?.obsidianCliResolvedPath === "string" &&
+          params.obsidianCliResolvedPath.trim()
             ? params.obsidianCliResolvedPath.trim()
             : null;
-        const patterns = resolvedPath ? ["**/obsidian-cli", "**/which", resolvedPath] : ["**/obsidian-cli", "**/which"];
+        const patterns = resolvedPath
+          ? ["**/obsidian-cli", "**/which", resolvedPath]
+          : ["**/obsidian-cli", "**/which"];
 
         // Apply both to "*" (wildcard) and "main" to avoid mismatches when the active agent id
         // differs from our onboarding assumption.
@@ -165,9 +175,8 @@ export function useWelcomeObsidian({ gw, loadConfig, setError, setStatus }: UseW
       setStatus("Obsidian enabled.");
       return true;
     },
-    [gw, loadConfig, setError, setStatus],
+    [gw, loadConfig, setError, setStatus]
   );
 
   return { enableObsidian };
 }
-

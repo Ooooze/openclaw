@@ -43,7 +43,9 @@ const SERVICE_OPTIONS: ServiceOption[] = [
 ];
 
 function parseDefaultServicesCsv(): string[] {
-  return DEFAULT_GOG_SERVICES.split(",").map((v) => v.trim()).filter(Boolean);
+  return DEFAULT_GOG_SERVICES.split(",")
+    .map((v) => v.trim())
+    .filter(Boolean);
 }
 
 export function GogPage(props: {
@@ -72,7 +74,7 @@ export function GogPage(props: {
 
   const selectedServices = React.useMemo(
     () => SERVICE_OPTIONS.filter((s) => services[s.id]).map((s) => s.id),
-    [services],
+    [services]
   );
   const servicesCsv = selectedServices.join(",");
 
@@ -91,12 +93,17 @@ export function GogPage(props: {
   }, [props, servicesCsv]);
 
   return (
-    <HeroPageLayout title="SETUP" variant="compact" align="center" aria-label="Google Workspace setup">
+    <HeroPageLayout
+      title="SETUP"
+      variant="compact"
+      align="center"
+      aria-label="Google Workspace setup"
+    >
       <GlassCard className="UiGoogleWorkspaceCard">
         <div className="UiSectionTitle">Google Workspace</div>
         <div className="UiSectionSubtitle">
-          Optional: connect your Google account to enable skills like email and calendar. This will open a browser for
-          consent.
+          Optional: connect your Google account to enable skills like email and calendar. This will
+          open a browser for consent.
         </div>
         {connected ? (
           <div className="UiGoogleWorkspaceConnected" aria-label="Connected">
@@ -152,7 +159,9 @@ export function GogPage(props: {
                 {props.gogBusy ? "Checking…" : "Check"}
               </button>
               <PrimaryButton
-                disabled={props.gogBusy || !props.gogAccount.trim() || selectedServices.length === 0}
+                disabled={
+                  props.gogBusy || !props.gogAccount.trim() || selectedServices.length === 0
+                }
                 onClick={() => void onConnect()}
               >
                 {props.gogBusy ? "Connecting…" : "Connect"}
@@ -169,7 +178,12 @@ export function GogPage(props: {
         ) : null}
 
         <div className="UiGoogleWorkspaceFooterRow">
-          <button className="UiTextButton" onClick={props.onFinish} type="button" disabled={props.gogBusy}>
+          <button
+            className="UiTextButton"
+            onClick={props.onFinish}
+            type="button"
+            disabled={props.gogBusy}
+          >
             {finishText}
           </button>
         </div>
@@ -177,4 +191,3 @@ export function GogPage(props: {
     </HeroPageLayout>
   );
 }
-

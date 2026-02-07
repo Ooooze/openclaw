@@ -11,7 +11,11 @@ function newSessionKey(): string {
   return `agent:main:main:${crypto.randomUUID().slice(0, 8)}`;
 }
 
-export function StartChatPage({ state: _state }: { state: Extract<GatewayState, { kind: "ready" }> }) {
+export function StartChatPage({
+  state: _state,
+}: {
+  state: Extract<GatewayState, { kind: "ready" }>;
+}) {
   const navigate = useNavigate();
   const gw = useGatewayRpc();
   const [input, setInput] = React.useState("");
@@ -49,7 +53,7 @@ export function StartChatPage({ state: _state }: { state: Extract<GatewayState, 
               };
             })
             .filter(
-              (a): a is { type: "image" | "file"; mimeType: string; content: string } => a !== null,
+              (a): a is { type: "image" | "file"; mimeType: string; content: string } => a !== null
             )
         : undefined;
 
@@ -87,7 +91,7 @@ export function StartChatPage({ state: _state }: { state: Extract<GatewayState, 
     <div className="UiChatShell">
       <div className="UiChatTranscript">
         <div className="UiChatEmpty">
-            <img className="UiChatEmptyLogo" src={logoUrl} alt="" aria-hidden="true" />
+          <img className="UiChatEmptyLogo" src={logoUrl} alt="" aria-hidden="true" />
           <div className="UiChatEmptyTitle">What can I help with?</div>
           <div className="UiChatEmptySubtitle">Send a message to start a conversation</div>
         </div>

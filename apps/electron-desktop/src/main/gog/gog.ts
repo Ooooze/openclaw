@@ -76,7 +76,11 @@ function parseGogAuthListEmails(jsonText: string): string[] {
   }
 }
 
-export async function clearGogAuthTokens(params: { gogBin: string; openclawDir: string; warnings: string[] }) {
+export async function clearGogAuthTokens(params: {
+  gogBin: string;
+  openclawDir: string;
+  warnings: string[];
+}) {
   if (!fs.existsSync(params.gogBin)) {
     params.warnings.push(`gog binary not found at: ${params.gogBin}`);
     return;
@@ -154,8 +158,7 @@ export async function ensureGogCredentialsConfigured(params: {
     const stderr = res.stderr.trim();
     const stdout = res.stdout.trim();
     console.warn(
-      `[electron-desktop] gog auth credentials set failed: ${stderr || stdout || "unknown error"} (bin: ${params.gogBin})`,
+      `[electron-desktop] gog auth credentials set failed: ${stderr || stdout || "unknown error"} (bin: ${params.gogBin})`
     );
   }
 }
-

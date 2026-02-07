@@ -17,7 +17,9 @@ function SettingsNavItem(props: { to: SettingsTab; children: React.ReactNode }) 
   return (
     <NavLink
       to={`/settings/${props.to}`}
-      className={({ isActive }) => `UiSettingsNavItem${isActive ? " UiSettingsNavItem-active" : ""}`}
+      className={({ isActive }) =>
+        `UiSettingsNavItem${isActive ? " UiSettingsNavItem-active" : ""}`
+      }
     >
       {props.children}
     </NavLink>
@@ -73,7 +75,13 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
   }
 
   return (
-    <HeroPageLayout title="SETTINGS" variant="compact" align="center" aria-label="Settings page" hideTopbar>
+    <HeroPageLayout
+      title="SETTINGS"
+      variant="compact"
+      align="center"
+      aria-label="Settings page"
+      hideTopbar
+    >
       <GlassCard size="wide">
         <div className="UiSettingsShell">
           <aside className="UiSettingsSidebar" aria-label="Settings navigation">
@@ -86,7 +94,12 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
 
           <div className="UiSettingsContent">
             {activeTab === "model-providers" ? (
-              <ModelProvidersTab gw={gw} configSnap={configSnap ?? null} reload={reload} onError={setPageError} />
+              <ModelProvidersTab
+                gw={gw}
+                configSnap={configSnap ?? null}
+                reload={reload}
+                onError={setPageError}
+              />
             ) : activeTab === "skills-integrations" ? (
               <SkillsIntegrationsTab
                 state={state}
@@ -96,7 +109,12 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
                 onError={setPageError}
               />
             ) : (
-              <ConnectorsTab gw={gw} configSnap={configSnap ?? null} reload={reload} onError={setPageError} />
+              <ConnectorsTab
+                gw={gw}
+                configSnap={configSnap ?? null}
+                reload={reload}
+                onError={setPageError}
+              />
             )}
           </div>
         </div>

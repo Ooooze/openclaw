@@ -230,7 +230,7 @@ export function SkillsIntegrationsTab(props: {
       void refresh();
       setActiveModal(null);
     },
-    [markConnected, refresh],
+    [markConnected, refresh]
   );
 
   /** Called by modal content after disabling a skill. */
@@ -246,7 +246,7 @@ export function SkillsIntegrationsTab(props: {
         props.onError(String(err));
       }
     },
-    [loadConfig, markDisabled, props, refresh],
+    [loadConfig, markDisabled, props, refresh]
   );
 
   /** Tile card class based on status. */
@@ -376,11 +376,7 @@ export function SkillsIntegrationsTab(props: {
         />
       </Modal>
 
-      <Modal
-        open={activeModal === "obsidian"}
-        onClose={closeModal}
-        aria-label="Obsidian settings"
-      >
+      <Modal open={activeModal === "obsidian"} onClose={closeModal} aria-label="Obsidian settings">
         <ObsidianModalContent
           gw={props.gw}
           loadConfig={loadConfig}

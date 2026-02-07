@@ -94,7 +94,10 @@ async function ensureMainWindow(): Promise<BrowserWindow | null> {
     return null;
   }
 
-  const nextWin = await createMainWindow({ preloadPath: preloadPathForWindow, rendererIndex: rendererIndexForWindow });
+  const nextWin = await createMainWindow({
+    preloadPath: preloadPathForWindow,
+    rendererIndex: rendererIndexForWindow,
+  });
   mainWindow = nextWin;
 
   nextWin.on("closed", () => {
@@ -210,7 +213,11 @@ void app.whenReady().then(async () => {
   const token = tokenFromConfig ?? randomBytes(24).toString("base64url");
   ensureGatewayConfigFile({ configPath, token });
 
-  const rendererIndex = resolveRendererIndex({ isPackaged: app.isPackaged, appPath: app.getAppPath(), mainDir: MAIN_DIR });
+  const rendererIndex = resolveRendererIndex({
+    isPackaged: app.isPackaged,
+    appPath: app.getAppPath(),
+    mainDir: MAIN_DIR,
+  });
   const preloadPath = resolvePreloadPath(MAIN_DIR);
   preloadPathForWindow = preloadPath;
   rendererIndexForWindow = rendererIndex;
@@ -323,4 +330,3 @@ function writeConsentAccepted(consentPath: string): void {
     // ignore
   }
 }
-

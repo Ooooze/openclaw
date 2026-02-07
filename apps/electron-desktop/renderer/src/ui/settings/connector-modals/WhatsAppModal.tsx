@@ -48,22 +48,16 @@ export function WhatsAppModalContent(props: {
     <div className="UiSkillModalContent">
       <div className="UiSectionTitle">WhatsApp</div>
       <div className="UiSectionSubtitle">
-        Connect WhatsApp Web to OpenClaw. After enabling, scan the QR code shown by the gateway
-        with your phone to complete the connection.
+        Connect WhatsApp Web to OpenClaw. After enabling, scan the QR code shown by the gateway with
+        your phone to complete the connection.
       </div>
       {error && <InlineError>{error}</InlineError>}
       {status && <div className="UiSkillModalStatus">{status}</div>}
 
-      {props.isConnected && (
-        <div className="UiSkillModalStatus">WhatsApp is connected.</div>
-      )}
+      {props.isConnected && <div className="UiSkillModalStatus">WhatsApp is connected.</div>}
 
       <div className="UiSkillModalActions">
-        <ActionButton
-          variant="primary"
-          disabled={busy}
-          onClick={() => void handleEnable()}
-        >
+        <ActionButton variant="primary" disabled={busy} onClick={() => void handleEnable()}>
           {busy ? "Enabling…" : props.isConnected ? "Re-enable" : "Enable WhatsApp"}
         </ActionButton>
       </div>

@@ -1,5 +1,14 @@
 import React from "react";
-import { Navigate, NavLink, Outlet, Route, Routes, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Navigate,
+  NavLink,
+  Outlet,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { ChatPage } from "./ChatPage";
 import { StartChatPage } from "./StartChatPage";
 import { Sidebar } from "./Sidebar";
@@ -336,11 +345,16 @@ export function App() {
       <Route path={routes.loading} element={<LoadingScreen state={state ?? null} />} />
       <Route
         path={routes.error}
-        element={state?.kind === "failed" ? <ErrorScreen state={state} /> : <Navigate to={routes.loading} replace />}
+        element={
+          state?.kind === "failed" ? (
+            <ErrorScreen state={state} />
+          ) : (
+            <Navigate to={routes.loading} replace />
+          )
+        }
       />
       <Route path={`${routes.welcome}/*`} element={<Navigate to={routes.loading} replace />} />
       <Route path="*" element={<Navigate to={routes.loading} replace />} />
     </Routes>
   );
 }
-

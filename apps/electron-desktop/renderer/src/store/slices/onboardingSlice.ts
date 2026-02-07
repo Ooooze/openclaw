@@ -11,22 +11,28 @@ const initialState: OnboardingSliceState = {
   onboarded: false,
 };
 
-export const loadOnboardingFromStorage = createAsyncThunk("onboarding/loadFromStorage", async (_: void, thunkApi) => {
-  const onboarded =
-    typeof localStorage !== "undefined" && localStorage.getItem(ONBOARDED_KEY) === "1";
-  thunkApi.dispatch(onboardingActions.setOnboardedState(onboarded));
-});
-
-export const setOnboarded = createAsyncThunk("onboarding/setOnboarded", async (onboarded: boolean, thunkApi) => {
-  if (typeof localStorage !== "undefined") {
-    if (onboarded) {
-      localStorage.setItem(ONBOARDED_KEY, "1");
-    } else {
-      localStorage.removeItem(ONBOARDED_KEY);
-    }
+export const loadOnboardingFromStorage = createAsyncThunk(
+  "onboarding/loadFromStorage",
+  async (_: void, thunkApi) => {
+    const onboarded =
+      typeof localStorage !== "undefined" && localStorage.getItem(ONBOARDED_KEY) === "1";
+    thunkApi.dispatch(onboardingActions.setOnboardedState(onboarded));
   }
-  thunkApi.dispatch(onboardingActions.setOnboardedState(onboarded));
-});
+);
+
+export const setOnboarded = createAsyncThunk(
+  "onboarding/setOnboarded",
+  async (onboarded: boolean, thunkApi) => {
+    if (typeof localStorage !== "undefined") {
+      if (onboarded) {
+        localStorage.setItem(ONBOARDED_KEY, "1");
+      } else {
+        localStorage.removeItem(ONBOARDED_KEY);
+      }
+    }
+    thunkApi.dispatch(onboardingActions.setOnboardedState(onboarded));
+  }
+);
 
 const onboardingSlice = createSlice({
   name: "onboarding",
@@ -40,4 +46,3 @@ const onboardingSlice = createSlice({
 
 export const onboardingActions = onboardingSlice.actions;
 export const onboardingReducer = onboardingSlice.reducer;
-

@@ -47,7 +47,7 @@ type ExecApprovalsSnapshot = {
 
 function mergeAllowlistEntries(
   existing: ExecApprovalsAllowlistEntry[] | undefined,
-  patterns: string[],
+  patterns: string[]
 ): ExecApprovalsAllowlistEntry[] {
   const list = Array.isArray(existing) ? existing : [];
   const seen = new Set(list.map((e) => e.pattern.trim().toLowerCase()).filter(Boolean));
@@ -94,7 +94,7 @@ export function useWelcomeNotion({ gw, loadConfig, setError, setStatus }: UseWel
             },
           },
           null,
-          2,
+          2
         ),
         note: "Welcome: configure Notion skill API key",
       });
@@ -159,9 +159,8 @@ export function useWelcomeNotion({ gw, loadConfig, setError, setStatus }: UseWel
       setStatus("Notion connected.");
       return true;
     },
-    [gw, loadConfig, setError, setStatus],
+    [gw, loadConfig, setError, setStatus]
   );
 
   return { saveNotionApiKey };
 }
-

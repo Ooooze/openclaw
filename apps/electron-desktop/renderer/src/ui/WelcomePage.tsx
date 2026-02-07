@@ -24,7 +24,11 @@ import { TelegramUserPage } from "./onboarding/TelegramUserPage";
 import { WebSearchPage } from "./onboarding/WebSearchPage";
 import { useWelcomeState } from "./onboarding/welcome/useWelcomeState";
 
-function WelcomeAutoStart(props: { startBusy: boolean; error: string | null; onStart: () => void }) {
+function WelcomeAutoStart(props: {
+  startBusy: boolean;
+  error: string | null;
+  onStart: () => void;
+}) {
   const didStartRef = React.useRef(false);
 
   React.useEffect(() => {
@@ -144,7 +148,9 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
             busy={welcome.mediaUnderstandingBusy}
             hasOpenAiProvider={welcome.hasOpenAiProvider}
             onSubmit={(settings) => void welcome.onMediaUnderstandingSubmit(settings)}
-            onAddProviderKey={(provider, apiKey) => welcome.onMediaProviderKeySubmit(provider, apiKey)}
+            onAddProviderKey={(provider, apiKey) =>
+              welcome.onMediaProviderKeySubmit(provider, apiKey)
+            }
             onBack={welcome.goSkills}
             onSkip={welcome.goSkills}
           />
@@ -234,7 +240,9 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
             selectedVaultName={welcome.selectedObsidianVaultName}
             setSelectedVaultName={welcome.setSelectedObsidianVaultName}
             vaultsLoading={welcome.obsidianVaultsLoading}
-            onSetDefaultAndEnable={(vaultName) => void welcome.onObsidianSetDefaultAndEnable(vaultName)}
+            onSetDefaultAndEnable={(vaultName) =>
+              void welcome.onObsidianSetDefaultAndEnable(vaultName)
+            }
             onRecheck={() => void welcome.onObsidianRecheck()}
             onBack={welcome.goSkills}
           />
@@ -354,4 +362,3 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
     </Routes>
   );
 }
-

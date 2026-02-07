@@ -96,12 +96,12 @@ export function GatewayRpcProvider({
       await waitForConnected(client, 6_000);
       return await client.request<T>(method, params);
     },
-    [client],
+    [client]
   );
 
   const value = React.useMemo<GatewayRpc>(
     () => ({ client, connected, request, onEvent }),
-    [client, connected, request, onEvent],
+    [client, connected, request, onEvent]
   );
 
   return <GatewayRpcContext.Provider value={value}>{children}</GatewayRpcContext.Provider>;
@@ -114,4 +114,3 @@ export function useGatewayRpc(): GatewayRpc {
   }
   return ctx;
 }
-

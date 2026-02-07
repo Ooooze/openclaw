@@ -171,8 +171,12 @@ export function SlackConnectPage(props: {
           Steps:
           <ol>
             <li>Slack API → Create App (From scratch).</li>
-            <li>Enable Socket Mode and create an app token (starts with <code>xapp-</code>).</li>
-            <li>Install the app to your workspace to get a bot token (starts with <code>xoxb-</code>).</li>
+            <li>
+              Enable Socket Mode and create an app token (starts with <code>xapp-</code>).
+            </li>
+            <li>
+              Install the app to your workspace to get a bot token (starts with <code>xoxb-</code>).
+            </li>
             <li>Invite the bot to channels you want it to read.</li>
           </ol>
           Docs:{" "}
@@ -195,34 +199,37 @@ export function SlackConnectPage(props: {
           <div className="UiSectionSubtitle" style={{ marginTop: 10 }}>
             <ol>
               <li>
-                Create a Slack app: Slack API → <strong>Apps</strong> → <strong>Create New App</strong> →{" "}
-                <strong>From scratch</strong>.
+                Create a Slack app: Slack API → <strong>Apps</strong> →{" "}
+                <strong>Create New App</strong> → <strong>From scratch</strong>.
               </li>
               <li>
                 Enable Socket Mode: <strong>Socket Mode</strong> → toggle on.
               </li>
               <li>
                 Create the app token (<code>xapp-...</code>): <strong>Basic Information</strong> →{" "}
-                <strong>App-Level Tokens</strong> → <strong>Generate Token and Scopes</strong> → scope{" "}
-                <code>connections:write</code>.
+                <strong>App-Level Tokens</strong> → <strong>Generate Token and Scopes</strong> →
+                scope <code>connections:write</code>.
               </li>
               <li>
-                Create the bot token (<code>xoxb-...</code>): <strong>OAuth &amp; Permissions</strong> → add bot scopes
-                (use the Manifest below) → <strong>Install to Workspace</strong> → copy{" "}
-                <strong>Bot User OAuth Token</strong>.
+                Create the bot token (<code>xoxb-...</code>):{" "}
+                <strong>OAuth &amp; Permissions</strong> → add bot scopes (use the Manifest below) →{" "}
+                <strong>Install to Workspace</strong> → copy <strong>Bot User OAuth Token</strong>.
               </li>
               <li>
-                Invite the bot to channels you want it to read (for example, in Slack: <code>/invite @YourBot</code>).
+                Invite the bot to channels you want it to read (for example, in Slack:{" "}
+                <code>/invite @YourBot</code>).
               </li>
             </ol>
             Notes:
             <ul>
               <li>
-                The <strong>Client Secret</strong> and <strong>Signing Secret</strong> shown in Slack{" "}
-                <strong>Basic Information</strong> are <em>not</em> the tokens used for Socket Mode in OpenClaw.
+                The <strong>Client Secret</strong> and <strong>Signing Secret</strong> shown in
+                Slack <strong>Basic Information</strong> are <em>not</em> the tokens used for Socket
+                Mode in OpenClaw.
               </li>
               <li>
-                If you previously pasted secrets anywhere public, rotate them in Slack (Regenerate) and use new tokens.
+                If you previously pasted secrets anywhere public, rotate them in Slack (Regenerate)
+                and use new tokens.
               </li>
             </ul>
           </div>
@@ -348,7 +355,9 @@ export function SlackConnectPage(props: {
                 spellCheck={false}
               />
               {dmPolicy === "allowlist" && parseList(dmAllowFromRaw).length === 0 ? (
-                <InlineError>At least one allowFrom entry is required for DM allowlist.</InlineError>
+                <InlineError>
+                  At least one allowFrom entry is required for DM allowlist.
+                </InlineError>
               ) : null}
               {dmPolicy === "open" ? (
                 <div className="UiSectionSubtitle" style={{ marginTop: 8 }}>
@@ -367,7 +376,12 @@ export function SlackConnectPage(props: {
         <div className="UiApiKeySpacer" aria-hidden="true" />
 
         <div className="UiApiKeyButtonRow">
-          <button className="UiTextButton" disabled={props.busy} onClick={props.onBack} type="button">
+          <button
+            className="UiTextButton"
+            disabled={props.busy}
+            onClick={props.onBack}
+            type="button"
+          >
             Back
           </button>
           <PrimaryButton disabled={!canSubmit || props.busy} onClick={handleSubmit}>
@@ -378,4 +392,3 @@ export function SlackConnectPage(props: {
     </HeroPageLayout>
   );
 }
-

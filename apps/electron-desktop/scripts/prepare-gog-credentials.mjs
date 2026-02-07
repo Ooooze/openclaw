@@ -14,7 +14,8 @@ function readSourceJson() {
   const fromPath =
     (process.env.OPENCLAW_GOG_OAUTH_CLIENT_SECRET_PATH &&
       String(process.env.OPENCLAW_GOG_OAUTH_CLIENT_SECRET_PATH).trim()) ||
-    (process.env.GOG_OAUTH_CLIENT_SECRET_PATH && String(process.env.GOG_OAUTH_CLIENT_SECRET_PATH).trim()) ||
+    (process.env.GOG_OAUTH_CLIENT_SECRET_PATH &&
+      String(process.env.GOG_OAUTH_CLIENT_SECRET_PATH).trim()) ||
     "";
 
   if (fromPath) {
@@ -29,8 +30,10 @@ function readSourceJson() {
       String(process.env.OPENCLAW_GOG_OAUTH_CLIENT_SECRET_B64).trim()) ||
     (process.env.OPENCLAW_GOG_OAUTH_CLIENT_SECRET_BASE64 &&
       String(process.env.OPENCLAW_GOG_OAUTH_CLIENT_SECRET_BASE64).trim()) ||
-    (process.env.GOG_OAUTH_CLIENT_SECRET_B64 && String(process.env.GOG_OAUTH_CLIENT_SECRET_B64).trim()) ||
-    (process.env.GOG_OAUTH_CLIENT_SECRET_BASE64 && String(process.env.GOG_OAUTH_CLIENT_SECRET_BASE64).trim()) ||
+    (process.env.GOG_OAUTH_CLIENT_SECRET_B64 &&
+      String(process.env.GOG_OAUTH_CLIENT_SECRET_B64).trim()) ||
+    (process.env.GOG_OAUTH_CLIENT_SECRET_BASE64 &&
+      String(process.env.GOG_OAUTH_CLIENT_SECRET_BASE64).trim()) ||
     "";
 
   if (fromB64Raw) {
@@ -42,14 +45,17 @@ function readSourceJson() {
       }
       return decoded;
     } catch (err) {
-      throw new Error(`Failed to decode OAuth client secret base64: ${String(err)}`, { cause: err });
+      throw new Error(`Failed to decode OAuth client secret base64: ${String(err)}`, {
+        cause: err,
+      });
     }
   }
 
   const fromJson =
     (process.env.OPENCLAW_GOG_OAUTH_CLIENT_SECRET_JSON &&
       String(process.env.OPENCLAW_GOG_OAUTH_CLIENT_SECRET_JSON)) ||
-    (process.env.GOG_OAUTH_CLIENT_SECRET_JSON && String(process.env.GOG_OAUTH_CLIENT_SECRET_JSON)) ||
+    (process.env.GOG_OAUTH_CLIENT_SECRET_JSON &&
+      String(process.env.GOG_OAUTH_CLIENT_SECRET_JSON)) ||
     "";
 
   if (fromJson.trim()) {
@@ -63,7 +69,7 @@ function readSourceJson() {
       "- OPENCLAW_GOG_OAUTH_CLIENT_SECRET_PATH=/path/to/client_secret.json",
       "- OPENCLAW_GOG_OAUTH_CLIENT_SECRET_B64='<base64>'",
       "- OPENCLAW_GOG_OAUTH_CLIENT_SECRET_JSON='{...json...}'",
-    ].join("\n"),
+    ].join("\n")
   );
 }
 
@@ -124,4 +130,3 @@ try {
   console.error(String(err?.stack || err?.message || err));
   process.exitCode = 1;
 }
-

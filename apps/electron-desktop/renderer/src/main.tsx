@@ -20,6 +20,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Toaster />
       </HashRouter>
     </Provider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );
-

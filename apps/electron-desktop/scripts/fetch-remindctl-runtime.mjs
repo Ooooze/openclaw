@@ -153,7 +153,9 @@ async function main() {
   const platform = process.platform;
   const arch = process.arch;
 
-  const repo = (process.env.REMINDCTL_REPO && String(process.env.REMINDCTL_REPO).trim()) || "steipete/remindctl";
+  const repo =
+    (process.env.REMINDCTL_REPO && String(process.env.REMINDCTL_REPO).trim()) ||
+    "steipete/remindctl";
   const tag = (process.env.REMINDCTL_TAG && String(process.env.REMINDCTL_TAG).trim()) || "latest";
   const apiUrl =
     tag === "latest"
@@ -167,7 +169,9 @@ async function main() {
   }
 
   const assets = Array.isArray(release?.assets) ? release.assets : [];
-  const match = assets.find((a) => a && typeof a.name === "string" && a.name === "remindctl-macos.zip");
+  const match = assets.find(
+    (a) => a && typeof a.name === "string" && a.name === "remindctl-macos.zip"
+  );
   const assetName = match && typeof match.name === "string" ? match.name : "";
   const downloadUrl =
     match && typeof match.browser_download_url === "string" ? match.browser_download_url : "";
@@ -177,7 +181,9 @@ async function main() {
       .filter(Boolean)
       .slice(0, 40)
       .join(", ");
-    throw new Error(`remindctl asset not found. Expected remindctl-macos.zip. Known assets: ${known || "<none>"}`);
+    throw new Error(
+      `remindctl asset not found. Expected remindctl-macos.zip. Known assets: ${known || "<none>"}`
+    );
   }
 
   const cacheDir = path.join(runtimeRoot, "_cache", `${tagName || tag}`, `${platform}-${arch}`);
@@ -222,4 +228,3 @@ main().catch((err) => {
   console.error(String(err?.stack || err?.message || err));
   process.exitCode = 1;
 });
-

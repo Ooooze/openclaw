@@ -1,7 +1,10 @@
 import React from "react";
 
 import { ActionButton, InlineError, TextInput } from "../../kit";
-import { useWelcomeWebSearch, type WebSearchProvider } from "../../onboarding/welcome/useWelcomeWebSearch";
+import {
+  useWelcomeWebSearch,
+  type WebSearchProvider,
+} from "../../onboarding/welcome/useWelcomeWebSearch";
 import type { ConfigSnapshot, GatewayRpcLike } from "../../onboarding/welcome/types";
 
 function getObject(value: unknown): Record<string, unknown> {
@@ -108,7 +111,13 @@ export function WebSearchModalContent(props: {
           type="password"
           value={apiKey}
           onChange={setApiKey}
-          placeholder={props.isConnected ? "••••••••  (leave empty to keep current)" : provider === "brave" ? "BSA..." : "pplx-..."}
+          placeholder={
+            props.isConnected
+              ? "••••••••  (leave empty to keep current)"
+              : provider === "brave"
+                ? "BSA..."
+                : "pplx-..."
+          }
           autoCapitalize="none"
           autoCorrect="off"
           spellCheck={false}

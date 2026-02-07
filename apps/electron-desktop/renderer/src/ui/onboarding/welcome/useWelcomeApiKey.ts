@@ -41,14 +41,14 @@ export function useWelcomeApiKey({ gw, loadConfig, setError, setStatus }: UseWel
             },
           },
           null,
-          2,
+          2
         ),
         note: `Welcome: enable ${provider} api_key profile`,
       });
       setStatus(`${provider} API key saved.`);
       return true;
     },
-    [gw, loadConfig, setError, setStatus],
+    [gw, loadConfig, setError, setStatus]
   );
 
   return { saveApiKey };

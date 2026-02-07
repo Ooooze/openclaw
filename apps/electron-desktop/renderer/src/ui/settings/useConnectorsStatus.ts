@@ -56,7 +56,10 @@ function deriveStatusFromConfig(config: unknown): Record<ConnectorId, ConnectorS
   let whatsappStatus: ConnectorStatus = "connect";
   if (whatsapp.enabled === false && "enabled" in whatsapp) {
     whatsappStatus = "disabled";
-  } else if (whatsapp.enabled === true || (Array.isArray(whatsapp.accounts) && whatsapp.accounts.length > 0)) {
+  } else if (
+    whatsapp.enabled === true ||
+    (Array.isArray(whatsapp.accounts) && whatsapp.accounts.length > 0)
+  ) {
     whatsappStatus = "connected";
   }
 
@@ -109,7 +112,7 @@ function deriveStatusFromConfig(config: unknown): Record<ConnectorId, ConnectorS
 export async function disableConnector(
   gw: GatewayRpc,
   loadConfig: () => Promise<ConfigSnapshotLike>,
-  connectorId: ConnectorId,
+  connectorId: ConnectorId
 ): Promise<void> {
   const snap = await loadConfig();
   const baseHash = typeof snap.hash === "string" && snap.hash.trim() ? snap.hash.trim() : null;
@@ -132,7 +135,7 @@ export function useConnectorsStatus(props: {
 }) {
   const { gw, configSnap, reload } = props;
   const [statuses, setStatuses] = React.useState<Record<ConnectorId, ConnectorStatus>>(() =>
-    deriveStatusFromConfig(configSnap?.config),
+    deriveStatusFromConfig(configSnap?.config)
   );
 
   // Re-derive statuses whenever configSnap changes.

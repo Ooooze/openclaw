@@ -57,7 +57,11 @@ async function downloadToFile(url, destPath) {
   if (fs.existsSync(destPath)) {
     try {
       const st = fs.statSync(destPath);
-      if (st.isFile() && st.size > 0 && String(process.env.GH_FORCE_DOWNLOAD || "").trim() !== "1") {
+      if (
+        st.isFile() &&
+        st.size > 0 &&
+        String(process.env.GH_FORCE_DOWNLOAD || "").trim() !== "1"
+      ) {
         return;
       }
     } catch {
@@ -231,4 +235,3 @@ main().catch((err) => {
   console.error(String(err?.stack || err?.message || err));
   process.exitCode = 1;
 });
-

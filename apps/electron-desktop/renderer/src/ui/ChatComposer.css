@@ -27,7 +27,9 @@
   font-size: 20px;
   line-height: 1;
   cursor: pointer;
-  transition: color 120ms ease, background 120ms ease;
+  transition:
+    color 120ms ease,
+    background 120ms ease;
 }
 
 .UiChatAttachButton:hover {
@@ -153,7 +155,12 @@
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: #272727;
-  box-shadow: 0 80px 22px 0 rgba(0, 0, 0, 0.00), 0 51px 20px 0 rgba(0, 0, 0, 0.00), 0 29px 17px 0 rgba(0, 0, 0, 0.01), 0 13px 13px 0 rgba(0, 0, 0, 0.02), 0 3px 7px 0 rgba(0, 0, 0, 0.02);
+  box-shadow:
+    0 80px 22px 0 rgba(0, 0, 0, 0),
+    0 51px 20px 0 rgba(0, 0, 0, 0),
+    0 29px 17px 0 rgba(0, 0, 0, 0.01),
+    0 13px 13px 0 rgba(0, 0, 0, 0.02),
+    0 3px 7px 0 rgba(0, 0, 0, 0.02);
 }
 
 .UiChatComposerButtonBlock {
@@ -201,7 +208,9 @@
   background: transparent;
   color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
-  transition: color 120ms ease, background 120ms ease;
+  transition:
+    color 120ms ease,
+    background 120ms ease;
 }
 
 .UiChatMicButton:hover {
@@ -225,10 +234,12 @@
   justify-content: center;
   border: none;
   border-radius: 50%;
-  background: #AEFF00;
-  color: #1E1E1E;
+  background: #aeff00;
+  color: #1e1e1e;
   cursor: pointer;
-  transition: background 120ms ease, color 120ms ease;
+  transition:
+    background 120ms ease,
+    color 120ms ease;
 }
 
 .UiChatSendButton:hover:not(:disabled) {

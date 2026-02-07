@@ -9,7 +9,12 @@ type UseWelcomeTelegramInput = {
   setStatus: (value: string | null) => void;
 };
 
-export function useWelcomeTelegram({ gw, loadConfig, setError, setStatus }: UseWelcomeTelegramInput) {
+export function useWelcomeTelegram({
+  gw,
+  loadConfig,
+  setError,
+  setStatus,
+}: UseWelcomeTelegramInput) {
   const [telegramToken, setTelegramToken] = React.useState("");
   const [telegramUserId, setTelegramUserId] = React.useState("");
   const [channelsProbe, setChannelsProbe] = React.useState<ChannelsStatusResult | null>(null);
@@ -39,7 +44,7 @@ export function useWelcomeTelegram({ gw, loadConfig, setError, setStatus }: UseW
           },
         },
         null,
-        2,
+        2
       ),
       note: "Welcome: configure Telegram bot token",
     });
@@ -82,14 +87,17 @@ export function useWelcomeTelegram({ gw, loadConfig, setError, setStatus }: UseW
           },
         },
         null,
-        2,
+        2
       ),
       note: "Welcome: configure Telegram allowFrom",
     });
 
     // Kick: probe channel status to surface immediate errors/config state.
     try {
-      const probe = await gw.request<ChannelsStatusResult>("channels.status", { probe: true, timeoutMs: 12_000 });
+      const probe = await gw.request<ChannelsStatusResult>("channels.status", {
+        probe: true,
+        timeoutMs: 12_000,
+      });
       setChannelsProbe(probe);
     } catch {
       // ignore probe failures; config patch is the primary action

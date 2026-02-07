@@ -167,9 +167,7 @@ function normalizeArch(arch) {
 }
 
 function pickAsset(assets, arch) {
-  const known = assets
-    .map((a) => (a && typeof a.name === "string" ? a.name : ""))
-    .filter(Boolean);
+  const known = assets.map((a) => (a && typeof a.name === "string" ? a.name : "")).filter(Boolean);
 
   const normArch = normalizeArch(arch);
   const scored = known
@@ -177,7 +175,12 @@ function pickAsset(assets, arch) {
       const lower = name.toLowerCase();
       let score = 0;
       // Platform signals.
-      if (lower.includes("darwin") || lower.includes("mac") || lower.includes("macos") || lower.includes("osx")) {
+      if (
+        lower.includes("darwin") ||
+        lower.includes("mac") ||
+        lower.includes("macos") ||
+        lower.includes("osx")
+      ) {
         score += 50;
       }
       // Architecture signals.
@@ -212,7 +215,8 @@ function pickAsset(assets, arch) {
   }
 
   const match = assets.find((a) => a && typeof a.name === "string" && a.name === best);
-  const downloadUrl = match && typeof match.browser_download_url === "string" ? match.browser_download_url : "";
+  const downloadUrl =
+    match && typeof match.browser_download_url === "string" ? match.browser_download_url : "";
   return { assetName: best, downloadUrl, known };
 }
 
@@ -225,8 +229,10 @@ async function main() {
   const arch = process.arch;
 
   const repo =
-    (process.env.OBSIDIAN_CLI_REPO && String(process.env.OBSIDIAN_CLI_REPO).trim()) || "Yakitrak/obsidian-cli";
-  const tag = (process.env.OBSIDIAN_CLI_TAG && String(process.env.OBSIDIAN_CLI_TAG).trim()) || "latest";
+    (process.env.OBSIDIAN_CLI_REPO && String(process.env.OBSIDIAN_CLI_REPO).trim()) ||
+    "Yakitrak/obsidian-cli";
+  const tag =
+    (process.env.OBSIDIAN_CLI_TAG && String(process.env.OBSIDIAN_CLI_TAG).trim()) || "latest";
   const apiUrl =
     tag === "latest"
       ? `https://api.github.com/repos/${repo}/releases/latest`
@@ -242,7 +248,7 @@ async function main() {
   const picked = pickAsset(assets, arch);
   if (!picked.downloadUrl) {
     throw new Error(
-      `obsidian-cli asset not found for darwin/${arch}. Known assets: ${picked.known.slice(0, 40).join(", ") || "<none>"}`,
+      `obsidian-cli asset not found for darwin/${arch}. Known assets: ${picked.known.slice(0, 40).join(", ") || "<none>"}`
     );
   }
 
@@ -274,7 +280,9 @@ async function main() {
     return /(^|\/)obsidian-cli$/i.test(fullPath);
   });
   if (!extractedBin) {
-    throw new Error(`failed to locate obsidian-cli binary in extracted archive (dir: ${extractDir})`);
+    throw new Error(
+      `failed to locate obsidian-cli binary in extracted archive (dir: ${extractDir})`
+    );
   }
 
   const targetDir = path.join(runtimeRoot, `${platform}-${arch}`);
@@ -287,7 +295,9 @@ async function main() {
   if (res.status !== 0) {
     const stderr = String(res.stderr || "").trim();
     const stdout = String(res.stdout || "").trim();
-    throw new Error(`downloaded obsidian-cli failed to run: ${stderr || stdout || "unknown error"}`);
+    throw new Error(
+      `downloaded obsidian-cli failed to run: ${stderr || stdout || "unknown error"}`
+    );
   }
 
   console.log(`[electron-desktop] obsidian-cli downloaded to: ${targetBin}`);
@@ -297,4 +307,3 @@ main().catch((err) => {
   console.error(String(err?.stack || err?.message || err));
   process.exitCode = 1;
 });
-

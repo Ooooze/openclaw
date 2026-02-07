@@ -49,7 +49,9 @@ export function TrelloModalContent(props: {
       {error && <InlineError>{error}</InlineError>}
       {status && <div className="UiSkillModalStatus">{status}</div>}
       {props.isConnected && !apiKey && !token && (
-        <div className="UiSkillModalStatus">Credentials configured. Enter new values to update.</div>
+        <div className="UiSkillModalStatus">
+          Credentials configured. Enter new values to update.
+        </div>
       )}
 
       <div className="UiSkillModalField">

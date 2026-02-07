@@ -36,7 +36,8 @@ const MODEL_TIERS: Record<string, Record<ModelTier, string>> = {
 export const TIER_INFO: Record<ModelTier, { label: string; description: string }> = {
   ultra: {
     label: "Ultra",
-    description: "Most capable. Best for complex reasoning, analysis, and creative tasks. Highest cost.",
+    description:
+      "Most capable. Best for complex reasoning, analysis, and creative tasks. Highest cost.",
   },
   pro: {
     label: "Pro",
@@ -52,7 +53,10 @@ const TIER_ORDER: ModelTier[] = ["ultra", "pro", "fast"];
 const TIER_PRIORITY: Record<ModelTier, number> = { ultra: 0, pro: 1, fast: 2 };
 
 function normalizeTierMatchText(text: string): string {
-  return text.toLowerCase().replaceAll(/[\s_-]+/g, " ").trim();
+  return text
+    .toLowerCase()
+    .replaceAll(/[\s_-]+/g, " ")
+    .trim();
 }
 
 export function getModelTier(model: ModelEntry): ModelTier | null {
@@ -137,4 +141,3 @@ export function sortModelsByProviderTierName(models: ModelEntry[]): ModelEntry[]
     return a.name.localeCompare(b.name);
   });
 }
-

@@ -39,7 +39,9 @@ function selectSigningIdentity() {
     return explicit;
   }
 
-  const out = run("security", ["find-identity", "-p", "codesigning", "-v"], { stdio: ["ignore", "pipe", "pipe"] });
+  const out = run("security", ["find-identity", "-p", "codesigning", "-v"], {
+    stdio: ["ignore", "pipe", "pipe"],
+  });
   const lines = out
     .split("\n")
     .map((l) => l.trim())
@@ -175,7 +177,7 @@ module.exports = async function afterPack(context) {
       [
         "[electron-desktop] No codesign identity found.",
         "Set CSC_NAME (recommended) or SIGN_IDENTITY to: Developer ID Application: <Name> (<TEAMID>)",
-      ].join("\n"),
+      ].join("\n")
     );
   }
 
@@ -186,9 +188,16 @@ module.exports = async function afterPack(context) {
   }
 
   const resourcesDir = path.join(appBundle, "Contents", "Resources");
-  const candidateRoots = ["node", "gog", "jq", "memo", "remindctl", "obsidian-cli", "gh", "openclaw"].map((name) =>
-    path.join(resourcesDir, name),
-  );
+  const candidateRoots = [
+    "node",
+    "gog",
+    "jq",
+    "memo",
+    "remindctl",
+    "obsidian-cli",
+    "gh",
+    "openclaw",
+  ].map((name) => path.join(resourcesDir, name));
   const roots = candidateRoots.filter((p) => fs.existsSync(p));
 
   if (roots.length === 0) {
@@ -232,7 +241,6 @@ module.exports = async function afterPack(context) {
   console.log(
     `[electron-desktop] afterPack: signed ${signed} Mach-O files (considered ${considered}) under: ${roots
       .map((p) => path.basename(p))
-      .join(", ")}`,
+      .join(", ")}`
   );
 };
-

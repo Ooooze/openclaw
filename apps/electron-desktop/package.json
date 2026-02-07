@@ -38,6 +38,8 @@
     "prepare:gh": "node scripts/prepare-gh-runtime.mjs",
     "reset:local": "node scripts/reset-local-state.mjs",
     "reset:local:yes": "node scripts/reset-local-state.mjs --yes",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
     "dist:local": "CSC_IDENTITY_AUTO_DISCOVERY=false npm run dist -- --publish never",
     "dist": "npm run build:all && electron-builder",
     "dist:env": "npm run build:all &&  node --env-file=.env ./node_modules/electron-builder/out/cli/cli.js",
@@ -58,7 +60,8 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.13.0",
     "typescript": "^5.9.3",
-    "vite": "^7.3.1"
+    "vite": "^7.3.1",
+    "prettier": "^3.4.2"
   },
   "dependencies": {
     "json5": "^2.2.3",

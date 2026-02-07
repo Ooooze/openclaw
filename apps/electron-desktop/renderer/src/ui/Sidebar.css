@@ -1,6 +1,6 @@
 /* Chat sidebar */
 .UiChatSidebar {
-  width: 240px;
+  width: 220px;
   min-width: 200px;
   flex-shrink: 0;
   display: flex;
@@ -14,21 +14,22 @@
   align-items: center;
   gap: 8px;
   margin: 12px;
-  padding: 10px 14px;
   border-radius: 12px;
-  border: 1px solid rgba(194, 255, 64, 0.25);
-  background: rgba(194, 255, 64, 0.12);
   color: var(--lime);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   appearance: none;
-  transition: background 140ms ease, border-color 140ms ease;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease;
+  height: 36px;
+  padding: 8px 10px;
+  align-self: stretch;
 }
 
 .UiChatSidebarNewSession:hover {
-  background: rgba(194, 255, 64, 0.18);
-  border-color: rgba(194, 255, 64, 0.4);
+  background: rgba(230, 237, 243, 0.06);
 }
 
 .UiChatSidebarNewSessionIcon {
@@ -52,13 +53,6 @@
   font-weight: 700;
   letter-spacing: 0.5px;
   color: var(--muted2);
-  text-transform: uppercase;
-}
-
-.UiChatSidebarError {
-  font-size: 12px;
-  color: rgba(255, 122, 0, 0.9);
-  padding: 8px 4px;
 }
 
 .UiChatSidebarLoading {
@@ -82,18 +76,24 @@
   display: block;
   width: 100%;
   text-align: left;
-  padding: 10px 12px;
+  height: 36px;
+  padding: 8px 10px;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
   border-radius: 10px;
   border: none;
   background: transparent;
   color: var(--text);
-  font-size: 13px;
+  font-size: 14px;
   cursor: pointer;
   appearance: none;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  transition: background 140ms ease, color 140ms ease;
+  transition:
+    background 140ms ease,
+    color 140ms ease;
 }
 
 .UiChatSidebarSessionItem:hover {
@@ -101,8 +101,7 @@
 }
 
 .UiChatSidebarSessionItem-active {
-  background: rgba(194, 255, 64, 0.1);
-  color: var(--lime);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .UiChatSidebarFooter {
@@ -115,12 +114,15 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 12px;
+  height: 32px;
+  padding: 8px 10px;
   border-radius: 10px;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 14px;
   text-decoration: none;
-  transition: background 140ms ease, color 140ms ease;
+  transition:
+    background 140ms ease,
+    color 140ms ease;
 }
 
 .UiChatSidebarSettings:hover {

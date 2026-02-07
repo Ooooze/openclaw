@@ -73,8 +73,8 @@ export function MediaUnderstandingPage(props: {
 
         <div className="UiSectionTitle">Media Understanding</div>
         <div className="UiSectionSubtitle">
-          Let OpenClaw understand images, voice notes, and videos you send. It automatically picks a compatible provider
-          based on the API keys you already configured.
+          Let OpenClaw understand images, voice notes, and videos you send. It automatically picks a
+          compatible provider based on the API keys you already configured.
         </div>
 
         {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
@@ -99,7 +99,8 @@ export function MediaUnderstandingPage(props: {
         {hasMissing ? (
           <div style={{ marginTop: 12 }}>
             <InlineError>
-              OpenAI is not configured yet. Add an OpenAI API key below to enable image + audio understanding reliably.
+              OpenAI is not configured yet. Add an OpenAI API key below to enable image + audio
+              understanding reliably.
             </InlineError>
             <div className="UiSectionSubtitle" style={{ marginTop: 10 }}>
               Add provider key
@@ -162,7 +163,12 @@ export function MediaUnderstandingPage(props: {
         ) : null}
 
         <div className="UiGoogleWorkspaceBottomRow" style={{ marginTop: 14 }}>
-          <button className="UiTextButton" onClick={props.onBack} type="button" disabled={props.busy}>
+          <button
+            className="UiTextButton"
+            onClick={props.onBack}
+            type="button"
+            disabled={props.busy}
+          >
             Back
           </button>
           <div className="UiGoogleWorkspaceActions">
@@ -189,4 +195,3 @@ export function MediaUnderstandingPage(props: {
     </HeroPageLayout>
   );
 }
-

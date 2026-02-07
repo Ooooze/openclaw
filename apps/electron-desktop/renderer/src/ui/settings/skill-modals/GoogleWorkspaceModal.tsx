@@ -78,7 +78,7 @@ export function GoogleWorkspaceModalContent(props: {
     }
     try {
       const res = await runGog(() =>
-        api.gogAuthAdd({ account: account.trim(), services: DEFAULT_GOG_SERVICES }),
+        api.gogAuthAdd({ account: account.trim(), services: DEFAULT_GOG_SERVICES })
       );
       if (res.ok) {
         props.onConnected();

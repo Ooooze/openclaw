@@ -47,7 +47,7 @@ type ExecApprovalsSnapshot = {
 
 function mergeAllowlistEntries(
   existing: ExecApprovalsAllowlistEntry[] | undefined,
-  patterns: string[],
+  patterns: string[]
 ): ExecApprovalsAllowlistEntry[] {
   const list = Array.isArray(existing) ? existing : [];
   const seen = new Set(list.map((e) => e.pattern.trim().toLowerCase()).filter(Boolean));
@@ -84,7 +84,9 @@ export function useWelcomeAppleReminders({
       const tools = getObject(cfg.tools);
       const exec = getObject(tools.exec);
       const existingSafeBins = getStringArray(exec.safeBins);
-      const safeBins = unique([...existingSafeBins, "remindctl", "which"].map((v) => v.toLowerCase()));
+      const safeBins = unique(
+        [...existingSafeBins, "remindctl", "which"].map((v) => v.toLowerCase())
+      );
 
       const hostRaw = typeof exec.host === "string" ? exec.host.trim() : "";
       // Apple Reminders uses a bundled binary that is guaranteed on the gateway host PATH. In sandbox
@@ -116,7 +118,7 @@ export function useWelcomeAppleReminders({
             },
           },
           null,
-          2,
+          2
         ),
         note: "Welcome: enable Apple Reminders (remindctl) skill",
       });
@@ -169,9 +171,8 @@ export function useWelcomeAppleReminders({
       setStatus("Apple Reminders enabled.");
       return true;
     },
-    [gw, loadConfig, setError, setStatus],
+    [gw, loadConfig, setError, setStatus]
   );
 
   return { enableAppleReminders };
 }
-

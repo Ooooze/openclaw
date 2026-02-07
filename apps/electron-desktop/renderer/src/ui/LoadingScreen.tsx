@@ -19,4 +19,3 @@ export function LoadingScreen({ state: _state }: { state: GatewayState | null })
     </FullscreenShell>
   );
 }
-

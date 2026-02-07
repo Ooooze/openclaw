@@ -53,7 +53,7 @@ run(PNPM, ["-C", repoRoot, "ui:build"]);
 const controlUiIndex = path.join(repoRoot, "dist", "control-ui", "index.html");
 if (!fs.existsSync(controlUiIndex)) {
   throw new Error(
-    `[electron-desktop] Control UI assets missing after build: ${controlUiIndex}. Did ui:build output change?`,
+    `[electron-desktop] Control UI assets missing after build: ${controlUiIndex}. Did ui:build output change?`
   );
 }
 
@@ -62,4 +62,3 @@ if (!fs.existsSync(controlUiIndex)) {
 run(PNPM, ["-C", repoRoot, "--filter", "openclaw", "--prod", "--legacy", "deploy", outDir]);
 
 console.log(`[electron-desktop] OpenClaw bundle prepared at: ${outDir}`);
-

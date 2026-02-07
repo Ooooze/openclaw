@@ -1,6 +1,9 @@
 import { BrowserWindow } from "electron";
 
-export async function createMainWindow(params: { preloadPath: string; rendererIndex: string }): Promise<BrowserWindow> {
+export async function createMainWindow(params: {
+  preloadPath: string;
+  rendererIndex: string;
+}): Promise<BrowserWindow> {
   const win = new BrowserWindow({
     width: 1200,
     height: 800,
@@ -16,4 +19,3 @@ export async function createMainWindow(params: { preloadPath: string; rendererIn
 
   return win;
 }
-

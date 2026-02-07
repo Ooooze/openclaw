@@ -20,7 +20,11 @@ export function createTailBuffer(maxChars: number): TailBuffer {
   };
 }
 
-export async function waitForPortOpen(host: string, port: number, timeoutMs: number): Promise<boolean> {
+export async function waitForPortOpen(
+  host: string,
+  port: number,
+  timeoutMs: number
+): Promise<boolean> {
   const start = Date.now();
   while (Date.now() - start < timeoutMs) {
     const ok = await new Promise<boolean>((resolve) => {
@@ -68,4 +72,3 @@ export async function pickPort(preferred: number): Promise<number> {
     });
   });
 }
-

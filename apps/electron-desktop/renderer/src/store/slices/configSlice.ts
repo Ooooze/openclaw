@@ -35,7 +35,7 @@ export const reloadConfig = createAsyncThunk(
       thunkApi.dispatch(configActions.setError(String(err)));
       thunkApi.dispatch(configActions.setStatus("error"));
     }
-  },
+  }
 );
 
 const configSlice = createSlice({
@@ -56,4 +56,3 @@ const configSlice = createSlice({
 
 export const configActions = configSlice.actions;
 export const configReducer = configSlice.reducer;
-

@@ -36,14 +36,18 @@ export function GitHubConnectPage(props: {
 
         <div className="UiApiKeyTitle">Connect GitHub</div>
         <div className="UiApiKeySubtitle">
-          Paste a GitHub Personal Access Token (PAT). We'll store it in the app's gh config and verify access.
+          Paste a GitHub Personal Access Token (PAT). We'll store it in the app's gh config and
+          verify access.
         </div>
 
         <div className="UiSectionSubtitle">
           Tips:
           <ol>
             <li>Prefer a fine-grained PAT if possible.</li>
-            <li>Common scopes: <code>repo</code>, <code>read:org</code>, <code>workflow</code> (adjust to your needs).</li>
+            <li>
+              Common scopes: <code>repo</code>, <code>read:org</code>, <code>workflow</code> (adjust
+              to your needs).
+            </li>
           </ol>
         </div>
 
@@ -65,7 +69,12 @@ export function GitHubConnectPage(props: {
         <div className="UiApiKeySpacer" aria-hidden="true" />
 
         <div className="UiApiKeyButtonRow">
-          <button className="UiTextButton" disabled={props.busy} onClick={props.onBack} type="button">
+          <button
+            className="UiTextButton"
+            disabled={props.busy}
+            onClick={props.onBack}
+            type="button"
+          >
             Back
           </button>
           <PrimaryButton disabled={!pat.trim() || props.busy} onClick={handleSubmit}>
@@ -76,4 +85,3 @@ export function GitHubConnectPage(props: {
     </HeroPageLayout>
   );
 }
-

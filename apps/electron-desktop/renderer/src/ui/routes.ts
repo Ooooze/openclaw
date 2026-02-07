@@ -18,4 +18,3 @@ export function isBootstrapPath(pathname: string): boolean {
     pathname.startsWith(`${routes.welcome}/`)
   );
 }
-

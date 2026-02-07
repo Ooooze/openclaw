@@ -91,10 +91,18 @@ export function TrelloConnectPage(props: {
         <div className="UiApiKeySpacer" aria-hidden="true" />
 
         <div className="UiApiKeyButtonRow">
-          <button className="UiTextButton" disabled={props.busy} onClick={props.onBack} type="button">
+          <button
+            className="UiTextButton"
+            disabled={props.busy}
+            onClick={props.onBack}
+            type="button"
+          >
             Back
           </button>
-          <PrimaryButton disabled={!apiKey.trim() || !token.trim() || props.busy} onClick={handleSubmit}>
+          <PrimaryButton
+            disabled={!apiKey.trim() || !token.trim() || props.busy}
+            onClick={handleSubmit}
+          >
             {props.busy ? "Saving..." : "Save & return"}
           </PrimaryButton>
         </div>
@@ -102,4 +110,3 @@ export function TrelloConnectPage(props: {
     </HeroPageLayout>
   );
 }
-

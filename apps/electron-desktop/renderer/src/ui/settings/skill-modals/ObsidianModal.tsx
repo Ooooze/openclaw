@@ -84,7 +84,7 @@ export function ObsidianModalContent(props: {
       const checkRes = await api.obsidianCliCheck();
       if (!checkRes.ok) {
         throw new Error(
-          checkRes.stderr?.trim() || checkRes.stdout?.trim() || "obsidian-cli check failed",
+          checkRes.stderr?.trim() || checkRes.stdout?.trim() || "obsidian-cli check failed"
         );
       }
 
@@ -93,7 +93,7 @@ export function ObsidianModalContent(props: {
         const setRes = await api.obsidianCliSetDefault({ vaultName: selectedVault });
         if (!setRes.ok) {
           throw new Error(
-            setRes.stderr?.trim() || setRes.stdout?.trim() || "Failed to set default vault",
+            setRes.stderr?.trim() || setRes.stdout?.trim() || "Failed to set default vault"
           );
         }
       }
@@ -149,11 +149,7 @@ export function ObsidianModalContent(props: {
       )}
 
       <div className="UiSkillModalActions">
-        <ActionButton
-          variant="primary"
-          disabled={busy}
-          onClick={() => void handleCheckAndEnable()}
-        >
+        <ActionButton variant="primary" disabled={busy} onClick={() => void handleCheckAndEnable()}>
           {busy ? "Enabling…" : "Check & enable"}
         </ActionButton>
       </div>

@@ -62,15 +62,26 @@ function deriveStatusFromConfig(config: unknown): Record<SkillId, SkillStatus> {
 
   // Media: connected if any capability is on, disabled if search.enabled is explicitly false.
   const mediaConnected = image.enabled === true || audio.enabled === true;
-  const mediaDisabled = image.enabled === false && audio.enabled === false
-    && ("enabled" in image || "enabled" in audio);
-  const mediaStatus: SkillStatus = mediaConnected ? "connected" : mediaDisabled ? "disabled" : "connect";
+  const mediaDisabled =
+    image.enabled === false &&
+    audio.enabled === false &&
+    ("enabled" in image || "enabled" in audio);
+  const mediaStatus: SkillStatus = mediaConnected
+    ? "connected"
+    : mediaDisabled
+      ? "disabled"
+      : "connect";
 
   // Web search: check enabled flag and provider presence.
   const webSearchConnected =
-    (typeof search.provider === "string" && search.provider.trim().length > 0) || search.enabled === true;
+    (typeof search.provider === "string" && search.provider.trim().length > 0) ||
+    search.enabled === true;
   const webSearchDisabled = search.enabled === false && "enabled" in search;
-  const webSearchStatus: SkillStatus = webSearchConnected ? "connected" : webSearchDisabled ? "disabled" : "connect";
+  const webSearchStatus: SkillStatus = webSearchConnected
+    ? "connected"
+    : webSearchDisabled
+      ? "disabled"
+      : "connect";
 
   // Slack: check channel config or skill entry.
   const slackChannelEnabled = slackChannel.enabled === true;
@@ -114,7 +125,7 @@ const SKILLS_ENTRY_KEYS: Partial<Record<SkillId, string>> = {
 export async function disableSkill(
   gw: GatewayRpc,
   loadConfig: () => Promise<ConfigSnapshotLike>,
-  skillId: SkillId,
+  skillId: SkillId
 ): Promise<void> {
   const entryKey = SKILLS_ENTRY_KEYS[skillId];
   if (entryKey) {
@@ -134,7 +145,13 @@ export async function disableSkill(
     await gw.request("config.patch", {
       baseHash,
       raw: JSON.stringify({
-        tools: { media: { image: { enabled: false }, audio: { enabled: false }, video: { enabled: false } } },
+        tools: {
+          media: {
+            image: { enabled: false },
+            audio: { enabled: false },
+            video: { enabled: false },
+          },
+        },
       }),
       note: "Settings: disable media understanding",
     });
@@ -160,7 +177,7 @@ export function useSkillsStatus(props: {
 }) {
   const { gw, configSnap, reload } = props;
   const [statuses, setStatuses] = React.useState<Record<SkillId, SkillStatus>>(() =>
-    deriveStatusFromConfig(configSnap?.config),
+    deriveStatusFromConfig(configSnap?.config)
   );
   const [loading, setLoading] = React.useState(true);
 

@@ -106,7 +106,9 @@
   align-items: center;
   justify-content: center;
   border-radius: 6px;
-  transition: color 120ms ease, background 120ms ease;
+  transition:
+    color 120ms ease,
+    background 120ms ease;
 }
 
 .UiChatMessageActionBtn:hover {

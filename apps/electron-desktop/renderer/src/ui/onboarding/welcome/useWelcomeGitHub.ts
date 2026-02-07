@@ -47,7 +47,7 @@ type ExecApprovalsSnapshot = {
 
 function mergeAllowlistEntries(
   existing: ExecApprovalsAllowlistEntry[] | undefined,
-  patterns: string[],
+  patterns: string[]
 ): ExecApprovalsAllowlistEntry[] {
   const list = Array.isArray(existing) ? existing : [];
   const seen = new Set(list.map((e) => e.pattern.trim().toLowerCase()).filter(Boolean));
@@ -80,7 +80,9 @@ export function useWelcomeGitHub({ gw, loadConfig, setError, setStatus }: UseWel
       const exec = getObject(tools.exec);
       const existingSafeBins = getStringArray(exec.safeBins);
       // `head` is commonly used for piping/previewing output without introducing file-path args.
-      const safeBins = unique([...existingSafeBins, "gh", "which", "head"].map((v) => v.toLowerCase()));
+      const safeBins = unique(
+        [...existingSafeBins, "gh", "which", "head"].map((v) => v.toLowerCase())
+      );
 
       const hostRaw = typeof exec.host === "string" ? exec.host.trim() : "";
       // GitHub CLI is bundled and available on the gateway host PATH. Prefer host=gateway.
@@ -111,7 +113,7 @@ export function useWelcomeGitHub({ gw, loadConfig, setError, setStatus }: UseWel
             },
           },
           null,
-          2,
+          2
         ),
         note: "Welcome: enable GitHub (gh) skill",
       });
@@ -123,7 +125,9 @@ export function useWelcomeGitHub({ gw, loadConfig, setError, setStatus }: UseWel
         const agents = file.agents ?? {};
 
         const resolvedPath =
-          typeof params?.ghResolvedPath === "string" && params.ghResolvedPath.trim() ? params.ghResolvedPath.trim() : null;
+          typeof params?.ghResolvedPath === "string" && params.ghResolvedPath.trim()
+            ? params.ghResolvedPath.trim()
+            : null;
         const patterns = resolvedPath ? ["**/gh", "**/which", resolvedPath] : ["**/gh", "**/which"];
 
         // Apply both to "*" (wildcard) and "main" to avoid mismatches when the active agent id
@@ -162,9 +166,8 @@ export function useWelcomeGitHub({ gw, loadConfig, setError, setStatus }: UseWel
       setStatus("GitHub enabled.");
       return true;
     },
-    [gw, loadConfig, setError, setStatus],
+    [gw, loadConfig, setError, setStatus]
   );
 
   return { enableGitHub };
 }
-
