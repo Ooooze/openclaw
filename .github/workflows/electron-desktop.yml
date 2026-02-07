@@ -94,13 +94,13 @@ jobs:
         working-directory: apps/electron-desktop
         run: npm run prepare:gh:all
 
-      # GOG credentials require a .env file with secrets; skip if not available.
+      # GOG credentials require an OAuth client secret; skip if not available.
       - name: Prepare GOG runtime
-        if: env.GOG_CLIENT_EMAIL != ''
+        if: env.OPENCLAW_GOG_OAUTH_CLIENT_SECRET_B64 != ''
         working-directory: apps/electron-desktop
         run: npm run prepare:gog:all
         env:
-          GOG_CLIENT_EMAIL: ${{ secrets.GOG_CLIENT_EMAIL }}
+          OPENCLAW_GOG_OAUTH_CLIENT_SECRET_B64: ${{ secrets.OPENCLAW_GOG_OAUTH_CLIENT_SECRET_B64 }}
 
       - name: Prepare memo runtime
         working-directory: apps/electron-desktop
@@ -126,17 +126,21 @@ jobs:
             echo "flag=never" >> "$GITHUB_OUTPUT"
           fi
 
-      # Build + publish. When CSC_LINK is missing, electron-builder skips signing.
+      # Build + publish.
+      # When MACOS_CSC_LINK is not set, CSC_IDENTITY_AUTO_DISCOVERY=false tells both
+      # electron-builder and the custom afterPack hook to skip code signing entirely.
       - name: Build with electron-builder
         working-directory: apps/electron-desktop
         run: npx electron-builder --publish ${{ steps.publish-mode.outputs.flag }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Code signing (optional — set these secrets to enable).
+          # Code signing: when CSC_LINK is empty, disable auto-discovery so the
+          # afterPack hook and electron-builder both skip signing gracefully.
           CSC_LINK: ${{ secrets.MACOS_CSC_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.MACOS_CSC_KEY_PASSWORD }}
-          # Notarization (optional — set these secrets to enable).
-          NOTARIZE: ${{ secrets.NOTARYTOOL_KEY != '' && '1' || '' }}
+          CSC_IDENTITY_AUTO_DISCOVERY: ${{ secrets.MACOS_CSC_LINK != '' && 'true' || 'false' }}
+          # Notarization (optional — only when signing secrets + notary keys are set).
+          NOTARIZE: ${{ secrets.NOTARYTOOL_KEY != '' && secrets.MACOS_CSC_LINK != '' && '1' || '' }}
           NOTARYTOOL_KEY: ${{ secrets.NOTARYTOOL_KEY }}
           NOTARYTOOL_KEY_ID: ${{ secrets.NOTARYTOOL_KEY_ID }}
           NOTARYTOOL_ISSUER: ${{ secrets.NOTARYTOOL_ISSUER }}
