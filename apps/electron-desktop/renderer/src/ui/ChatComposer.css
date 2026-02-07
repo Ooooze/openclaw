@@ -39,12 +39,15 @@
 
 .UiChatAttachments {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
   width: 100%;
   margin: 0 auto 10px;
   align-items: flex-start;
   justify-content: flex-start;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 4px;
 }
 
 .UiChatAttachment {
@@ -108,6 +111,83 @@
 
 .UiChatAttachmentRemove:hover {
   background: rgba(0, 0, 0, 0.8);
+}
+
+/* File attachment card (composer + message) */
+.UiChatAttachmentCard {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  background: #121212;
+  flex-shrink: 0;
+  height: 58px;
+  box-sizing: border-box;
+  min-width: 160px;
+  max-width: 160px;
+  padding: 4px 36px 4px 8px;
+  gap: 8px;
+}
+
+.UiChatAttachmentCardIconBox {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.UiChatAttachmentCardIcon {
+  width: 24px;
+  height: 24px;
+  color: #ef4444;
+}
+
+.UiChatAttachmentCardText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.UiChatAttachmentCardFileName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.UiChatAttachmentCardFileType {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.UiChatAttachmentCardRemove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 50%;
+  background: #ffffff14;
+  color: #fff;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.UiChatAttachmentCardRemove:hover {
+  opacity: 0.8;
 }
 
 /* Attachments inside a chat message (history) */

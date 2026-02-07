@@ -38,6 +38,8 @@ export type ChatAttachmentInput = {
   id: string;
   dataUrl: string;
   mimeType: string;
+  /** Optional display name (e.g. from File.name). */
+  fileName?: string;
 };
 
 export function dataUrlToBase64(dataUrl: string): { content: string; mimeType: string } | null {

@@ -12,6 +12,7 @@ import {
   type UiMessageAttachment,
 } from "../store/slices/chatSlice";
 import type { GatewayState } from "../../../src/main/types";
+import { ChatAttachmentCard, getFileTypeLabel } from "./ChatAttachmentCard";
 import { ChatComposer } from "./ChatComposer";
 import { addToastError } from "./toast";
 
@@ -232,17 +233,26 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
                     <span className="UiChatPending">sending…</span>
                   </div>
                 )}
-                {attachmentsToShow.length > 0 ? (
+                {attachmentsToShow.length > 0 && m.role === "user" ? (
                   <div className="UiChatMessageAttachments">
                     {attachmentsToShow.map((att: UiMessageAttachment, idx: number) => {
                       const isImage = att.dataUrl && (att.mimeType?.startsWith("image/") ?? false);
-                      if (!isImage) return null;
-                      return (
-                        <div key={`${m.id}-att-${idx}`} className="UiChatMessageAttachment">
-                          {isImage && att.dataUrl && (
+                      if (isImage && att.dataUrl) {
+                        return (
+                          <div key={`${m.id}-att-${idx}`} className="UiChatMessageAttachment">
                             <img src={att.dataUrl} alt="" className="UiChatMessageAttachmentImg" />
-                          )}
-                        </div>
+                          </div>
+                        );
+                      }
+                      const mimeType = att.mimeType ?? "application/octet-stream";
+                      const thinkingType = att.type === "thinking";
+                      if (thinkingType) return null;
+                      return (
+                        <ChatAttachmentCard
+                          key={`${m.id}-att-${idx}`}
+                          fileName={getFileTypeLabel(mimeType)}
+                          mimeType={mimeType}
+                        />
                       );
                     })}
                   </div>
@@ -294,6 +304,7 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
         onAttachmentsChange={setAttachments}
         onSend={send}
         disabled={sending}
+        onAttachmentsLimitError={(msg) => addToastError(msg)}
       />
     </div>
   );

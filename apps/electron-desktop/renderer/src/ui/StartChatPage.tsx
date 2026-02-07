@@ -105,6 +105,7 @@ export function StartChatPage({
         onAttachmentsChange={setAttachments}
         onSend={() => void send()}
         disabled={sending}
+        onAttachmentsLimitError={(msg) => addToastError(msg)}
       />
     </div>
   );

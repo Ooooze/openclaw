@@ -1,5 +1,6 @@
 import React from "react";
 import type { ChatAttachmentInput } from "../store/slices/chatSlice";
+import { ChatAttachmentCard, getFileTypeLabel } from "./ChatAttachmentCard";
 
 function SendIcon() {
   return (
@@ -15,6 +16,8 @@ function SendIcon() {
   );
 }
 
+const MAX_ATTACHMENTS_DEFAULT = 5;
+
 export type ChatComposerProps = {
   value: string;
   onChange: (value: string) => void;
@@ -27,6 +30,9 @@ export type ChatComposerProps = {
   sendLabel?: string;
   sendingLabel?: string;
   placeholder?: string;
+  /** Max attachments (default 5). When exceeded, onAttachmentsLimitError is called. */
+  maxAttachments?: number;
+  onAttachmentsLimitError?: (message: string) => void;
 };
 
 export function ChatComposer({
@@ -39,6 +45,8 @@ export function ChatComposer({
   sendLabel = "Send",
   sendingLabel = "Sending...",
   placeholder = "Message...",
+  maxAttachments = MAX_ATTACHMENTS_DEFAULT,
+  onAttachmentsLimitError,
 }: ChatComposerProps) {
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
   const textareaRef = React.useRef<HTMLTextAreaElement | null>(null);
@@ -64,18 +72,27 @@ export function ChatComposer({
       if (!files?.length) {
         return;
       }
+      const currentCount = attachments.length;
+      const totalNew = files.length;
+      if (currentCount + totalNew > maxAttachments) {
+        onAttachmentsLimitError?.(
+          `Maximum ${maxAttachments} attachment${maxAttachments === 1 ? "" : "s"} allowed.`
+        );
+        e.target.value = "";
+        return;
+      }
       const add: ChatAttachmentInput[] = [];
+      const toProcess = Math.min(totalNew, maxAttachments - currentCount);
       let done = 0;
-      const total = files.length;
       const checkDone = () => {
         done += 1;
-        if (done === total) {
+        if (done === toProcess) {
           onAttachmentsChange((prev) => [...prev, ...add]);
           e.target.value = "";
         }
       };
-      for (let i = 0; i < files.length; i += 1) {
-        const file = files[i];
+      for (let i = 0; i < toProcess; i += 1) {
+        const file = files[i]!;
         const reader = new FileReader();
         reader.addEventListener("load", () => {
           const dataUrl = reader.result as string;
@@ -83,6 +100,7 @@ export function ChatComposer({
             id: crypto.randomUUID(),
             dataUrl,
             mimeType: file.type || "application/octet-stream",
+            fileName: file.name,
           });
           checkDone();
         });
@@ -90,7 +108,7 @@ export function ChatComposer({
         reader.readAsDataURL(file);
       }
     },
-    [onAttachmentsChange]
+    [attachments.length, maxAttachments, onAttachmentsChange, onAttachmentsLimitError]
   );
 
   const removeAttachment = React.useCallback(
@@ -109,45 +127,28 @@ export function ChatComposer({
           <div className="UiChatAttachments">
             {attachments.map((att) => {
               const isImage = att.mimeType.startsWith("image/");
-              return (
-                <div key={att.id} className="UiChatAttachment">
-                  {isImage ? (
+              if (isImage) {
+                return (
+                  <div key={att.id} className="UiChatAttachment">
                     <img src={att.dataUrl} alt="" className="UiChatAttachmentImg" />
-                  ) : (
-                    <div className="UiChatAttachmentFile" title={att.mimeType}>
-                      <span className="UiChatAttachmentFileIcon" aria-hidden="true">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="20"
-                          height="20"
-                          viewBox="0 0 20 20"
-                          fill="none"
-                        >
-                          <path
-                            d="M11.6667 1.89128V5.3334C11.6667 5.80011 11.6667 6.03346 11.7575 6.21172C11.8374 6.36852 11.9649 6.49601 12.1217 6.5759C12.2999 6.66673 12.5333 6.66673 13 6.66673H16.4421M11.6667 14.1667H6.66666M13.3333 10.8333H6.66666M16.6667 8.32353V14.3333C16.6667 15.7335 16.6667 16.4335 16.3942 16.9683C16.1545 17.4387 15.772 17.8212 15.3016 18.0609C14.7669 18.3333 14.0668 18.3333 12.6667 18.3333H7.33333C5.9332 18.3333 5.23313 18.3333 4.69835 18.0609C4.22795 17.8212 3.8455 17.4387 3.60581 16.9683C3.33333 16.4335 3.33333 15.7335 3.33333 14.3333V5.66667C3.33333 4.26654 3.33333 3.56647 3.60581 3.0317C3.8455 2.56129 4.22795 2.17884 4.69835 1.93916C5.23313 1.66667 5.9332 1.66667 7.33333 1.66667H10.0098C10.6213 1.66667 10.927 1.66667 11.2147 1.73575C11.4698 1.79699 11.7137 1.898 11.9374 2.03507C12.1897 2.18968 12.4059 2.40587 12.8382 2.83824L15.4951 5.4951C15.9275 5.92748 16.1437 6.14367 16.2983 6.39596C16.4353 6.61964 16.5363 6.8635 16.5976 7.11859C16.6667 7.40631 16.6667 7.71205 16.6667 8.32353Z"
-                            stroke="currentColor"
-                            stroke-width="1.66667"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                      </span>
-                      <span className="UiChatAttachmentFileLabel">
-                        {att.mimeType === "application/pdf"
-                          ? "PDF"
-                          : att.mimeType.split("/")[0] || "File"}
-                      </span>
-                    </div>
-                  )}
-                  <button
-                    type="button"
-                    className="UiChatAttachmentRemove"
-                    onClick={() => removeAttachment(att.id)}
-                    aria-label="Remove attachment"
-                  >
-                    ×
-                  </button>
-                </div>
+                    <button
+                      type="button"
+                      className="UiChatAttachmentRemove"
+                      onClick={() => removeAttachment(att.id)}
+                      aria-label="Remove attachment"
+                    >
+                      ×
+                    </button>
+                  </div>
+                );
+              }
+              return (
+                <ChatAttachmentCard
+                  key={att.id}
+                  fileName={att.fileName ?? getFileTypeLabel(att.mimeType)}
+                  mimeType={att.mimeType}
+                  onRemove={() => removeAttachment(att.id)}
+                />
               );
             })}
           </div>
