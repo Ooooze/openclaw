@@ -91,9 +91,6 @@ export function Sidebar() {
         }));
 
         setSessions(withTitles);
-        if (currentSessionKey && withTitles.some((s) => s.key === currentSessionKey)) {
-          setOptimistic(null);
-        }
       } catch (err) {
         if (!background) {
           addToastError(String(err));
@@ -105,7 +102,7 @@ export function Sidebar() {
         }
       }
     },
-    [gw.request, currentSessionKey, setOptimistic]
+    [gw.request]
   );
 
   const isInitialLoad = React.useRef(true);

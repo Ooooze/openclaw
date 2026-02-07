@@ -1,10 +1,14 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import type { ChatAttachmentInput } from "../store/slices/chatSlice";
 import { routes } from "./routes";
 
 export type OptimisticSession = {
   key: string;
   title: string;
+  /** First user message for this session; only shown in the thread with this sessionKey. */
+  firstMessage?: string;
+  firstAttachments?: ChatAttachmentInput[];
 };
 
 type ContextValue = {
@@ -31,9 +35,17 @@ export function OptimisticSessionSync() {
       setOptimistic(null);
       return;
     }
-    const state = location.state as { optimisticNewSession?: OptimisticSession } | null;
+    const state = location.state as {
+      optimisticNewSession?: OptimisticSession;
+      pendingFirstMessage?: string;
+      pendingFirstAttachments?: ChatAttachmentInput[];
+    } | null;
     if (state?.optimisticNewSession) {
-      setOptimistic(state.optimisticNewSession);
+      setOptimistic({
+        ...state.optimisticNewSession,
+        firstMessage: state.pendingFirstMessage,
+        firstAttachments: state.pendingFirstAttachments,
+      });
     }
   }, [location.pathname, location.state, setOptimistic]);
   return null;

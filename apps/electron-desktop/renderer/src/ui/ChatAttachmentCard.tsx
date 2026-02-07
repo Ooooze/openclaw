@@ -10,9 +10,6 @@ export function getFileTypeLabel(mimeType: string): string {
   if (main === "audio") return "Audio";
   if (main === "video") return "Video";
   if (main === "text") return "Text File";
-  if (main) {
-    return `${main.charAt(0).toUpperCase()}${main.slice(1)} File`;
-  }
   return "File";
 }
 

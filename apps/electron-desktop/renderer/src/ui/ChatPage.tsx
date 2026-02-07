@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Markdown from "react-markdown";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useGatewayRpc } from "../gateway/context";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
@@ -14,6 +14,7 @@ import {
 import type { GatewayState } from "../../../src/main/types";
 import { ChatAttachmentCard, getFileTypeLabel } from "./ChatAttachmentCard";
 import { ChatComposer, type ChatComposerRef } from "./ChatComposer";
+import { useOptimisticSession } from "./optimisticSessionContext";
 import { addToastError } from "./toast";
 
 /** Parsed file attachment from user message text ([Attached: fileName (mimeType)]). */
@@ -112,20 +113,15 @@ type ChatEvent = {
 
 export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kind: "ready" }> }) {
   const [searchParams] = useSearchParams();
-  const location = useLocation();
   const sessionKey = searchParams.get("session") ?? "";
   const [input, setInput] = React.useState("");
   const [attachments, setAttachments] = React.useState<ChatAttachmentInput[]>([]);
-  const [optimisticFirstMessage, setOptimisticFirstMessage] = React.useState<string | null>(() => {
-    const state = location.state as { pendingFirstMessage?: string } | null;
-    return state?.pendingFirstMessage ?? null;
-  });
-  const [optimisticFirstAttachments, setOptimisticFirstAttachments] = React.useState<
-    ChatAttachmentInput[] | null
-  >(() => {
-    const state = location.state as { pendingFirstAttachments?: ChatAttachmentInput[] } | null;
-    return state?.pendingFirstAttachments ?? null;
-  });
+  const { optimistic, setOptimistic } = useOptimisticSession();
+  /** Optimistic first message only for current thread (sessionKey matches). */
+  const optimisticFirstMessage =
+    optimistic?.key === sessionKey ? (optimistic.firstMessage ?? null) : null;
+  const optimisticFirstAttachments =
+    optimistic?.key === sessionKey ? (optimistic.firstAttachments ?? null) : null;
 
   const dispatch = useAppDispatch();
   const messages = useAppSelector((s) => s.chat.messages);
@@ -139,10 +135,19 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
 
   /** First user message in history that matches optimistic text; used for seamless handoff. */
   const matchingFirstUserFromHistory = React.useMemo(() => {
-    if (optimisticFirstMessage == null) return null;
-    const userMsg = messages.find((m) => m.role === "user" && m.text === optimisticFirstMessage);
+    if (optimisticFirstMessage === null) return null;
+    const userMsg = messages.find(
+      (m) => m.role === "user" && m.text.startsWith(optimisticFirstMessage)
+    );
     return userMsg ?? null;
   }, [messages, optimisticFirstMessage]);
+
+  // Clear optimistic session only when we're on that thread and chat.history has returned the matching user message.
+  React.useEffect(() => {
+    if (matchingFirstUserFromHistory !== null && optimistic?.key === sessionKey) {
+      setOptimistic(null);
+    }
+  }, [matchingFirstUserFromHistory, optimistic?.key, sessionKey, setOptimistic]);
 
   React.useEffect(() => {
     return gw.onEvent((evt) => {
@@ -196,14 +201,6 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
   React.useEffect(() => {
     refresh();
   }, [refresh]);
-
-  // Clear optimistic first message and attachments only when history has the matching user message (seamless handoff).
-  React.useEffect(() => {
-    if (matchingFirstUserFromHistory != null && optimisticFirstMessage != null) {
-      setOptimisticFirstMessage(null);
-      setOptimisticFirstAttachments(null);
-    }
-  }, [matchingFirstUserFromHistory, optimisticFirstMessage]);
 
   // Derived list and waiting state (needed for scroll deps).
   const allMessages =
