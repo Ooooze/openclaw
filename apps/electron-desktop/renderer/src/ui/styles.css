@@ -1800,6 +1800,7 @@ pre {
   letter-spacing: 0.05em;
   color: rgba(255, 255, 255, 0.5);
   padding: 0 4px;
+  margin-top: 16px;
 }
 
 .UiModelOption {
@@ -2443,47 +2444,43 @@ pre {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 10px;
+  margin: 16px 0 0;
 }
 
 .UiProviderFilterChip {
   appearance: none;
   display: inline-flex;
+  justify-content: center;
   align-items: center;
+  border: 1px solid transparent;
   gap: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
+  background: #FFFFFF0F;
   color: rgba(230, 237, 243, 0.7);
   border-radius: 999px;
-  padding: 5px 12px;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 6px 6px 6px 8px;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 400;
+  min-width: 41px;
   cursor: pointer;
   transition:
-    border-color 120ms ease,
-    background 120ms ease,
-    color 120ms ease;
+    border-color 0.2ms ease,
+    background 0.2ms ease,
+    color 0.2ms ease;
 }
 
 .UiProviderFilterChip:hover {
-  border-color: rgba(255, 255, 255, 0.24);
   background: rgba(255, 255, 255, 0.07);
-  color: rgba(230, 237, 243, 0.92);
 }
 
 .UiProviderFilterChip--active {
-  border-color: var(--accent-color, #a3e635);
-  background: rgba(163, 230, 53, 0.1);
-  color: rgba(230, 237, 243, 0.95);
+  border-color: #1C8AF5;
 }
 
-.UiProviderFilterChip--active:hover {
-  background: rgba(163, 230, 53, 0.16);
-}
 
 .UiProviderFilterChipIcon {
-  width: 14px;
-  height: 14px;
+  width: 20px;
+  height: 20px;
   display: block;
   flex-shrink: 0;
 }
@@ -2554,15 +2551,16 @@ pre {
 /* "Add Provider" chip variant */
 
 .UiProviderFilterChip--add {
-  border-style: dashed;
-  border-color: rgba(255, 255, 255, 0.18);
-  color: rgba(230, 237, 243, 0.6);
+  border-color: #FFFFFF0F;
+  background: transparent;
+  color: #FFFFFF;
 }
 
-.UiProviderFilterChip--add:hover {
-  border-color: var(--accent-color, #a3e635);
-  color: var(--accent-color, #a3e635);
-  background: rgba(163, 230, 53, 0.06);
+.UiSettingsSubtitle {
+  font-size: 13px;
+  line-height: 16px;
+  color: #FFFFFF80;
+  margin-bottom: 12px;
 }
 
 .UiActiveModelCard {
@@ -2570,9 +2568,10 @@ pre {
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  border: 1px solid rgba(163, 230, 53, 0.25);
+  border: 1px solid #1E1E1E;
   border-radius: 14px;
-  background: rgba(163, 230, 53, 0.04);
+  background: linear-gradient(0deg, #1E1E1E, #1E1E1E),
+  linear-gradient(0deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.06));
   margin-bottom: 14px;
 }
 

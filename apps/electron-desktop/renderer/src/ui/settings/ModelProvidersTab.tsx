@@ -497,29 +497,29 @@ export function ModelProvidersTab(props: {
         <section className="UiSettingsSection">
           {/* Active model card */}
           {activeModelId ? (
-            <div className="UiActiveModelCard">
-              {activeProviderInfo ? (
-                <span className="UiActiveModelIcon" aria-hidden="true">
-                  <img src={resolveProviderIconUrl(activeProviderInfo.id)} alt="" />
-                </span>
-              ) : null}
-              <div className="UiActiveModelInfo">
-                <div className="UiActiveModelNameRow">
-                  <span className="UiActiveModelName">
+            <div>
+              <div className="UiSettingsSubtitle">Live Model</div>
+              <div className="UiActiveModelCard">
+                <div className="UiActiveModelInfo">
+                  <div className="UiProviderContent">
+                    <div className='UiProviderHeader'>
+                     <span className="UiProviderName">
                     {activeModelEntry?.name ?? activeModelId}
                   </span>
-                  {activeModelTier ? (
-                    <span
-                      className={`UiModelTierBadge UiModelTierBadge--${activeModelTier}`}
-                      title={TIER_INFO[activeModelTier].description}
-                    >
+                      {activeModelTier ? (
+                        <span
+                          className={`UiProviderBadge UiModelTierBadge--${activeModelTier}`}
+                          title={TIER_INFO[activeModelTier].description}
+                        >
                       {TIER_INFO[activeModelTier].label}
                     </span>
-                  ) : null}
-                </div>
-                <div className="UiActiveModelProvider">
-                  {activeProviderInfo?.name ?? activeProviderKey ?? "unknown"}
-                  {activeModelMeta ? ` · ${activeModelMeta}` : ""}
+                      ) : null}
+                    </div>
+                  </div>
+                  <div className="UiProviderDescription">
+                    {activeProviderInfo?.name ?? activeProviderKey ?? "unknown"}
+                    {activeModelMeta ? ` · ${activeModelMeta}` : ""}
+                  </div>
                 </div>
               </div>
             </div>
@@ -529,6 +529,7 @@ export function ModelProvidersTab(props: {
 
           {modelsError ? <InlineError>{modelsError}</InlineError> : null}
 
+          <div className="UiSettingsSubtitle">Change Model</div>
           <div className="UiInputRow">
             <TextInput
               type="text"
@@ -540,9 +541,6 @@ export function ModelProvidersTab(props: {
               spellCheck={false}
               disabled={modelsLoading || modelBusy}
             />
-            <ActionButton disabled={modelsLoading || modelBusy} onClick={() => void loadModels()}>
-              Refresh
-            </ActionButton>
           </div>
 
           {/* Provider filter chips + Add Provider link */}
@@ -639,7 +637,7 @@ export function ModelProvidersTab(props: {
                       return (
                         <label
                           key={modelKey}
-                          className={`UiModelOption ${selected ? "UiModelOption--selected" : ""}`}
+                          className={`UiProviderOption ${selected ? "UiProviderOption--selected" : ""}`}
                         >
                           <input
                             type="radio"
@@ -647,22 +645,22 @@ export function ModelProvidersTab(props: {
                             value={modelKey}
                             checked={selected}
                             onChange={() => void saveDefaultModel(modelKey)}
-                            className="UiModelRadio"
+                            className="UiProviderRadio"
                             disabled={modelBusy}
                           />
-                          <div className="UiModelContent">
-                            <div className="UiModelNameRow">
-                              <span className="UiModelName">{model.name || model.id}</span>
+                          <div className="UiProviderContent">
+                            <div className="UiProviderHeader">
+                              <span className="UiProviderName">{model.name || model.id}</span>
                               {tier ? (
                                 <span
-                                  className={`UiModelTierBadge UiModelTierBadge--${tier}`}
+                                  className={`UiProviderBadge UiModelTierBadge--${tier}`}
                                   title={TIER_INFO[tier].description}
                                 >
                                   {TIER_INFO[tier].label}
                                 </span>
                               ) : null}
                             </div>
-                            {meta ? <div className="UiModelMeta">{meta}</div> : null}
+                            {meta ? <div className="UiProviderDescription">{meta}</div> : null}
                           </div>
                         </label>
                       );
