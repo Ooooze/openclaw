@@ -1559,8 +1559,8 @@ pre {
 }
 
 .UiSkillIcon {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 6px;
   background: #343434;
   display: grid;
@@ -1570,6 +1570,7 @@ pre {
   color: rgba(230, 237, 243, 0.92);
   flex-shrink: 0;
   letter-spacing: 0.02em;
+  position: relative;
 }
 
 .UiSkillIcon--google {
@@ -1663,11 +1664,26 @@ pre {
   background: #ffffff;
   color: #292929;
   border-radius: 999px;
-  padding: 2px 6px;
+  padding: 4px 9px;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transition: opacity 0.2s ease;
+}
+
+.UiSkillConnectButtonConfigure {
+  color: #ffffff;
+  background:
+          linear-gradient(#353535, #353535) padding-box,
+          linear-gradient(
+                  150deg,
+                  rgba(255, 255, 255, 0.24) 0%,
+                  rgba(255, 255, 255, 0) 50%,
+                  rgba(255, 255, 255, 0.24) 100%
+          )
+          border-box;
+
+  border: 1px solid transparent;
 }
 
 .UiSkillConnectButton:disabled {
@@ -2355,17 +2371,19 @@ pre {
 }
 
 .UiProviderTileCheck {
-  width: 24px;
-  height: 24px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  border: 1px solid rgba(34, 197, 94, 0.35);
-  background: rgba(34, 197, 94, 0.18);
-  color: rgba(208, 255, 224, 0.98);
+  background: #38BB58;
+  color: #FFFFFF;
   display: grid;
   place-items: center;
-  font-size: 13px;
+  font-size: 10px;
   font-weight: 700;
   flex-shrink: 0;
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
 }
 
 .UiProviderTileName {

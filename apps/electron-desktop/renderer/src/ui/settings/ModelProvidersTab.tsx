@@ -82,11 +82,10 @@ function ProviderTile(props: {
   const { provider, configured, onClick } = props;
   return (
     <div
-      className={`UiProviderTile${configured ? " UiProviderTile--configured" : ""}`}
+      className={`UiSkillCard`}
       role="button"
       tabIndex={0}
       aria-label={`${provider.name}${configured ? " (configured)" : ""}`}
-      onClick={onClick}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
@@ -94,15 +93,18 @@ function ProviderTile(props: {
         }
       }}
     >
-      <div className="UiProviderTileTopRow">
-        <span className="UiProviderTileIcon" aria-hidden="true">
+      <div className="UiSkillTopRow">
+        <span className="UiSkillIcon" aria-hidden="true">
           <img src={resolveProviderIconUrl(provider.id)} alt="" />
-        </span>
-        {configured ? (
-          <span className="UiProviderTileCheck" aria-label="Key configured">
+          {configured ? (
+            <span className="UiProviderTileCheck" aria-label="Key configured">
             ✓
           </span>
-        ) : null}
+          ) : null}
+        </span>
+        <button onClick={onClick} className={`UiSkillConnectButton ${configured && 'UiSkillConnectButtonConfigure'}`}>
+          {configured ? 'Configure' : 'Connect'}
+        </button>
       </div>
       <div className="UiProviderTileName">{provider.name}</div>
       <div className="UiProviderTileDesc">{provider.description}</div>
