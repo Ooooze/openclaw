@@ -254,7 +254,14 @@ export const sendChatMessage = createAsyncThunk(
           };
         })
         .filter(
-          (a): a is { type: "image" | "file"; mimeType: string; fileName: string | undefined; content: string } => a !== null
+          (
+            a
+          ): a is {
+            type: "image" | "file";
+            mimeType: string;
+            fileName: string | undefined;
+            content: string;
+          } => a !== null
         ) ?? [];
 
     try {
