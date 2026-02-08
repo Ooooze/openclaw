@@ -94,6 +94,9 @@ type OpenclawDesktopApi = {
   ghAuthStatus: () => Promise<GhExecResult>;
   ghApiUser: () => Promise<GhExecResult>;
   onGatewayState: (cb: (state: GatewayState) => void) => () => void;
+  // Launch at login (auto-start)
+  getLaunchAtLogin: () => Promise<{ enabled: boolean }>;
+  setLaunchAtLogin: (enabled: boolean) => Promise<{ ok: true }>;
   // Auto-updater
   checkForUpdate: () => Promise<void>;
   downloadUpdate: () => Promise<void>;
@@ -147,6 +150,10 @@ const api: OpenclawDesktopApi = {
       ipcRenderer.removeListener("gateway-state", handler);
     };
   },
+  // Launch at login (auto-start)
+  getLaunchAtLogin: async () => ipcRenderer.invoke("launch-at-login-get"),
+  setLaunchAtLogin: async (enabled: boolean) =>
+    ipcRenderer.invoke("launch-at-login-set", { enabled }),
   // Auto-updater
   checkForUpdate: async () => ipcRenderer.invoke("updater-check"),
   downloadUpdate: async () => ipcRenderer.invoke("updater-download"),

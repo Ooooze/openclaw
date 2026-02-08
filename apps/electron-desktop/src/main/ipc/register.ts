@@ -693,6 +693,18 @@ export function registerIpcHandlers(params: {
     });
   });
 
+  // Launch at login (auto-start) IPC handlers.
+  ipcMain.handle("launch-at-login-get", () => {
+    const settings = app.getLoginItemSettings();
+    return { enabled: settings.openAtLogin };
+  });
+
+  ipcMain.handle("launch-at-login-set", (_evt, p: { enabled?: unknown }) => {
+    const enabled = typeof p?.enabled === "boolean" ? p.enabled : false;
+    app.setLoginItemSettings({ openAtLogin: enabled });
+    return { ok: true } as const;
+  });
+
   // Auto-updater IPC handlers.
   ipcMain.handle("updater-check", async () => {
     await checkForUpdates();

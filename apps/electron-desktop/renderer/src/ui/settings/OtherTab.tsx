@@ -10,6 +10,32 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
 
   const appVersion = pkg.version || "0.0.0";
 
+  // Load the current launch-at-login state on mount.
+  React.useEffect(() => {
+    const api = window.openclawDesktop;
+    if (!api?.getLaunchAtLogin) return;
+    void api.getLaunchAtLogin().then((res) => setLaunchAtStartup(res.enabled));
+  }, []);
+
+  const toggleLaunchAtStartup = React.useCallback(
+    async (enabled: boolean) => {
+      const api = window.openclawDesktop;
+      if (!api?.setLaunchAtLogin) {
+        onError("Desktop API not available");
+        return;
+      }
+      setLaunchAtStartup(enabled);
+      try {
+        await api.setLaunchAtLogin(enabled);
+      } catch (err) {
+        // Revert on failure.
+        setLaunchAtStartup(!enabled);
+        onError(String(err));
+      }
+    },
+    [onError],
+  );
+
   const resetAndClose = React.useCallback(async () => {
     const api = window.openclawDesktop;
     if (!api) {
@@ -52,7 +78,7 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
                 <input
                   type="checkbox"
                   checked={launchAtStartup}
-                  onChange={(e) => setLaunchAtStartup(e.target.checked)}
+                  onChange={(e) => void toggleLaunchAtStartup(e.target.checked)}
                 />
                 <span className="UiSettingsOtherToggleTrack">
                   <span className="UiSettingsOtherToggleThumb" />

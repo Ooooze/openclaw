@@ -94,6 +94,9 @@ declare global {
       ghAuthStatus: () => Promise<GhExecResult>;
       ghApiUser: () => Promise<GhExecResult>;
       onGatewayState: (cb: (state: GatewayState) => void) => () => void;
+      // Launch at login (auto-start)
+      getLaunchAtLogin: () => Promise<{ enabled: boolean }>;
+      setLaunchAtLogin: (enabled: boolean) => Promise<{ ok: true }>;
       // Auto-updater
       checkForUpdate: () => Promise<void>;
       downloadUpdate: () => Promise<void>;
