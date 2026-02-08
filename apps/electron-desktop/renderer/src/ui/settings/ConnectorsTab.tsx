@@ -199,7 +199,7 @@ export function ConnectorsTab(props: {
 
   return (
     <div className="UiSettingsContentInner">
-      <div className="UiSettingsTabTitle">Connectors</div>
+      <div className="UiSettingsTabTitle">Messengers</div>
 
       <div className="UiSkillsScroll" style={{ maxHeight: "none" }}>
         <div className="UiSkillsGrid">

@@ -4,7 +4,20 @@
   width: 100%;
   max-width: 680px;
   min-width: 568px;
-  overflow: hidden;
+  height: 100vh;
+  overflow: auto;
+}
+
+.UiSettingsHeader {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #1e1e1e;
+  padding-top: 48px;
+  height: 86px;
+  z-index: 100;
 }
 
 .UiSettingsTitle {
@@ -21,8 +34,7 @@
 .UiSettingsTabs {
   display: flex;
   gap: 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  margin-bottom: 24px;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.08);
 }
 
 .UiSettingsTab {
@@ -30,8 +42,8 @@
   padding: 10px 16px;
   text-decoration: none;
   color: rgba(230, 237, 243, 0.55);
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 400;
   position: relative;
   transition: color 120ms ease;
   cursor: pointer;
@@ -43,7 +55,6 @@
 
 .UiSettingsTab--active {
   color: #fff;
-  font-weight: 700;
 }
 
 .UiSettingsTab--active::after {
@@ -61,6 +72,8 @@
   flex: 1 1 auto;
   min-width: 0;
   width: 100%;
+  margin-top: 24px;
+  margin-bottom: 32px;
 }
 
 .UiSettingsNav {
@@ -252,10 +265,6 @@
   .UiSettingsSidebar {
     width: 100%;
     padding: 18px;
-  }
-
-  .UiSettingsContent {
-    border-radius: 0 0 16px 16px;
   }
 
   .UiSettingsNav {

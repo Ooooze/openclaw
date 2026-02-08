@@ -135,12 +135,7 @@ export const ChatComposer = React.forwardRef<ChatComposerRef, ChatComposerProps>
           reader.readAsDataURL(file);
         }
       },
-      [
-        attachments.length,
-        maxAttachments,
-        onAttachmentsChange,
-        onAttachmentsLimitError,
-      ]
+      [attachments.length, maxAttachments, onAttachmentsChange, onAttachmentsLimitError]
     );
 
     const onFileChange = React.useCallback(
@@ -219,15 +214,15 @@ export const ChatComposer = React.forwardRef<ChatComposerRef, ChatComposerProps>
             </div>
           )}
 
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="*"
-          multiple
-          className="UiChatFileInput"
-          aria-hidden
-          onChange={onFileChange}
-        />
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="*"
+            multiple
+            className="UiChatFileInput"
+            aria-hidden
+            onChange={onFileChange}
+          />
 
           <textarea
             ref={textareaRef}

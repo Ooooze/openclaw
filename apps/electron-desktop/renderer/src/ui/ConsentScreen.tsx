@@ -3,6 +3,7 @@ import React from "react";
 import { CheckboxRow, FooterText, HeroPageLayout, PrimaryButton, SplashLogo } from "./kit";
 import { LoadingScreen } from "./LoadingScreen";
 import { addToastError } from "./toast";
+import pkg from "../../../package.json";
 
 export type ConsentDesktopApi = NonNullable<Window["openclawDesktop"]> & {
   getConsentInfo?: () => Promise<{ accepted: boolean }>;
@@ -16,7 +17,7 @@ export function ConsentScreen({ onAccepted }: { onAccepted: () => void }) {
   const [agreeRequired, setAgreeRequired] = React.useState(false);
   const [busy, setBusy] = React.useState(false);
   const termsUrl = "https://atomicbot.ai/terms-of-service";
-  const appVersion = api?.version?.trim() ? api.version.trim() : "0.0.0";
+  const appVersion = pkg.version || "0.0.0";
 
   const accept = React.useCallback(async () => {
     if (busy) {

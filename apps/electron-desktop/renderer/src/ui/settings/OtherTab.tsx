@@ -5,6 +5,7 @@ import "./OtherTab.css";
 import pkg from "../../../../package.json";
 
 export function OtherTab({ onError }: { onError: (msg: string | null) => void }) {
+  const [launchAtStartup, setLaunchAtStartup] = React.useState(false);
   const [resetBusy, setResetBusy] = React.useState(false);
 
   const appVersion = pkg.version || "0.0.0";
@@ -40,27 +41,47 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
         <h3 className="UiSettingsOtherSectionTitle">App</h3>
         <div className="UiSettingsOtherCard">
           <div className="UiSettingsOtherRow">
-            <span className="UiSettingsOtherRowLabel">App</span>
+            <span className="UiSettingsOtherRowLabel">Version</span>
             <span className="UiSettingsOtherAppRowValue">Atomic Bot v{appVersion}</span>
           </div>
-          {/*<div className="UiSettingsOtherRow">*/}
-          {/*  <button*/}
-          {/*    type="button"*/}
-          {/*    className="UiSettingsOtherLink"*/}
-          {/*    onClick={() => void api?.openLogs()}*/}
-          {/*  >*/}
-          {/*    Open logs*/}
-          {/*  </button>*/}
-          {/*</div>*/}
-          {/*<div className="UiSettingsOtherRow">*/}
-          {/*  <button*/}
-          {/*    type="button"*/}
-          {/*    className="UiSettingsOtherLink"*/}
-          {/*    onClick={() => void api?.toggleDevTools()}*/}
-          {/*  >*/}
-          {/*    Dev Tools*/}
-          {/*  </button>*/}
-          {/*</div>*/}
+
+          <div className="UiSettingsOtherRow">
+            <span className="UiSettingsOtherRowLabel">Auto start</span>
+            <span className="UiSettingsOtherAppRowValue">
+              <label className="UiSettingsOtherToggle" aria-label="Launch at startup">
+                <input
+                  type="checkbox"
+                  checked={launchAtStartup}
+                  onChange={(e) => setLaunchAtStartup(e.target.checked)}
+                />
+                <span className="UiSettingsOtherToggleTrack">
+                  <span className="UiSettingsOtherToggleThumb" />
+                </span>
+              </label>
+            </span>
+          </div>
+
+          {/*<>*/}
+          {/*  <div className="UiSettingsOtherRow">*/}
+          {/*    <button*/}
+          {/*      type="button"*/}
+          {/*      className="UiSettingsOtherLink"*/}
+          {/*      onClick={() => void api?.openLogs()}*/}
+          {/*    >*/}
+          {/*      Open logs*/}
+          {/*    </button>*/}
+          {/*  </div>*/}
+          {/*  <div className="UiSettingsOtherRow">*/}
+          {/*    <button*/}
+          {/*      type="button"*/}
+          {/*      className="UiSettingsOtherLink"*/}
+          {/*      onClick={() => void api?.toggleDevTools()}*/}
+          {/*    >*/}
+          {/*      Dev Tools*/}
+          {/*    </button>*/}
+          {/*  </div>*/}
+          {/*</>*/}
+
           <div className="UiSettingsOtherRow">
             <NavLink to={routes.legacy} className="UiSettingsOtherLink">
               Legacy
@@ -84,7 +105,7 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
               disabled={resetBusy}
               onClick={() => void resetAndClose()}
             >
-              {resetBusy ? "Resetting..." : "Reset and close"}
+              {resetBusy ? "Resetting..." : "Reset and sign out"}
             </button>
           </div>
         </div>

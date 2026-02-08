@@ -470,7 +470,11 @@ button:disabled {
   flex: 1 1 auto;
   display: grid;
   place-items: start center;
-  padding: 48px 56px;
+  padding: 0 56px;
+}
+
+.UiHero-secondary-color {
+  background: #1e1e1e;
 }
 
 .UiHero-align-center {
@@ -939,6 +943,10 @@ button:disabled {
   border-bottom: 1px solid rgba(230, 237, 243, 0.1);
   background: rgba(11, 15, 20, 0.55);
   backdrop-filter: blur(18px);
+}
+
+.UiAppNavLink {
+  cursor: pointer;
 }
 
 .UiAppTopbarActions {
@@ -2092,7 +2100,7 @@ pre {
 }
 
 .UiMarkdown p {
-  margin: 0 0 12px;
+  margin: 0 0 8px;
 }
 
 .UiMarkdown p:last-child {

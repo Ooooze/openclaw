@@ -128,16 +128,18 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
   );
 
   return (
-    <HeroPageLayout aria-label="Settings page" hideTopbar>
+    <HeroPageLayout aria-label="Settings page" hideTopbar color="secondary">
       <div className="UiSettingsShellWrapper">
-        <h1 className="UiSettingsTitle">Settings</h1>
-        <nav className="UiSettingsTabs" aria-label="Settings sections">
-          {SETTINGS_TABS.map(({ path, label }) => (
-            <SettingsTabItem key={path} to={path}>
-              {label}
-            </SettingsTabItem>
-          ))}
-        </nav>
+        <div className="UiSettingsHeader">
+          <h1 className="UiSettingsTitle">Settings</h1>
+          <nav className="UiSettingsTabs" aria-label="Settings sections">
+            {SETTINGS_TABS.map(({ path, label }) => (
+              <SettingsTabItem key={path} to={path}>
+                {label}
+              </SettingsTabItem>
+            ))}
+          </nav>
+        </div>
         <div className="UiSettingsContent">
           <Outlet context={outletContext} />
         </div>

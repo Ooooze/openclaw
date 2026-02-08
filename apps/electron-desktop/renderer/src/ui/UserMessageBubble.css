@@ -31,7 +31,6 @@
 }
 
 .UiChatBubble-user .UiChatText {
-  white-space: pre-wrap;
   word-break: break-word;
   line-height: 1.6;
   font-size: 16px;
