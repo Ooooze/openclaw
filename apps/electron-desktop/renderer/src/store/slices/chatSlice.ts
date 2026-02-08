@@ -249,11 +249,19 @@ export const sendChatMessage = createAsyncThunk(
           return {
             type: isImage ? "image" : "file",
             mimeType: parsed.mimeType,
+            fileName: att.fileName,
             content: parsed.content,
           };
         })
         .filter(
-          (a): a is { type: "image" | "file"; mimeType: string; content: string } => a !== null
+          (
+            a
+          ): a is {
+            type: "image" | "file";
+            mimeType: string;
+            fileName: string | undefined;
+            content: string;
+          } => a !== null
         ) ?? [];
 
     try {

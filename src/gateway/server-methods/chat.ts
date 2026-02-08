@@ -10,6 +10,7 @@ import { resolveAgentTimeoutMs } from "../../agents/timeout.js";
 import { dispatchInboundMessage } from "../../auto-reply/dispatch.js";
 import { createReplyDispatcher } from "../../auto-reply/reply/reply-dispatcher.js";
 import { createReplyPrefixOptions } from "../../channels/reply-prefix.js";
+import { saveMediaBuffer } from "../../media/store.js";
 import { resolveSendPolicy } from "../../sessions/send-policy.js";
 import { INTERNAL_MESSAGE_CHANNEL } from "../../utils/message-channel.js";
 import {
@@ -355,10 +356,37 @@ export const chatHandlers: GatewayRequestHandlers = {
     }
     let parsedMessage = p.message;
     let parsedImages: ChatImageContent[] = [];
+    const clientRunId = p.idempotencyKey;
+    // Saved non-image file paths for agent read_file access via MediaPaths.
+    const savedMediaPaths: string[] = [];
+    const savedMediaTypes: string[] = [];
     if (normalizedAttachments.length > 0) {
+      // Save non-image attachments to media/inbound so the existing
+      // stageSandboxMedia → buildInboundMediaNote pipeline makes them
+      // available to the agent via read_file (same path as Telegram).
+      for (const att of normalizedAttachments) {
+        if (!att.content) continue;
+        const mime = att.mimeType?.split(";")[0]?.trim().toLowerCase() ?? "";
+        if (mime.startsWith("image/")) continue;
+        try {
+          const buffer = Buffer.from(att.content, "base64");
+          const saved = await saveMediaBuffer(
+            buffer,
+            att.mimeType,
+            "inbound",
+            undefined,
+            att.fileName,
+          );
+          savedMediaPaths.push(saved.path);
+          if (saved.contentType) savedMediaTypes.push(saved.contentType);
+        } catch (err) {
+          context.logGateway.warn(
+            `attachment ${att.fileName ?? "file"}: save failed: ${String(err)}`,
+          );
+        }
+      }
       try {
         const parsed = await parseMessageWithAttachments(p.message, normalizedAttachments, {
-          maxBytes: 5_000_000,
           log: context.logGateway,
         });
         parsedMessage = parsed.message;
@@ -374,7 +402,6 @@ export const chatHandlers: GatewayRequestHandlers = {
       overrideMs: p.timeoutMs,
     });
     const now = Date.now();
-    const clientRunId = p.idempotencyKey;
 
     const sendPolicy = resolveSendPolicy({
       cfg,
@@ -470,6 +497,12 @@ export const chatHandlers: GatewayRequestHandlers = {
         SenderName: clientInfo?.displayName,
         SenderUsername: clientInfo?.displayName,
         GatewayClientScopes: client?.connect?.scopes,
+        // Non-image file paths saved to media/inbound; stageSandboxMedia
+        // will copy them into the sandbox and buildInboundMediaNote will
+        // inject the [media attached: ...] note for the agent.
+        ...(savedMediaPaths.length > 0
+          ? { MediaPaths: savedMediaPaths, MediaTypes: savedMediaTypes }
+          : {}),
       };
 
       const agentId = resolveSessionAgentId({

@@ -52,7 +52,7 @@ export type GatewayClientOptions = {
   reconnectMinDelayMs?: number;
   /**
    * Max reconnect delay in milliseconds.
-   * Default: 5000ms.
+   * Default: 1000ms.
    */
   reconnectMaxDelayMs?: number;
 };
@@ -62,6 +62,7 @@ export class GatewayClient {
   private pending = new Map<string, Pending>();
   private nextId = 1;
   private closed = false;
+  private handshakeComplete = false;
   private reconnectDelayMs = 250;
   private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -76,6 +77,7 @@ export class GatewayClient {
 
   stop() {
     this.closed = true;
+    this.handshakeComplete = false;
     this.clearReconnectTimer();
     this.ws?.close();
     this.ws = null;
@@ -83,7 +85,26 @@ export class GatewayClient {
   }
 
   get connected() {
-    return this.ws?.readyState === WebSocket.OPEN;
+    return this.handshakeComplete && this.ws?.readyState === WebSocket.OPEN;
+  }
+
+  /**
+   * Nudge the client to reconnect immediately if it's currently waiting
+   * in a backoff pause. No-op when already connected or actively connecting.
+   */
+  nudge() {
+    if (this.closed || this.connected) {
+      return;
+    }
+    // If a WebSocket is already in CONNECTING state, don't interrupt it.
+    if (this.ws && this.ws.readyState === WebSocket.CONNECTING) {
+      return;
+    }
+    // Cancel any pending backoff timer and connect right away.
+    console.info("[GatewayClient] nudge: forcing immediate reconnect");
+    this.clearReconnectTimer();
+    this.reconnectDelayMs = this.resolveReconnectMinDelayMs();
+    this.connect();
   }
 
   async request<T = unknown>(method: string, params?: unknown): Promise<T> {
@@ -103,16 +124,19 @@ export class GatewayClient {
     if (this.closed) {
       return;
     }
+    this.handshakeComplete = false;
     this.ws = new WebSocket(this.opts.wsUrl);
     this.ws.addEventListener("open", () => {
       this.reconnectDelayMs = this.resolveReconnectMinDelayMs();
-      this.opts.onOpen?.();
+      // Don't fire onOpen yet — wait for the handshake response so
+      // consumers don't send requests before the gateway is ready.
       this.sendConnect();
     });
     this.ws.addEventListener("message", (ev) => this.handleMessage(String(ev.data ?? "")));
     this.ws.addEventListener("close", (ev) => {
       const reason = String(ev.reason ?? "");
       this.ws = null;
+      this.handshakeComplete = false;
       this.flushPending(new Error(`gateway closed (${ev.code}): ${reason}`));
       this.opts.onClose?.({ code: ev.code, reason });
       this.scheduleReconnect();
@@ -137,7 +161,7 @@ export class GatewayClient {
       typeof this.opts.reconnectMaxDelayMs === "number" &&
       Number.isFinite(this.opts.reconnectMaxDelayMs)
         ? Math.max(0, Math.floor(this.opts.reconnectMaxDelayMs))
-        : 5000;
+        : 1000;
     return value;
   }
 
@@ -223,6 +247,18 @@ export class GatewayClient {
       return;
     }
     if (frame.type === "res") {
+      // Handle the handshake response separately — it's not in the pending map.
+      if (frame.id === "connect") {
+        if (frame.ok) {
+          this.handshakeComplete = true;
+          this.opts.onOpen?.();
+        } else {
+          console.error("[GatewayClient] Handshake failed:", frame.error);
+          // Close the socket so the reconnect logic can retry.
+          this.ws?.close();
+        }
+        return;
+      }
       const pending = this.pending.get(frame.id);
       if (!pending) {
         return;

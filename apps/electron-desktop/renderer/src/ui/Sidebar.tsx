@@ -91,9 +91,6 @@ export function Sidebar() {
         }));
 
         setSessions(withTitles);
-        if (currentSessionKey && withTitles.some((s) => s.key === currentSessionKey)) {
-          setOptimistic(null);
-        }
       } catch (err) {
         if (!background) {
           addToastError(String(err));
@@ -105,20 +102,34 @@ export function Sidebar() {
         }
       }
     },
-    [gw.request, currentSessionKey, setOptimistic]
+    [gw.request]
   );
 
+  // Don't attempt to load sessions until the gateway WebSocket is actually
+  // connected — avoids pointless "gateway not connected" errors on startup
+  // (e.g. before onboarding finishes or while the gateway is still booting).
+  // Also reload when the connection is restored after a disconnect (e.g. gateway restart).
   const isInitialLoad = React.useRef(true);
+  const wasConnectedRef = React.useRef(false);
   React.useEffect(() => {
-    if (isInitialLoad.current) {
+    if (!gw.connected) {
+      wasConnectedRef.current = false;
+      return;
+    }
+    const reconnected = !wasConnectedRef.current;
+    wasConnectedRef.current = true;
+
+    if (isInitialLoad.current || reconnected) {
+      // First load: show loading spinner (foreground). Reconnect: refresh silently (background).
+      const background = !isInitialLoad.current;
       isInitialLoad.current = false;
-      void loadSessionsWithTitles(false);
+      void loadSessionsWithTitles(background);
       return;
     }
     if (optimistic) {
       void loadSessionsWithTitles(true);
     }
-  }, [currentSessionKey, optimistic, loadSessionsWithTitles]);
+  }, [gw.connected, currentSessionKey, optimistic, loadSessionsWithTitles]);
 
   const handleNewSession = React.useCallback(() => {
     void navigate(routes.chat, { replace: true, state: { focusComposer: true } });

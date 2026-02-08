@@ -60,7 +60,9 @@ function Topbar() {
 
   return (
     <div className="UiAppTopbar">
-      <Brand text="ATOMIC BOT" iconSrc={brandIconUrl} iconAlt="" />
+      <NavLink to={routes.chat} className="UiAppNavLink">
+        <Brand text="ATOMIC BOT" iconSrc={brandIconUrl} iconAlt="" />
+      </NavLink>
 
       <div className="UiAppTopbarActions">
         <NavLink to={routes.settings + "/other"} className="UiAppTopbarBackButton">

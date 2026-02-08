@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Markdown from "react-markdown";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useGatewayRpc } from "../gateway/context";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
@@ -14,7 +14,52 @@ import {
 import type { GatewayState } from "../../../src/main/types";
 import { ChatAttachmentCard, getFileTypeLabel } from "./ChatAttachmentCard";
 import { ChatComposer, type ChatComposerRef } from "./ChatComposer";
+import { useOptimisticSession } from "./optimisticSessionContext";
 import { addToastError } from "./toast";
+
+/** Parsed file attachment from user message text. */
+type ParsedFileAttachment = { fileName: string; mimeType: string };
+
+/**
+ * Parse user message text that may contain media attachment markers.
+ * Supports both core format: [media attached: path (mime)]
+ * and legacy format: [Attached: name (mime)]
+ * Returns display text (before first marker) and parsed file attachments.
+ */
+function parseUserMessageWithAttachments(text: string): {
+  displayText: string;
+  fileAttachments: ParsedFileAttachment[];
+} {
+  // Find first attachment marker (either format)
+  const coreIdx = text.indexOf("[media attached");
+  const legacyIdx = text.indexOf("[Attached:");
+  const firstIdx =
+    coreIdx >= 0 && legacyIdx >= 0
+      ? Math.min(coreIdx, legacyIdx)
+      : coreIdx >= 0
+        ? coreIdx
+        : legacyIdx;
+  const displayText = firstIdx >= 0 ? text.slice(0, firstIdx).trim() : text;
+
+  const fileAttachments: ParsedFileAttachment[] = [];
+  // Match both: [media attached: path (mime)] and [media attached N/M: path (mime)]
+  const re = /\[(?:media attached(?:\s+\d+\/\d+)?|Attached):\s*([^\]]+)\]/g;
+  let match: RegExpExecArray | null;
+  while ((match = re.exec(text)) !== null) {
+    const part = match[1]!.trim();
+    const lastParen = part.lastIndexOf("(");
+    if (lastParen > 0 && part.endsWith(")")) {
+      const rawName = part.slice(0, lastParen).trim();
+      const mimeType = part.slice(lastParen + 1, -1).trim();
+      // Extract just the filename from path (may be full or relative path)
+      const fileName = rawName.includes("/") ? rawName.split("/").pop()! : rawName;
+      if (fileName && mimeType) {
+        fileAttachments.push({ fileName, mimeType });
+      }
+    }
+  }
+  return { displayText, fileAttachments };
+}
 
 function CopyIcon() {
   return (
@@ -82,20 +127,15 @@ type ChatEvent = {
 
 export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kind: "ready" }> }) {
   const [searchParams] = useSearchParams();
-  const location = useLocation();
   const sessionKey = searchParams.get("session") ?? "";
   const [input, setInput] = React.useState("");
   const [attachments, setAttachments] = React.useState<ChatAttachmentInput[]>([]);
-  const [optimisticFirstMessage, setOptimisticFirstMessage] = React.useState<string | null>(() => {
-    const state = location.state as { pendingFirstMessage?: string } | null;
-    return state?.pendingFirstMessage ?? null;
-  });
-  const [optimisticFirstAttachments, setOptimisticFirstAttachments] = React.useState<
-    ChatAttachmentInput[] | null
-  >(() => {
-    const state = location.state as { pendingFirstAttachments?: ChatAttachmentInput[] } | null;
-    return state?.pendingFirstAttachments ?? null;
-  });
+  const { optimistic, setOptimistic } = useOptimisticSession();
+  /** Optimistic first message only for current thread (sessionKey matches). */
+  const optimisticFirstMessage =
+    optimistic?.key === sessionKey ? (optimistic.firstMessage ?? null) : null;
+  const optimisticFirstAttachments =
+    optimistic?.key === sessionKey ? (optimistic.firstAttachments ?? null) : null;
 
   const dispatch = useAppDispatch();
   const messages = useAppSelector((s) => s.chat.messages);
@@ -109,10 +149,19 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
 
   /** First user message in history that matches optimistic text; used for seamless handoff. */
   const matchingFirstUserFromHistory = React.useMemo(() => {
-    if (optimisticFirstMessage == null) return null;
-    const userMsg = messages.find((m) => m.role === "user" && m.text === optimisticFirstMessage);
+    if (optimisticFirstMessage === null) return null;
+    const userMsg = messages.find(
+      (m) => m.role === "user" && m.text.startsWith(optimisticFirstMessage)
+    );
     return userMsg ?? null;
   }, [messages, optimisticFirstMessage]);
+
+  // Clear optimistic session only when we're on that thread and chat.history has returned the matching user message.
+  React.useEffect(() => {
+    if (matchingFirstUserFromHistory !== null && optimistic?.key === sessionKey) {
+      setOptimistic(null);
+    }
+  }, [matchingFirstUserFromHistory, optimistic?.key, sessionKey, setOptimistic]);
 
   React.useEffect(() => {
     return gw.onEvent((evt) => {
@@ -166,14 +215,6 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
   React.useEffect(() => {
     refresh();
   }, [refresh]);
-
-  // Clear optimistic first message and attachments only when history has the matching user message (seamless handoff).
-  React.useEffect(() => {
-    if (matchingFirstUserFromHistory != null && optimisticFirstMessage != null) {
-      setOptimisticFirstMessage(null);
-      setOptimisticFirstAttachments(null);
-    }
-  }, [matchingFirstUserFromHistory, optimisticFirstMessage]);
 
   // Derived list and waiting state (needed for scroll deps).
   const allMessages =
@@ -240,6 +281,11 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
                   dataUrl: att.dataUrl,
                 }))
               : (m.attachments ?? []);
+          const parsedUser = m.role === "user" ? parseUserMessageWithAttachments(m.text) : null;
+          const hasParsedFileAttachments =
+            parsedUser != null && parsedUser.fileAttachments.length > 0;
+          const messageText = hasParsedFileAttachments ? parsedUser!.displayText : m.text;
+          const showAttachmentsBlock = attachmentsToShow.length > 0 || hasParsedFileAttachments;
           return (
             <div key={getMessageKey(m)} className={`UiChatRow UiChatRow-${m.role}`}>
               <div className={`UiChatBubble UiChatBubble-${m.role}`}>
@@ -248,7 +294,7 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
                     <span className="UiChatPending">sending…</span>
                   </div>
                 )}
-                {attachmentsToShow.length > 0 ? (
+                {showAttachmentsBlock ? (
                   <div className="UiChatMessageAttachments">
                     {attachmentsToShow.map((att: UiMessageAttachment, idx: number) => {
                       const isImage = att.dataUrl && (att.mimeType?.startsWith("image/") ?? false);
@@ -270,10 +316,18 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
                         />
                       );
                     })}
+                    {hasParsedFileAttachments &&
+                      parsedUser!.fileAttachments.map((att, idx) => (
+                        <ChatAttachmentCard
+                          key={`${m.id}-parsed-${idx}`}
+                          fileName={att.fileName}
+                          mimeType={att.mimeType}
+                        />
+                      ))}
                   </div>
                 ) : null}
                 <div className="UiChatText UiMarkdown">
-                  <Markdown>{m.text}</Markdown>
+                  <Markdown>{messageText}</Markdown>
                 </div>
                 {m.role === "assistant" && (
                   <div className="UiChatMessageActions">

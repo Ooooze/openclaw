@@ -100,14 +100,16 @@ export function HeroPageLayout(props: {
   "aria-label"?: string;
   align?: "start" | "center";
   variant?: "default" | "compact";
+  color?: "primary" | "secondary";
   hideTopbar?: boolean;
 }) {
   const { title, subtitle, children, role = "main" } = props;
   const align = props.align ?? "start";
   const variant = props.variant ?? "default";
+  const color = props.color ?? "primary";
   const hideTopbar = props.hideTopbar ?? false;
   const brandIconUrl = useAppIconUrl();
-  const heroClassName = `UiHero UiHero-align-${align}${variant === "compact" ? " UiHero-compact" : ""}`;
+  const heroClassName = `UiHero UiHero-align-${align}${variant === "compact" ? " UiHero-compact" : ""}${color === "secondary" ? " UiHero-secondary-color" : ""}`;
   return (
     <div className="UiHeroShell" role={role} aria-label={props["aria-label"]}>
       {!hideTopbar && (
