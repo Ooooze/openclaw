@@ -233,10 +233,21 @@ export const sendChatMessage = createAsyncThunk(
     const runId = crypto.randomUUID();
     const displayMessage = trimmed || (hasAttachments ? `[${attachments!.length} file(s)]` : "");
 
+    // Convert input attachments to UiMessageAttachment[] for optimistic display
+    const uiAttachments: UiMessageAttachment[] | undefined =
+      attachments?.length
+        ? attachments.map((att) => ({
+            type: att.mimeType.startsWith("image/") ? "image" : "file",
+            mimeType: att.mimeType,
+            dataUrl: att.dataUrl,
+          }))
+        : undefined;
+
     thunkApi.dispatch(
       chatActions.userMessageQueued({
         localId,
         message: displayMessage,
+        attachments: uiAttachments,
       })
     );
     thunkApi.dispatch(chatActions.ensureStreamRun({ runId }));
@@ -325,13 +336,21 @@ const chatSlice = createSlice({
           : fromHistory;
       state.streamByRun = {};
     },
-    userMessageQueued(state, action: PayloadAction<{ localId: string; message: string }>) {
+    userMessageQueued(
+      state,
+      action: PayloadAction<{
+        localId: string;
+        message: string;
+        attachments?: UiMessageAttachment[];
+      }>
+    ) {
       state.messages.push({
         id: action.payload.localId,
         role: "user",
         text: action.payload.message,
         ts: Date.now(),
         pending: true,
+        attachments: action.payload.attachments,
       });
     },
     markUserMessageDelivered(state, action: PayloadAction<{ localId: string }>) {
