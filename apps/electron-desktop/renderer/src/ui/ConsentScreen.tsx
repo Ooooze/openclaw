@@ -1,6 +1,6 @@
 import React from "react";
 
-import { CheckboxRow, FooterText, HeroPageLayout, PrimaryButton, SplashLogo } from "./kit";
+import { FooterText, HeroPageLayout, PrimaryButton, SplashLogo } from "./kit";
 import { LoadingScreen } from "./LoadingScreen";
 import { addToastError } from "./toast";
 import pkg from "../../../package.json";
@@ -13,18 +13,12 @@ export type ConsentDesktopApi = NonNullable<Window["openclawDesktop"]> & {
 
 export function ConsentScreen({ onAccepted }: { onAccepted: () => void }) {
   const api = window.openclawDesktop as ConsentDesktopApi | undefined;
-  const [checked, setChecked] = React.useState(false);
-  const [agreeRequired, setAgreeRequired] = React.useState(false);
   const [busy, setBusy] = React.useState(false);
   const termsUrl = "https://atomicbot.ai/terms-of-service";
   const appVersion = pkg.version || "0.0.0";
 
   const accept = React.useCallback(async () => {
     if (busy) {
-      return;
-    }
-    if (!checked) {
-      setAgreeRequired(true);
       return;
     }
     if (!api || typeof api.acceptConsent !== "function") {
@@ -44,7 +38,7 @@ export function ConsentScreen({ onAccepted }: { onAccepted: () => void }) {
     } finally {
       setBusy(false);
     }
-  }, [api, busy, checked, onAccepted]);
+  }, [api, busy, onAccepted]);
 
   if (busy) {
     return <LoadingScreen state={null} />;
@@ -64,21 +58,15 @@ export function ConsentScreen({ onAccepted }: { onAccepted: () => void }) {
           <div className="UiConsentTitle">Welcome to Atomic Bot</div>
           <div className="UiConsentSubtitle">Your Personal AI Agent based on OpenClaw</div>
 
-          <CheckboxRow
-            checked={checked}
-            error={agreeRequired && !checked}
-            className="UiConsentAgreement"
-            onChange={(next) => {
-              setChecked(next);
-              if (next) {
-                setAgreeRequired(false);
-              }
-            }}
-          >
+          <PrimaryButton onClick={() => void accept()}>Start</PrimaryButton>
+
+          <div className="UiLinkContainer">
             <span>
-              By clicking &quot;Start&quot;, you agree to the{" "}
+              Atomic Bot is experimental product. By clicking
+              <br />
+              “Start” you agree to the{" "}
               <a
-                className="UiLink"
+                className="UiLink UiLinkMainPage"
                 href={termsUrl}
                 target="_blank"
                 rel="noreferrer"
@@ -99,11 +87,7 @@ export function ConsentScreen({ onAccepted }: { onAccepted: () => void }) {
               </a>
               .
             </span>
-          </CheckboxRow>
-
-          <PrimaryButton disabled={busy} onClick={() => void accept()}>
-            Start
-          </PrimaryButton>
+          </div>
         </div>
 
         <FooterText>Version {appVersion}</FooterText>

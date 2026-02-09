@@ -28,6 +28,7 @@ import githubImage from "../../../../assets/set-up-skills/GitHub.svg";
 import slackImage from "../../../../assets/set-up-skills/Slack.svg";
 import notesIcon from "../../../../assets/set-up-skills/Notes.svg";
 import mediaImage from "../../../../assets/set-up-skills/Media.svg";
+import webSearchImage from "../../../../assets/set-up-skills/Web-Search.svg";
 
 type GatewayRpc = {
   request: <T = unknown>(method: string, params?: unknown) => Promise<T>;
@@ -86,7 +87,7 @@ const SKILLS: SkillDefinition[] = [
     description: "Enable the web_search tool via Brave Search or Perplexity Sonar",
     iconText: "🌐",
     iconVariant: "gemini",
-    image: geminiImage,
+    image: webSearchImage,
   },
   {
     id: "notion",

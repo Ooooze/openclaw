@@ -33,7 +33,7 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
         onError(String(err));
       }
     },
-    [onError],
+    [onError]
   );
 
   const resetAndClose = React.useCallback(async () => {
@@ -43,7 +43,7 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
       return;
     }
     const ok = window.confirm(
-      "Reset and sign out will delete the app's local state (including onboarding + logs) and remove all Google Workspace authorizations from the keystore. The app will restart. Continue?"
+      "All local data will be deleted and Google Workspace will be disconnected. The app will close and you’ll need to set it up again."
     );
     if (!ok) return;
     onError(null);
