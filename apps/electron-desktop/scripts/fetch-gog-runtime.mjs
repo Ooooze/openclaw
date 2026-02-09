@@ -81,15 +81,25 @@ function findFileRecursive(rootDir, filename) {
   return null;
 }
 
+function ghHeaders(userAgent) {
+  const headers = {
+    Accept: "application/vnd.github+json",
+    "User-Agent": userAgent,
+  };
+  // Use GITHUB_TOKEN / GH_TOKEN when available to avoid GitHub API rate limits.
+  const token = (process.env.GITHUB_TOKEN || process.env.GH_TOKEN || "").trim();
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+  return headers;
+}
+
 async function fetchJson(url) {
   if (typeof fetch !== "function") {
     throw new Error("global fetch() not available; please run this script with Node 18+");
   }
   const res = await fetch(url, {
-    headers: {
-      Accept: "application/vnd.github+json",
-      "User-Agent": "openclaw-electron-desktop/fetch-gog-runtime",
-    },
+    headers: ghHeaders("openclaw-electron-desktop/fetch-gog-runtime"),
   });
   if (!res.ok) {
     const text = await res.text().catch(() => "");
@@ -121,9 +131,7 @@ async function downloadToFile(url, destPath) {
   }
 
   const res = await fetch(url, {
-    headers: {
-      "User-Agent": "openclaw-electron-desktop/fetch-gog-runtime",
-    },
+    headers: ghHeaders("openclaw-electron-desktop/fetch-gog-runtime"),
   });
   if (!res.ok) {
     const text = await res.text().catch(() => "");
