@@ -2655,6 +2655,8 @@ pre {
     border-color 0.2s ease,
     background 0.2s ease,
     color 0.2s ease;
+  height: 34px;
+  box-sizing: border-box;
 }
 
 .UiProviderFilterChip:hover {

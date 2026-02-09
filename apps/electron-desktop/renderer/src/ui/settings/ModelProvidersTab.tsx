@@ -266,8 +266,7 @@ export function ModelProvidersTab(props: {
   const [modelStatus, setModelStatus] = React.useState<string | null>(null);
   const [keyConfiguredProviders, setKeyConfiguredProviders] =
     React.useState<Set<ModelProvider> | null>(null);
-  // Provider filter for model list — null means "show all configured"
-  const [providerFilter, setProviderFilter] = React.useState<Set<ModelProvider> | null>(null);
+  const [providerFilter, setProviderFilter] = React.useState<ModelProvider | null>(null);
 
   const activeModelId = React.useMemo(
     () => getDefaultModelPrimary(props.configSnap?.config),
@@ -482,38 +481,19 @@ export function ModelProvidersTab(props: {
   const sortedModels = React.useMemo(() => sortModelsByProviderTierName(models), [models]);
 
   // Toggle a single provider in the filter chip set
-  const toggleProviderFilter = React.useCallback(
-    (id: ModelProvider) => {
-      setProviderFilter((prev) => {
-        if (!prev) {
-          // First click: select only this provider (deselect all others)
-          return new Set([id]);
-        }
-        const next = new Set(prev);
-        if (next.has(id)) {
-          next.delete(id);
-        } else {
-          next.add(id);
-        }
-        // If all configured providers are selected (or none), reset to "all"
-        if (next.size === 0 || next.size === strictConfiguredProviders.size) {
-          return null;
-        }
-        return next;
-      });
-    },
-    [strictConfiguredProviders.size]
-  );
+  const toggleProviderFilter = React.useCallback((id: ModelProvider) => {
+    setProviderFilter((prev) => (prev === id ? null : id));
+  }, []);
 
   // The effective set of providers shown in the model list
   const visibleProviders = React.useMemo(() => {
-    if (!providerFilter) return strictConfiguredProviders;
-    // Intersect filter with actually configured providers
-    const out = new Set<ModelProvider>();
-    for (const p of providerFilter) {
-      if (strictConfiguredProviders.has(p)) out.add(p);
+    if (providerFilter === null) return strictConfiguredProviders;
+
+    if (strictConfiguredProviders.has(providerFilter)) {
+      return new Set<ModelProvider>([providerFilter]);
     }
-    return out.size > 0 ? out : strictConfiguredProviders;
+
+    return strictConfiguredProviders;
   }, [providerFilter, strictConfiguredProviders]);
 
   // Resolve provider info for modal
@@ -618,7 +598,8 @@ export function ModelProvidersTab(props: {
                   All
                 </button>
                 {MODEL_PROVIDERS.filter((p) => strictConfiguredProviders.has(p.id)).map((p) => {
-                  const active = providerFilter ? providerFilter.has(p.id) : false;
+                  const active = providerFilter === p.id;
+
                   return (
                     <button
                       key={p.id}
