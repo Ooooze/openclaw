@@ -32,8 +32,7 @@ export const MODEL_PROVIDERS: ModelProviderInfo[] = [
   {
     id: "anthropic",
     name: "Anthropic (Claude)",
-    description:
-      "Claude models with excellent reasoning, coding, and instruction-following capabilities.",
+    description: "Best for complex reasoning, long-form writing and precise instructions",
     recommended: true,
     placeholder: "sk-ant-...",
     helpUrl: "https://console.anthropic.com/settings/keys",
@@ -42,7 +41,7 @@ export const MODEL_PROVIDERS: ModelProviderInfo[] = [
   {
     id: "openrouter",
     name: "OpenRouter",
-    description: "Access to 200+ models from multiple providers through a single API.",
+    description: "One gateway to 200+ AI models. Ideal for flexibility and experimentation",
     recommended: true,
     placeholder: "sk-or-...",
     helpUrl: "https://openrouter.ai/keys",
@@ -51,7 +50,7 @@ export const MODEL_PROVIDERS: ModelProviderInfo[] = [
   {
     id: "google",
     name: "Google (Gemini)",
-    description: "Gemini models with strong multimodal understanding and large context windows.",
+    description: "Strong with images, documents and large amounts of context",
     placeholder: "AIza...",
     helpUrl: "https://aistudio.google.com/apikey",
     helpText: "Get your API key from Google AI Studio.",
@@ -59,7 +58,7 @@ export const MODEL_PROVIDERS: ModelProviderInfo[] = [
   {
     id: "openai",
     name: "OpenAI (GPT)",
-    description: "GPT models with broad capabilities and extensive tool use support.",
+    description: "An all-rounder for chat, coding, and everyday tasks",
     placeholder: "sk-...",
     helpUrl: "https://platform.openai.com/api-keys",
     helpText: "Get your API key from the OpenAI Platform.",
@@ -67,7 +66,7 @@ export const MODEL_PROVIDERS: ModelProviderInfo[] = [
   {
     id: "zai",
     name: "Z.ai (GLM)",
-    description: "Budget-friendly models built for efficient, scalable AI workloads.",
+    description: "Cost-effective models for everyday tasks and high-volume usage",
     placeholder: "sk-...",
     helpUrl: "https://z.ai/manage-apikey/apikey-list",
     helpText: "Get your API key from the Z.AI Platform.",
@@ -75,7 +74,7 @@ export const MODEL_PROVIDERS: ModelProviderInfo[] = [
   {
     id: "minimax",
     name: "MiniMax",
-    description: "Models designed for strong conversational AI and creative generation.",
+    description: "Good for creative writing and expressive conversations",
     placeholder: "sk-...",
     helpUrl: "https://platform.minimax.io/user-center/basic-information/interface-key",
     helpText: "Get your API key from the MiniMax Platform.",

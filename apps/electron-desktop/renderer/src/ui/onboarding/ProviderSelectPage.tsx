@@ -37,9 +37,9 @@ export function ProviderSelectPage(props: {
           ))}
         </div>
 
-        <div className="UiSectionTitle">Select AI Provider</div>
+        <div className="UiSectionTitle">Choose Al Provider</div>
         <div className="UiSectionSubtitle">
-          Choose your preferred AI provider. You can configure additional providers later.
+          Pick the Al provider you want to start with. You can switch or add more providers later.
         </div>
 
         <div className="UiProviderList UiListWithScroll">

@@ -3233,3 +3233,21 @@ pre {
     transform: rotate(360deg);
   }
 }
+
+.UiBanner {
+  background: #292929;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.UiBannerTitle {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.UiBannerSubtitle {
+  color: #8E8E8E;
+  font-size: 12px;
+}

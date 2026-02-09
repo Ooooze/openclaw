@@ -27,7 +27,7 @@ const CONNECTIONS: ConnectionEntry[] = [
   {
     id: "slack",
     name: "Slack",
-    description: "Send messages, react, and manage pins in your Slack workspace",
+    description: "Send messages, search info and manage pins in your workspace",
     iconText: "S",
     iconVariant: "slack",
     image: slackIcon,
