@@ -159,6 +159,7 @@ export function TextInput(props: {
   error?: boolean;
   inputRef?: React.Ref<HTMLInputElement>;
   label?: string;
+  isSearch?: boolean;
 }) {
   const className = `UiInput${props.error ? " UiInput--error" : ""}${props.className ? ` ${props.className}` : ""}`;
   return (
@@ -179,9 +180,11 @@ export function TextInput(props: {
           aria-invalid={props.error ? true : undefined}
         />
       </div>
-      <div className="InputErrorMessageContainer">
-        {props.isError && <div className="InputErrorMessage">{props.isError}</div>}
-      </div>
+      {!props.isSearch && (
+        <div className="InputErrorMessageContainer">
+          {props.isError && <div className="InputErrorMessage">{props.isError}</div>}
+        </div>
+      )}
     </div>
   );
 }

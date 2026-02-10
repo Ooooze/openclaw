@@ -890,6 +890,10 @@ select.UiInput {
     padding: 0;
   }
 
+  ul > li {
+    margin-left: 16px;
+  }
+
   ol {
     counter-reset: item;
     margin: 12px 0;
@@ -1453,7 +1457,7 @@ pre {
 
 .UiLinkContainer {
   margin-top: 12px;
-  color: #A0A0A0;
+  color: #a0a0a0;
   text-align: center;
   font-size: 11px;
   font-style: normal;

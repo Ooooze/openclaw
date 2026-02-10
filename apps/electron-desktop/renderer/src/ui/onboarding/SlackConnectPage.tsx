@@ -218,21 +218,28 @@ export function SlackConnectPage(props: {
             <div className="UiSectionSubtitle" style={{ marginTop: 10 }}>
               <ol>
                 <li>
-                  Create a Slack app: Slack API → <strong>Apps</strong> →{" "}
-                  <strong>Create New App</strong> → <strong>From scratch</strong>.
+                  <div>
+                    Create a Slack app: Slack API → <strong>Apps</strong> →{" "}
+                    <strong>Create New App</strong> → <strong>From scratch</strong>.
+                  </div>
                 </li>
                 <li>
-                  Enable Socket Mode: <strong>Socket Mode</strong> → toggle on.
+                  <div>
+                    Enable Socket Mode: <strong>Socket Mode</strong> → toggle on.
+                  </div>
                 </li>
                 <li>
-                  Create the app token (xapp-...): <strong>Basic Information</strong> →{" "}
-                  <strong>App-Level Tokens</strong> → <strong>Generate Token and Scopes</strong> →
-                  scope connections:write.
+                  <div>
+                    Create the app token (xapp-...): <strong>Basic Information</strong> →{" "}
+                    <strong>App-Level Tokens</strong> → <strong>Generate Token and Scopes</strong> →
+                    scope connections:write.
+                  </div>
                 </li>
                 <li>
-                  Create the bot token (xoxb-...): <strong>OAuth &amp; Permissions</strong> → add
-                  bot scopes (use the Manifest below) → <strong>Install to Workspace</strong> → copy{" "}
-                  <strong>Bot User OAuth Token</strong>.
+                  <div>Create the bot token (xoxb-...): <strong>OAuth &amp; Permissions</strong> → add
+                    bot scopes (use the Manifest below) → <strong>Install to Workspace</strong> →
+                    copy <strong>Bot User OAuth Token</strong>.
+                  </div>
                 </li>
                 <li>
                   Invite the bot to channels you want it to read (for example, in Slack: /invite
@@ -242,9 +249,11 @@ export function SlackConnectPage(props: {
               Notes:
               <ul>
                 <li>
-                  The <strong>Client Secret</strong> and <strong>Signing Secret</strong> shown in
-                  Slack <strong>Basic Information</strong> are <em>not</em> the tokens used for
-                  Socket Mode in OpenClaw.
+                  <div>
+                    The <strong>Client Secret</strong> and <strong>Signing Secret</strong> shown in
+                    Slack <strong>Basic Information</strong> are <em>not</em> the tokens used for
+                    Socket Mode in OpenClaw.
+                  </div>
                 </li>
                 <li>
                   If you previously pasted secrets anywhere public, rotate them in Slack

@@ -568,6 +568,7 @@ export function ModelProvidersTab(props: {
               autoCorrect="off"
               spellCheck={false}
               disabled={modelsLoading || modelBusy}
+              isSearch={true}
             />
           </div>
 
