@@ -1,5 +1,6 @@
 import { app, type BrowserWindow } from "electron";
 import { autoUpdater, type UpdateInfo } from "electron-updater";
+import { showUpdateSplash } from "./update-splash";
 
 // Interval between periodic update checks (4 hours).
 const CHECK_INTERVAL_MS = 4 * 60 * 60 * 1000;
@@ -89,6 +90,9 @@ export async function downloadUpdate(): Promise<void> {
 
 /** Quit the app and install the downloaded update. */
 export function installUpdate(): void {
+  // Show a native splash window that persists across the restart gap so the
+  // user sees continuous feedback instead of a confusing blank screen.
+  showUpdateSplash();
   autoUpdater.quitAndInstall();
 }
 

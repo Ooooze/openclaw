@@ -8,6 +8,7 @@ import { DEFAULT_PORT } from "./main/constants";
 import { ensureGatewayConfigFile, readGatewayTokenFromConfig } from "./main/gateway/config";
 import { spawnGateway } from "./main/gateway/spawn";
 import { initAutoUpdater, disposeAutoUpdater } from "./main/updater";
+import { killUpdateSplash } from "./main/update-splash";
 import {
   resolveBundledGogBin,
   resolveBundledJqBin,
@@ -226,6 +227,9 @@ void app.whenReady().then(async () => {
 
   await ensureMainWindow();
   ensureTray();
+
+  // Kill any lingering update splash from the previous version's restart.
+  killUpdateSplash();
 
   // Initialize auto-updater in packaged builds only.
   if (app.isPackaged) {
