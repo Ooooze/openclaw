@@ -3310,3 +3310,125 @@ pre {
   color: #8e8e8e;
   font-size: 12px;
 }
+
+/* ── Exec Approval Modal ─────────────────────────────────── */
+
+.ExecApprovalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 950;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: uiModalFadeIn 150ms ease;
+}
+
+.ExecApprovalCard {
+  width: 460px;
+  max-width: 92vw;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #1d1d1d;
+  padding: 20px 24px;
+  animation: uiModalSlideUp 200ms ease;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ExecApprovalHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.ExecApprovalTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.ExecApprovalSub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 2px;
+}
+
+.ExecApprovalBadge {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 3px 10px;
+  white-space: nowrap;
+}
+
+.ExecApprovalCommand {
+  font-family: "SF Mono", "Fira Code", "Cascadia Code", Menlo, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #aeff00;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 12px 14px;
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+
+.ExecApprovalMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ExecApprovalMetaRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.ExecApprovalMetaLabel {
+  color: rgba(255, 255, 255, 0.4);
+  min-width: 64px;
+  flex-shrink: 0;
+}
+
+.ExecApprovalMetaValue {
+  color: rgba(255, 255, 255, 0.75);
+  word-break: break-all;
+}
+
+.ExecApprovalError {
+  font-size: 12px;
+  color: rgba(255, 122, 0, 0.95);
+  background: rgba(255, 122, 0, 0.08);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.ExecApprovalActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.ExecApprovalActions .UiActionButton {
+  flex: 1;
+  width: auto;
+}
+
+.ExecApprovalDenyBtn {
+  background: rgba(255, 70, 70, 0.15);
+  color: #ff6b6b;
+}
+
+.ExecApprovalDenyBtn:hover:enabled {
+  background: rgba(255, 70, 70, 0.25);
+}

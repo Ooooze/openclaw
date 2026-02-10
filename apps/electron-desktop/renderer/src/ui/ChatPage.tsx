@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   chatActions,
   extractText,
+  isHeartbeatMessage,
   loadChatHistory,
   sendChatMessage,
   type ChatAttachmentInput,
@@ -231,7 +232,10 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
         ? [{ id: "opt-first", role: "user" as const, text: optimisticFirstMessage }, ...messages]
         : messages;
   const displayMessages = allMessages.filter(
-    (m) => (m.role === "user" || m.role === "assistant") && m.text !== "[2 file(s)]"
+    (m) =>
+      (m.role === "user" || m.role === "assistant") &&
+      m.text !== "[2 file(s)]" &&
+      !isHeartbeatMessage(m.role, m.text)
   );
 
   // Hide loader as soon as the first stream delta arrives (streamByRun gets an entry).

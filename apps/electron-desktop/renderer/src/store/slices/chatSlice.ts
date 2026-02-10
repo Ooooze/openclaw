@@ -150,6 +150,32 @@ export function extractAttachmentsFromMessage(msg: unknown): UiMessageAttachment
   return out;
 }
 
+// Default heartbeat prompt sent by the gateway as a user message.
+const HEARTBEAT_PROMPT_PREFIX =
+  "Read HEARTBEAT.md if it exists (workspace context).";
+const HEARTBEAT_OK_TOKEN = "HEARTBEAT_OK";
+
+/** Detect heartbeat-related messages that should be hidden from the chat UI. */
+export function isHeartbeatMessage(role: string, text: string): boolean {
+  const trimmed = text.trim();
+  if (!trimmed) return false;
+  // User-side: the heartbeat prompt injected by the gateway
+  if (role === "user" && trimmed.startsWith(HEARTBEAT_PROMPT_PREFIX)) {
+    return true;
+  }
+  // Assistant-side: pure HEARTBEAT_OK acknowledgment (possibly with light markup)
+  if (role === "assistant") {
+    const stripped = trimmed
+      .replace(/<[^>]*>/g, " ")
+      .replace(/[*`~_]+/g, "")
+      .trim();
+    if (stripped === HEARTBEAT_OK_TOKEN) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function parseRole(value: unknown): UiMessage["role"] {
   const raw = typeof value === "string" ? value.trim().toLowerCase() : "";
   if (raw === "user" || raw === "assistant" || raw === "system") {
@@ -387,6 +413,10 @@ const chatSlice = createSlice({
       const { runId, seq, text } = action.payload;
       delete state.streamByRun[runId];
       if (!text) {
+        return;
+      }
+      // Suppress heartbeat ack messages from appearing in chat history
+      if (isHeartbeatMessage("assistant", text)) {
         return;
       }
       state.messages.push({

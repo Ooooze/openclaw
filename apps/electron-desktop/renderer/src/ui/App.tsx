@@ -24,6 +24,7 @@ import { loadOnboardingFromStorage } from "../store/slices/onboardingSlice";
 import type { GatewayState } from "../../../src/main/types";
 import { isBootstrapPath, routes } from "./routes";
 import { OptimisticSessionProvider, OptimisticSessionSync } from "./optimisticSessionContext";
+import { ExecApprovalOverlay } from "./ExecApprovalModal";
 
 function ChatRoute({ state }: { state: Extract<GatewayState, { kind: "ready" }> }) {
   const [searchParams] = useSearchParams();
@@ -39,6 +40,7 @@ function SidebarLayout({ state }: { state: Extract<GatewayState, { kind: "ready"
     <GatewayRpcProvider url={state.url} token={state.token}>
       <OptimisticSessionProvider>
         <OptimisticSessionSync />
+        <ExecApprovalOverlay />
         <div className="UiAppShell">
           <div className="UiAppPage UiChatLayout">
             <Sidebar />
