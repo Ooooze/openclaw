@@ -198,7 +198,7 @@ export function TelegramModalContent(props: {
         .
       </div>
       {error && <InlineError>{error}</InlineError>}
-      {status && <div className="UiSkillModalStatus">{status}</div>}
+      {/*{status && <div className="UiSkillModalStatus">{status}</div>}*/}
 
       {/* ── Bot token ──────────────────────────────────────── */}
       <div className="UiSkillModalField">
@@ -232,23 +232,23 @@ export function TelegramModalContent(props: {
         </div>
       </div>
 
-      {/* ── DM policy ─────────────────────────────────────── */}
-      <div className="UiSkillModalField">
-        <label className="UiSkillModalLabel">DM policy</label>
-        <div className="UiSkillModalProviderSelect">
-          {["pairing", "allowlist", "open"].map((p) => (
-            <button
-              key={p}
-              type="button"
-              className={`UiSkillModalProviderOption${dmPolicy === p ? " UiSkillModalProviderOption--active" : ""}`}
-              disabled={busy}
-              onClick={() => void handlePolicyChange(p)}
-            >
-              {p}
-            </button>
-          ))}
-        </div>
-      </div>
+      {/*/!* ── DM policy ─────────────────────────────────────── *!/*/}
+      {/*<div className="UiSkillModalField">*/}
+      {/*  <label className="UiSkillModalLabel">DM policy</label>*/}
+      {/*  <div className="UiSkillModalProviderSelect">*/}
+      {/*    {["pairing", "allowlist", "open"].map((p) => (*/}
+      {/*      <button*/}
+      {/*        key={p}*/}
+      {/*        type="button"*/}
+      {/*        className={`UiSkillModalProviderOption${dmPolicy === p ? " UiSkillModalProviderOption--active" : ""}`}*/}
+      {/*        disabled={busy}*/}
+      {/*        onClick={() => void handlePolicyChange(p)}*/}
+      {/*      >*/}
+      {/*        {p}*/}
+      {/*      </button>*/}
+      {/*    ))}*/}
+      {/*  </div>*/}
+      {/*</div>*/}
 
       {/* ── Allowlist management ──────────────────────────── */}
       <div className="UiSkillModalField">
