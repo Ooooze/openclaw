@@ -12,7 +12,7 @@ export type ModelTier = "ultra" | "pro" | "fast";
 // (except OpenRouter and Google, which can be name/ID matched to handle dynamic IDs).
 const MODEL_TIERS: Record<string, Record<ModelTier, string>> = {
   anthropic: {
-    ultra: "claude-opus-4-5",
+    ultra: "claude-opus-4-6",
     pro: "claude-sonnet-4-5",
     fast: "claude-haiku-4-5",
   },
