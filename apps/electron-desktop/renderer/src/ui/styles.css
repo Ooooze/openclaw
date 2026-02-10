@@ -1522,6 +1522,8 @@ pre {
   flex: 1;
   overflow-y: auto;
   padding-right: 4px;
+  /* Reset to auto so ::-webkit-scrollbar pseudo-elements take effect
+     (non-auto values like thin/none activate standard mode and ignore webkit) */
   scrollbar-width: auto;
 }
 
