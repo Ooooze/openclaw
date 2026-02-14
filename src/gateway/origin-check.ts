@@ -45,15 +45,22 @@ export function checkBrowserOrigin(params: {
   origin?: string;
   allowedOrigins?: string[];
 }): OriginCheckResult {
+  const rawOrigin = (params.origin ?? "").trim();
+  const allowlist = new Set(
+    (params.allowedOrigins ?? []).map((value) => value.trim().toLowerCase()).filter(Boolean),
+  );
+
+  // file:// origins send "null" — allow if explicitly listed.
+  if (rawOrigin === "null" && allowlist.has("null")) {
+    return { ok: true };
+  }
+
   const parsedOrigin = parseOrigin(params.origin);
   if (!parsedOrigin) {
     return { ok: false, reason: "origin missing or invalid" };
   }
 
-  const allowlist = (params.allowedOrigins ?? [])
-    .map((value) => value.trim().toLowerCase())
-    .filter(Boolean);
-  if (allowlist.includes(parsedOrigin.origin)) {
+  if (allowlist.has(parsedOrigin.origin)) {
     return { ok: true };
   }
 

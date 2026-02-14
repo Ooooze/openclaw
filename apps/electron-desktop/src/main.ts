@@ -2,6 +2,7 @@ import { app, BrowserWindow, Menu, Tray, nativeImage } from "electron";
 import type { ChildProcess } from "node:child_process";
 import { randomBytes } from "node:crypto";
 import * as fs from "node:fs";
+import * as os from "node:os";
 import * as path from "node:path";
 import { registerIpcHandlers } from "./main/ipc/register";
 import { registerTerminalIpcHandlers } from "./main/terminal/ipc";
@@ -189,9 +190,33 @@ app.on("before-quit", async () => {
 
 void app.whenReady().then(async () => {
   const userData = app.getPath("userData");
-  const stateDir = path.join(userData, "openclaw");
   const logsDir = path.join(userData, "logs");
   logsDirForUi = logsDir;
+
+  // ── Resolve stateDir with priority: 1) user override, 2) external gateway, 3) default ──
+  const stateDirOverridePath = path.join(userData, "state-dir-override.json");
+  const userOverrideDir = readStateDirOverride(stateDirOverridePath);
+
+  let stateDir: string;
+  let externalGatewayDetected = false;
+
+  if (userOverrideDir) {
+    stateDir = userOverrideDir;
+  } else {
+    // Check if an external gateway is already running on the default port.
+    const externalConfigPath = path.join(os.homedir(), ".openclaw", "openclaw.json");
+    const externalToken = readGatewayTokenFromConfig(externalConfigPath);
+    const externalGatewayAvailable = externalToken
+      ? await waitForPortOpen("127.0.0.1", DEFAULT_PORT, 3_000)
+      : false;
+
+    if (externalGatewayAvailable) {
+      stateDir = path.join(os.homedir(), ".openclaw");
+      externalGatewayDetected = true;
+    } else {
+      stateDir = path.join(userData, "openclaw");
+    }
+  }
 
   const openclawDir = app.isPackaged ? resolveBundledOpenClawDir() : resolveRepoRoot(MAIN_DIR);
   // In dev, prefer a real Node binary. Spawning the Gateway via the Electron binary (process.execPath)
@@ -248,6 +273,31 @@ void app.whenReady().then(async () => {
       return;
     }
     const nextWin = await ensureMainWindow();
+
+    // Check if an external gateway is already running on the default port.
+    if (port !== DEFAULT_PORT) {
+      // pickPort returned a different port, meaning DEFAULT_PORT is occupied.
+      // Try to connect to the existing gateway instead of spawning a new one.
+      const externalConfigPath = path.join(os.homedir(), ".openclaw", "openclaw.json");
+      const externalToken = readGatewayTokenFromConfig(externalConfigPath);
+      if (externalToken) {
+        const reachable = await waitForPortOpen("127.0.0.1", DEFAULT_PORT, 3_000);
+        if (reachable) {
+          // Ensure the external config allows the Electron renderer's file:// origin ("null").
+          ensureGatewayConfigFile({ configPath: externalConfigPath, token: externalToken });
+          const externalUrl = `http://127.0.0.1:${DEFAULT_PORT}/`;
+          broadcastGatewayState(nextWin, {
+            kind: "ready",
+            port: DEFAULT_PORT,
+            logsDir,
+            url: externalUrl,
+            token: externalToken,
+          });
+          return;
+        }
+      }
+    }
+
     broadcastGatewayState(nextWin, { kind: "starting", port, logsDir, token });
     gateway = spawnGateway({
       port,
@@ -300,6 +350,7 @@ void app.whenReady().then(async () => {
     startGateway,
     userData,
     stateDir,
+    stateDirOverridePath,
     logsDir,
     openclawDir,
     gogBin,
@@ -328,6 +379,24 @@ void app.whenReady().then(async () => {
     await startGateway();
   }
 });
+
+function readStateDirOverride(overridePath: string): string | null {
+  try {
+    if (!fs.existsSync(overridePath)) {
+      return null;
+    }
+    const raw = fs.readFileSync(overridePath, "utf-8");
+    const parsed = JSON.parse(raw) as unknown;
+    if (!parsed || typeof parsed !== "object") {
+      return null;
+    }
+    const obj = parsed as { stateDir?: unknown };
+    const dir = typeof obj.stateDir === "string" ? obj.stateDir.trim() : "";
+    return dir.length > 0 ? dir : null;
+  } catch {
+    return null;
+  }
+}
 
 function readConsentAccepted(consentPath: string): boolean {
   try {
