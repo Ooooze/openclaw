@@ -22,13 +22,6 @@
   box-sizing: border-box;
 }
 
-.UiChatTranscriptInner {
-  max-width: 800px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
 .UiChatEmpty {
   flex: 1;
   display: flex;

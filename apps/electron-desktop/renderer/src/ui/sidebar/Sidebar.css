@@ -75,38 +75,6 @@
   margin: 2px 0;
 }
 
-.UiChatSidebarSessionItem {
-  display: block;
-  width: 100%;
-  text-align: left;
-  height: 36px;
-  padding: 8px 10px;
-  align-items: center;
-  gap: 8px;
-  align-self: stretch;
-  border-radius: var(--radius-10);
-  border: none;
-  background: transparent;
-  color: var(--text);
-  font-size: 14px;
-  cursor: pointer;
-  appearance: none;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  transition:
-    background 140ms ease,
-    color 140ms ease;
-}
-
-.UiChatSidebarSessionItem:hover {
-  background: var(--border-subtle);
-}
-
-.UiChatSidebarSessionItem-active {
-  background: var(--surface-overlay);
-}
-
 .UiChatSidebarFooter {
   flex-shrink: 0;
   padding: 6px;
