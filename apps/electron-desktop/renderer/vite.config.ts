@@ -6,6 +6,11 @@ export default defineConfig({
   root: path.resolve(__dirname),
   plugins: [react()],
   base: "./",
+  css: {
+    modules: {
+      localsConvention: "camelCase",
+    },
+  },
   build: {
     outDir: path.resolve(__dirname, "dist"),
     emptyOutDir: true,
