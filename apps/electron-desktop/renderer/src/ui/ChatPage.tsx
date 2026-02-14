@@ -27,7 +27,7 @@ type ParsedFileAttachment = { fileName: string; mimeType: string };
  * and legacy format: [Attached: name (mime)]
  * Returns display text (before first marker) and parsed file attachments.
  */
-function parseUserMessageWithAttachments(text: string): {
+export function parseUserMessageWithAttachments(text: string): {
   displayText: string;
   fileAttachments: ParsedFileAttachment[];
 } {

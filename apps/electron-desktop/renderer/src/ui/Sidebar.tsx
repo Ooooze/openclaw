@@ -62,7 +62,7 @@ const TITLE_MAX_LEN = 48;
  * envelope date headers, attachment markers, media hints, file tags,
  * and message_id hints to recover the original user text for display.
  */
-function cleanDerivedTitle(derivedTitle: string | undefined): string {
+export function cleanDerivedTitle(derivedTitle: string | undefined): string {
   const raw = derivedTitle?.trim();
   if (!raw) {
     return "";

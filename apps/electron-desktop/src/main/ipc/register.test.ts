@@ -1,56 +1,23 @@
 /**
- * Tests for pure helper functions in register.ts.
- * These functions will be extracted into domain-specific modules during refactoring;
- * the tests serve as a safety net to catch regressions.
+ * Tests for pure helper functions extracted from the former monolithic register.ts.
+ * Now imports directly from domain-specific modules to test the real code.
  */
-import fs from "node:fs";
 import fsp from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-// The helpers are not exported by register.ts, so we import the file indirectly.
-// For now we replicate the function signatures to test them in isolation.
-// When the refactoring extracts them into separate modules, these tests will import directly.
+import JSZip from "jszip";
+
+import { parseObsidianVaultsFromJson } from "../ipc/obsidian-ipc";
+import {
+  extractZipBuffer,
+  listCustomSkillsFromDir,
+  parseSkillFrontmatter,
+  resolveSkillRoot,
+} from "../ipc/skills-ipc";
 
 // ── parseObsidianVaultsFromJson ────────────────────────────────────────────────
-
-// Inline copy for testing (mirrors register.ts lines 31-63)
-type ObsidianVaultEntry = { name: string; path: string; open: boolean };
-
-function parseObsidianVaultsFromJson(payload: unknown): ObsidianVaultEntry[] {
-  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
-    return [];
-  }
-  const root = payload as Record<string, unknown>;
-  const vaultsRaw = root.vaults;
-  if (!vaultsRaw || typeof vaultsRaw !== "object" || Array.isArray(vaultsRaw)) {
-    return [];
-  }
-  const vaults = vaultsRaw as Record<string, unknown>;
-  const openVaultId = typeof root.openVaultId === "string" ? root.openVaultId : null;
-  const out: ObsidianVaultEntry[] = [];
-  for (const [id, v] of Object.entries(vaults)) {
-    if (!v || typeof v !== "object" || Array.isArray(v)) {
-      continue;
-    }
-    const obj = v as Record<string, unknown>;
-    const vaultPath = typeof obj.path === "string" ? obj.path.trim() : "";
-    if (!vaultPath) {
-      continue;
-    }
-    const isOpen = obj.open === true || (openVaultId ? id === openVaultId : false);
-    const name = path.basename(vaultPath);
-    out.push({ name, path: vaultPath, open: isOpen });
-  }
-  out.sort((a, b) => {
-    if (a.open !== b.open) {
-      return a.open ? -1 : 1;
-    }
-    return a.name.localeCompare(b.name);
-  });
-  return out;
-}
 
 describe("parseObsidianVaultsFromJson", () => {
   it("parses valid payload with multiple vaults", () => {
@@ -115,26 +82,6 @@ describe("parseObsidianVaultsFromJson", () => {
 
 // ── parseSkillFrontmatter ──────────────────────────────────────────────────────
 
-type CustomSkillMeta = { name: string; description: string; emoji: string; dirName: string };
-
-function parseSkillFrontmatter(content: string): Omit<CustomSkillMeta, "dirName"> {
-  const fmMatch = content.match(/^---\n([\s\S]*?)\n---/);
-  if (!fmMatch) {
-    return { name: "", description: "", emoji: "🧩" };
-  }
-  const block = fmMatch[1] ?? "";
-  const nameMatch = block.match(/^name:\s*(.+)$/m);
-  const name = nameMatch?.[1]?.trim() ?? "";
-  const descMatch = block.match(/^description:\s*(.+)$/m);
-  const description = descMatch?.[1]?.trim() ?? "";
-  let emoji = "🦞";
-  const emojiMatch = block.match(/"emoji"\s*:\s*"([^"]+)"/);
-  if (emojiMatch?.[1]) {
-    emoji = emojiMatch[1];
-  }
-  return { name, description, emoji };
-}
-
 describe("parseSkillFrontmatter", () => {
   it("extracts name, description, and emoji from valid frontmatter", () => {
     const content = `---
@@ -181,31 +128,6 @@ version: 1.0
 
 // ── resolveSkillRoot ───────────────────────────────────────────────────────────
 
-// Inline copy (mirrors register.ts lines 137-165)
-async function resolveSkillRoot(extractDir: string): Promise<string> {
-  const entries = await fsp.readdir(extractDir, { withFileTypes: true });
-  const dirs = entries.filter((e) => e.isDirectory());
-  if (dirs.length === 1 && dirs[0]) {
-    const candidate = path.join(extractDir, dirs[0].name);
-    try {
-      await fsp.stat(path.join(candidate, "SKILL.md"));
-      return candidate;
-    } catch {
-      // fall through
-    }
-  }
-  try {
-    await fsp.stat(path.join(extractDir, "SKILL.md"));
-    return extractDir;
-  } catch {
-    // not found
-  }
-  if (dirs.length === 1 && dirs[0]) {
-    return path.join(extractDir, dirs[0].name);
-  }
-  return extractDir;
-}
-
 describe("resolveSkillRoot", () => {
   let tmpDir: string;
 
@@ -247,38 +169,6 @@ describe("resolveSkillRoot", () => {
 });
 
 // ── listCustomSkillsFromDir ────────────────────────────────────────────────────
-
-// Inline copy (mirrors register.ts lines 170-196)
-async function listCustomSkillsFromDir(
-  skillsDir: string
-): Promise<CustomSkillMeta[]> {
-  try {
-    await fsp.stat(skillsDir);
-  } catch {
-    return [];
-  }
-  const entries = await fsp.readdir(skillsDir, { withFileTypes: true });
-  const skills: CustomSkillMeta[] = [];
-  for (const entry of entries) {
-    if (!entry.isDirectory()) {
-      continue;
-    }
-    const skillMdPath = path.join(skillsDir, entry.name, "SKILL.md");
-    try {
-      const content = await fsp.readFile(skillMdPath, "utf-8");
-      const meta = parseSkillFrontmatter(content);
-      skills.push({
-        name: meta.name || entry.name,
-        description: meta.description,
-        emoji: meta.emoji,
-        dirName: entry.name,
-      });
-    } catch {
-      // skip
-    }
-  }
-  return skills;
-}
 
 describe("listCustomSkillsFromDir", () => {
   let tmpDir: string;
@@ -335,32 +225,6 @@ describe("listCustomSkillsFromDir", () => {
 });
 
 // ── extractZipBuffer ───────────────────────────────────────────────────────────
-
-// We import JSZip to create test fixtures.
-import JSZip from "jszip";
-
-async function extractZipBuffer(buffer: Buffer, destDir: string): Promise<void> {
-  const zip = await JSZip.loadAsync(buffer);
-  const entries = Object.values(zip.files);
-  for (const entry of entries) {
-    const entryPath = entry.name.replaceAll("\\", "/");
-    if (!entryPath || entryPath.endsWith("/")) {
-      const dirPath = path.resolve(destDir, entryPath);
-      if (!dirPath.startsWith(destDir)) {
-        throw new Error(`zip entry escapes destination: ${entry.name}`);
-      }
-      await fsp.mkdir(dirPath, { recursive: true });
-      continue;
-    }
-    const outPath = path.resolve(destDir, entryPath);
-    if (!outPath.startsWith(destDir)) {
-      throw new Error(`zip entry escapes destination: ${entry.name}`);
-    }
-    await fsp.mkdir(path.dirname(outPath), { recursive: true });
-    const data = await entry.async("nodebuffer");
-    await fsp.writeFile(outPath, data);
-  }
-}
 
 describe("extractZipBuffer", () => {
   let tmpDir: string;

@@ -53,6 +53,8 @@
   "devDependencies": {
     "@electron/rebuild": "^4.0.3",
     "@reduxjs/toolkit": "^2.9.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^25.2.0",
     "@types/react": "^19.2.10",
     "@types/react-dom": "^19.2.3",
@@ -63,6 +65,7 @@
     "cross-env": "^10.1.0",
     "electron": "^40.1.0",
     "electron-builder": "^26.7.0",
+    "jsdom": "^28.0.0",
     "prettier": "^3.4.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
@@ -70,7 +73,8 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.13.0",
     "typescript": "^5.9.3",
-    "vite": "^7.3.1"
+    "vite": "^7.3.1",
+    "vitest": "^4.0.18"
   },
   "dependencies": {
     "electron-updater": "^6.7.3",

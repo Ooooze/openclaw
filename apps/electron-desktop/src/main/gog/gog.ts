@@ -62,7 +62,7 @@ export function runGog(params: {
   });
 }
 
-function parseGogAuthListEmails(jsonText: string): string[] {
+export function parseGogAuthListEmails(jsonText: string): string[] {
   try {
     const parsed = JSON.parse(jsonText || "{}") as { accounts?: unknown };
     const accounts = Array.isArray(parsed.accounts) ? parsed.accounts : [];

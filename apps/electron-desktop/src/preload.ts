@@ -1,39 +1,8 @@
 import { contextBridge, ipcRenderer } from "electron";
 
+import type { ExecResult } from "./shared/types";
 import type { GogExecResult } from "./main/gog/types";
 import type { GatewayState, ResetAndCloseResult } from "./main/types";
-
-type MemoExecResult = {
-  ok: boolean;
-  code: number | null;
-  stdout: string;
-  stderr: string;
-  resolvedPath: string | null;
-};
-
-type RemindctlExecResult = {
-  ok: boolean;
-  code: number | null;
-  stdout: string;
-  stderr: string;
-  resolvedPath: string | null;
-};
-
-type ObsidianCliExecResult = {
-  ok: boolean;
-  code: number | null;
-  stdout: string;
-  stderr: string;
-  resolvedPath: string | null;
-};
-
-type GhExecResult = {
-  ok: boolean;
-  code: number | null;
-  stdout: string;
-  stderr: string;
-  resolvedPath: string | null;
-};
 
 type UpdateAvailablePayload = {
   version: string;
@@ -54,6 +23,15 @@ type UpdateDownloadedPayload = {
 type UpdateErrorPayload = {
   message: string;
 };
+
+/** Helper: subscribe to an IPC event channel with automatic unsubscribe. */
+function onIpc<T>(channel: string, cb: (payload: T) => void): () => void {
+  const handler = (_evt: unknown, payload: T) => cb(payload);
+  ipcRenderer.on(channel, handler);
+  return () => {
+    ipcRenderer.removeListener(channel, handler);
+  };
+}
 
 type OpenclawDesktopApi = {
   version: string;
@@ -81,17 +59,17 @@ type OpenclawDesktopApi = {
     credentialsJson: string;
     filename?: string;
   }) => Promise<GogExecResult>;
-  memoCheck: () => Promise<MemoExecResult>;
-  remindctlAuthorize: () => Promise<RemindctlExecResult>;
-  remindctlTodayJson: () => Promise<RemindctlExecResult>;
-  obsidianCliCheck: () => Promise<ObsidianCliExecResult>;
-  obsidianCliPrintDefaultPath: () => Promise<ObsidianCliExecResult>;
-  obsidianVaultsList: () => Promise<ObsidianCliExecResult>;
-  obsidianCliSetDefault: (params: { vaultName: string }) => Promise<ObsidianCliExecResult>;
-  ghCheck: () => Promise<GhExecResult>;
-  ghAuthLoginPat: (params: { pat: string }) => Promise<GhExecResult>;
-  ghAuthStatus: () => Promise<GhExecResult>;
-  ghApiUser: () => Promise<GhExecResult>;
+  memoCheck: () => Promise<ExecResult>;
+  remindctlAuthorize: () => Promise<ExecResult>;
+  remindctlTodayJson: () => Promise<ExecResult>;
+  obsidianCliCheck: () => Promise<ExecResult>;
+  obsidianCliPrintDefaultPath: () => Promise<ExecResult>;
+  obsidianVaultsList: () => Promise<ExecResult>;
+  obsidianCliSetDefault: (params: { vaultName: string }) => Promise<ExecResult>;
+  ghCheck: () => Promise<ExecResult>;
+  ghAuthLoginPat: (params: { pat: string }) => Promise<ExecResult>;
+  ghAuthStatus: () => Promise<ExecResult>;
+  ghApiUser: () => Promise<ExecResult>;
   onGatewayState: (cb: (state: GatewayState) => void) => () => void;
   // OpenClaw config (openclaw.json)
   readConfig: () => Promise<{ ok: boolean; content: string; error?: string }>;
@@ -170,13 +148,7 @@ const api: OpenclawDesktopApi = {
     ipcRenderer.invoke("gh-auth-login-pat", params),
   ghAuthStatus: async () => ipcRenderer.invoke("gh-auth-status"),
   ghApiUser: async () => ipcRenderer.invoke("gh-api-user"),
-  onGatewayState: (cb: (state: GatewayState) => void) => {
-    const handler = (_evt: unknown, state: GatewayState) => cb(state);
-    ipcRenderer.on("gateway-state", handler);
-    return () => {
-      ipcRenderer.removeListener("gateway-state", handler);
-    };
-  },
+  onGatewayState: (cb: (state: GatewayState) => void) => onIpc("gateway-state", cb),
   // OpenClaw config (openclaw.json)
   readConfig: async () => ipcRenderer.invoke("config-read"),
   writeConfig: async (content: string) => ipcRenderer.invoke("config-write", { content }),
@@ -192,34 +164,13 @@ const api: OpenclawDesktopApi = {
   checkForUpdate: async () => ipcRenderer.invoke("updater-check"),
   downloadUpdate: async () => ipcRenderer.invoke("updater-download"),
   installUpdate: async () => ipcRenderer.invoke("updater-install"),
-  onUpdateAvailable: (cb: (payload: UpdateAvailablePayload) => void) => {
-    const handler = (_evt: unknown, payload: UpdateAvailablePayload) => cb(payload);
-    ipcRenderer.on("updater-available", handler);
-    return () => {
-      ipcRenderer.removeListener("updater-available", handler);
-    };
-  },
-  onUpdateDownloadProgress: (cb: (payload: UpdateDownloadProgressPayload) => void) => {
-    const handler = (_evt: unknown, payload: UpdateDownloadProgressPayload) => cb(payload);
-    ipcRenderer.on("updater-download-progress", handler);
-    return () => {
-      ipcRenderer.removeListener("updater-download-progress", handler);
-    };
-  },
-  onUpdateDownloaded: (cb: (payload: UpdateDownloadedPayload) => void) => {
-    const handler = (_evt: unknown, payload: UpdateDownloadedPayload) => cb(payload);
-    ipcRenderer.on("updater-downloaded", handler);
-    return () => {
-      ipcRenderer.removeListener("updater-downloaded", handler);
-    };
-  },
-  onUpdateError: (cb: (payload: UpdateErrorPayload) => void) => {
-    const handler = (_evt: unknown, payload: UpdateErrorPayload) => cb(payload);
-    ipcRenderer.on("updater-error", handler);
-    return () => {
-      ipcRenderer.removeListener("updater-error", handler);
-    };
-  },
+  onUpdateAvailable: (cb: (payload: UpdateAvailablePayload) => void) =>
+    onIpc("updater-available", cb),
+  onUpdateDownloadProgress: (cb: (payload: UpdateDownloadProgressPayload) => void) =>
+    onIpc("updater-download-progress", cb),
+  onUpdateDownloaded: (cb: (payload: UpdateDownloadedPayload) => void) =>
+    onIpc("updater-downloaded", cb),
+  onUpdateError: (cb: (payload: UpdateErrorPayload) => void) => onIpc("updater-error", cb),
   // Custom skills
   installCustomSkill: async (data: string) => ipcRenderer.invoke("install-custom-skill", { data }),
   listCustomSkills: async () => ipcRenderer.invoke("list-custom-skills"),
@@ -234,21 +185,10 @@ const api: OpenclawDesktopApi = {
   terminalKill: async (id: string) => ipcRenderer.invoke("terminal:kill", { id }),
   terminalList: async () => ipcRenderer.invoke("terminal:list"),
   terminalGetBuffer: async (id: string) => ipcRenderer.invoke("terminal:get-buffer", { id }),
-  onTerminalData: (cb: (payload: { id: string; data: string }) => void) => {
-    const handler = (_evt: unknown, payload: { id: string; data: string }) => cb(payload);
-    ipcRenderer.on("terminal:data", handler);
-    return () => {
-      ipcRenderer.removeListener("terminal:data", handler);
-    };
-  },
-  onTerminalExit: (cb: (payload: { id: string; exitCode: number; signal?: number }) => void) => {
-    const handler = (_evt: unknown, payload: { id: string; exitCode: number; signal?: number }) =>
-      cb(payload);
-    ipcRenderer.on("terminal:exit", handler);
-    return () => {
-      ipcRenderer.removeListener("terminal:exit", handler);
-    };
-  },
+  onTerminalData: (cb: (payload: { id: string; data: string }) => void) =>
+    onIpc("terminal:data", cb),
+  onTerminalExit: (cb: (payload: { id: string; exitCode: number; signal?: number }) => void) =>
+    onIpc("terminal:exit", cb),
 };
 
 contextBridge.exposeInMainWorld("openclawDesktop", api);
