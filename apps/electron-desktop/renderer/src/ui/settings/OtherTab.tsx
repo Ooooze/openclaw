@@ -89,10 +89,9 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
 
   return (
     <div className={ps.UiSettingsContentInner}>
-      <h2 className={s.UiSettingsOtherTitle}>Other</h2>
-
+      {/* Folders: OpenClaw data + Agent workspace */}
       <section className={s.UiSettingsOtherSection}>
-        <h3 className={s.UiSettingsOtherSectionTitle}>OpenClaw Folder</h3>
+        <h3 className={s.UiSettingsOtherSectionTitle}>Folders</h3>
         <div className={s.UiSettingsOtherCard}>
           <div className={s.UiSettingsOtherRow}>
             <span className={s.UiSettingsOtherRowLabel}>OpenClaw folder</span>
@@ -104,15 +103,6 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
               Open folder
             </button>
           </div>
-        </div>
-        <p className={s.UiSettingsOtherHint}>
-          Contains your local OpenClaw state and app data.
-        </p>
-      </section>
-
-      <section className={s.UiSettingsOtherSection}>
-        <h3 className={s.UiSettingsOtherSectionTitle}>Workspace</h3>
-        <div className={s.UiSettingsOtherCard}>
           <div className={s.UiSettingsOtherRow}>
             <span className={s.UiSettingsOtherRowLabel}>Agent workspace</span>
             <button
@@ -125,10 +115,12 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
           </div>
         </div>
         <p className={s.UiSettingsOtherHint}>
-          Contains editable .md files (AGENTS, SOUL, USER, IDENTITY, TOOLS, HEARTBEAT, BOOTSTRAP) that shape the agent.
+          Contains your local OpenClaw state and app data. Workspace contains editable .md files
+          (AGENTS, SOUL, USER, IDENTITY, TOOLS, HEARTBEAT, BOOTSTRAP) that shape the agent.
         </p>
       </section>
 
+      {/* Terminal */}
       <section className={s.UiSettingsOtherSection}>
         <h3 className={s.UiSettingsOtherSectionTitle}>Terminal</h3>
         <div className={s.UiSettingsOtherCard}>
@@ -158,7 +150,7 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
         </p>
       </section>
 
-      {/* About */}
+      {/* App & About (combined) */}
       <section className={s.UiSettingsOtherSection}>
         <h3 className={s.UiSettingsOtherSectionTitle}>App</h3>
         <div className={s.UiSettingsOtherCard}>
@@ -166,7 +158,6 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
             <span className={s.UiSettingsOtherRowLabel}>Version</span>
             <span className={s.UiSettingsOtherAppRowValue}>Atomic Bot v{appVersion}</span>
           </div>
-
           <div className={s.UiSettingsOtherRow}>
             <span className={s.UiSettingsOtherRowLabel}>Auto start</span>
             <span className={s.UiSettingsOtherAppRowValue}>
@@ -182,7 +173,6 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
               </label>
             </span>
           </div>
-
           <div className={s.UiSettingsOtherRow}>
             <span className={s.UiSettingsOtherRowLabel}>License</span>
             <button
@@ -195,24 +185,6 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
               PolyForm Noncommercial 1.0.0
             </button>
           </div>
-
-          <div className={s.UiSettingsOtherRow}>
-            <NavLink to={routes.legacy} className={s.UiSettingsOtherLink}>
-              Legacy
-            </NavLink>
-          </div>
-        </div>
-      </section>
-
-      {/* About */}
-      <section className={s.UiSettingsOtherSection}>
-        <h3 className={s.UiSettingsOtherSectionTitle}>About</h3>
-        <div className={s.UiSettingsOtherCard}>
-          <div className={s.UiSettingsOtherRow}>
-            <span className={s.UiSettingsOtherRowLabel}>
-              &copy; {new Date().getFullYear()} Atomic Bot
-            </span>
-          </div>
           <div className={s.UiSettingsOtherRow}>
             <span className={s.UiSettingsOtherRowLabel}>Support</span>
             <a href="mailto:support@atomicbot.ai" className={s.UiSettingsOtherLink}>
@@ -220,60 +192,60 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
             </a>
           </div>
           <div className={s.UiSettingsOtherRow}>
-            <button
-              type="button"
-              className={s.UiSettingsOtherLink}
-              onClick={() => void api?.openExternal("https://github.com/AtomicBot-ai/atomicbot")}
-            >
-              GitHub
-            </button>
+            <NavLink to={routes.legacy} className={s.UiSettingsOtherLink}>
+              Legacy
+            </NavLink>
           </div>
-          <div className={s.UiSettingsOtherRow}>
-            <button
-              type="button"
-              className={s.UiSettingsOtherLink}
-              onClick={() => void api?.openExternal("https://atomicbot.ai")}
-            >
-              Website
-            </button>
-          </div>
-          <div className={s.UiSettingsOtherRow}>
-            <button
-              type="button"
-              className={s.UiSettingsOtherLink}
-              onClick={() => void api?.openExternal("https://x.com/atomicbot_ai")}
-            >
-              X (Twitter)
-            </button>
-          </div>
-          <div className={s.UiSettingsOtherRow}>
-            <button
-              type="button"
-              className={s.UiSettingsOtherLink}
-              onClick={() => void api?.openExternal("https://www.instagram.com/atomicbot.ai/")}
-            >
-              Instagram
-            </button>
-          </div>
-          <div className={s.UiSettingsOtherRow}>
-            <button
-              type="button"
-              className={s.UiSettingsOtherLink}
-              onClick={() => void api?.openExternal("https://discord.gg/2TXafRV69m")}
-            >
-              Discord
-            </button>
-          </div>
+        </div>
+        <div className={s.UiSettingsOtherLinksRow}>
+          <span className={s.UiSettingsOtherFooterCopy}>
+            &copy; {new Date().getFullYear()} Atomic Bot
+          </span>
+          <button
+            type="button"
+            className={s.UiSettingsOtherFooterLink}
+            onClick={() => void api?.openExternal("https://github.com/AtomicBot-ai/atomicbot")}
+          >
+            GitHub
+          </button>
+          <button
+            type="button"
+            className={s.UiSettingsOtherFooterLink}
+            onClick={() => void api?.openExternal("https://atomicbot.ai")}
+          >
+            Website
+          </button>
+          <button
+            type="button"
+            className={s.UiSettingsOtherFooterLink}
+            onClick={() => void api?.openExternal("https://x.com/atomicbot_ai")}
+          >
+            X
+          </button>
+          <button
+            type="button"
+            className={s.UiSettingsOtherFooterLink}
+            onClick={() => void api?.openExternal("https://www.instagram.com/atomicbot.ai/")}
+          >
+            Instagram
+          </button>
+          <button
+            type="button"
+            className={s.UiSettingsOtherFooterLink}
+            onClick={() => void api?.openExternal("https://discord.gg/2TXafRV69m")}
+          >
+            Discord
+          </button>
         </div>
       </section>
 
       {/* Danger zone (reset) */}
       <section className={s.UiSettingsOtherSection}>
         <h3 className={s.UiSettingsOtherSectionTitle}>Account</h3>
-        <h3 className={s.UiSettingsOtherDangerSubtitle}>
+        <p className={s.UiSettingsOtherDangerSubtitle}>
           This will wipe the app's local state and remove all Google Workspace authorizations. The
           app will restart.
-        </h3>
+        </p>
         <div className={`${s.UiSettingsOtherCard} ${s["UiSettingsOtherCard--danger"]}`}>
           <div className={s.UiSettingsOtherRow}>
             <button

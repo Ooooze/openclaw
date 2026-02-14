@@ -224,3 +224,36 @@
   align-items: center;
 }
 
+/* Compact horizontal links row below a card */
+.UiSettingsOtherLinksRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  padding: 10px 2px 0;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.UiSettingsOtherFooterCopy {
+  color: rgba(235, 235, 245, 0.4);
+  font-weight: 400;
+  margin-right: 4px;
+}
+
+.UiSettingsOtherFooterLink {
+  appearance: none;
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 400;
+  color: #0a84ff;
+  cursor: pointer;
+  transition: opacity var(--transition-base);
+}
+
+.UiSettingsOtherFooterLink:hover {
+  opacity: 0.85;
+}
+
