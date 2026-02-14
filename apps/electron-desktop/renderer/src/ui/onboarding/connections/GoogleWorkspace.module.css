@@ -1,13 +1,13 @@
 /* ── Onboarding: Connection setup (Google Workspace) ── */
 
-.UiGoogleWorkspaceCard {
+.card {
   display: flex;
   flex-direction: column;
   min-height: 472px;
   justify-content: space-between;
 }
 
-.UiGoogleWorkspaceConnected {
+.connected {
   margin-top: 10px;
   display: inline-flex;
   align-items: center;
@@ -21,7 +21,7 @@
   color: rgba(208, 255, 224, 0.98);
 }
 
-.UiGoogleWorkspaceForm {
+.form {
   flex: 1;
   min-height: 0;
   margin-top: 12px;
@@ -29,11 +29,11 @@
   flex-direction: column;
 }
 
-.UiGoogleWorkspaceServices {
+.services {
   margin-top: 6px;
 }
 
-.UiGoogleWorkspaceServicesCheckboxes {
+.servicesCheckboxes {
   padding: 16px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -43,26 +43,26 @@
   margin-top: 8px;
 }
 
-.UiGoogleWorkspaceBottomRow {
+.bottomRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
 
-.UiGoogleWorkspaceActions {
+.actions {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.UiGoogleWorkspaceActions .UiPrimaryButton {
+.actions :global(.UiPrimaryButton) {
   margin-top: 0;
   width: auto;
   padding: 8px 16px;
 }
 
-.UiGoogleWorkspaceDetails {
+.details {
   margin-top: 10px;
   border-radius: var(--radius-14);
   border: 1px solid var(--border-light);
@@ -70,20 +70,20 @@
   padding: 10px 12px;
 }
 
-.UiGoogleWorkspaceDetailsSummary {
+.detailsSummary {
   cursor: pointer;
   font-size: 12px;
   color: rgba(230, 237, 243, 0.72);
 }
 
-.UiGoogleWorkspaceDetailsPre {
+.detailsPre {
   margin-top: 10px;
   white-space: pre-wrap;
   font-size: 12px;
   color: rgba(230, 237, 243, 0.86);
 }
 
-.UiGoogleWorkspaceFooterRow {
+.footerRow {
   margin-top: 14px;
   display: flex;
   justify-content: flex-end;

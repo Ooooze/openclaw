@@ -1,5 +1,6 @@
 import React from "react";
 
+import sm from "../../skills/modals/SkillModal.module.css";
 import { ActionButton, InlineError } from "../../../shared/kit";
 import type { ConfigSnapshot, GatewayRpcLike } from "../../../onboarding/hooks/types";
 
@@ -45,28 +46,28 @@ export function IMessageModalContent(props: {
   }, [props]);
 
   return (
-    <div className="UiSkillModalContent">
+    <div className={sm.UiSkillModalContent}>
       <div className="UiSectionTitle">iMessage</div>
       <div className="UiSectionSubtitle">
         Connect iMessage on macOS. Requires the bundled imsg CLI and Full Disk Access permission for
         the Messages database.
       </div>
       {error && <InlineError>{error}</InlineError>}
-      {status && <div className="UiSkillModalStatus">{status}</div>}
+      {status && <div className={sm.UiSkillModalStatus}>{status}</div>}
 
-      {props.isConnected && <div className="UiSkillModalStatus">iMessage is connected.</div>}
+      {props.isConnected && <div className={sm.UiSkillModalStatus}>iMessage is connected.</div>}
 
-      <div className="UiSkillModalActions">
+      <div className={sm.UiSkillModalActions}>
         <ActionButton variant="primary" disabled={busy} onClick={() => void handleEnable()}>
           {busy ? "Enabling…" : props.isConnected ? "Re-enable" : "Enable iMessage"}
         </ActionButton>
       </div>
 
       {props.isConnected && (
-        <div className="UiSkillModalDangerZone">
+        <div className={sm.UiSkillModalDangerZone}>
           <button
             type="button"
-            className="UiSkillModalDisableButton"
+            className={sm.UiSkillModalDisableButton}
             disabled={busy}
             onClick={props.onDisabled}
           >

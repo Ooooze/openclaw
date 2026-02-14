@@ -1,5 +1,6 @@
 import React from "react";
 
+import gw from "../connections/GoogleWorkspace.module.css";
 import { getDesktopApiOrNull } from "../../../ipc/desktopApi";
 import { CheckboxRow, GlassCard, HeroPageLayout, PrimaryButton, TextInput } from "../../shared/kit";
 import { DEFAULT_GOG_SERVICES } from "../hooks/constants";
@@ -107,7 +108,7 @@ export function GogPage(props: {
 
   return (
     <HeroPageLayout variant="compact" align="center" aria-label="Google Workspace setup">
-      <GlassCard className="UiGoogleWorkspaceCard UiGlassCardOnboarding">
+      <GlassCard className={`${gw.card} UiGlassCardOnboarding`}>
         <div className="UiSectionTitle">Google Workspace</div>
         <div className="UiContentWrapper scrollable">
           <div>
@@ -159,7 +160,7 @@ export function GogPage(props: {
               </div>
             </div>
 
-            <div className="UiGoogleWorkspaceForm">
+            <div className={gw.form}>
               <TextInput
                 type="text"
                 value={props.gogAccount}
@@ -176,7 +177,7 @@ export function GogPage(props: {
               <div className="UiSectionSubtitle" style={{ margin: "14px 0 0" }}>
                 Enable
               </div>
-              <div className="UiGoogleWorkspaceServicesCheckboxes">
+              <div className={gw.servicesCheckboxes}>
                 {SERVICE_OPTIONS.map((svc) => (
                   <UiCheckbox
                     key={svc.id}
@@ -199,11 +200,11 @@ export function GogPage(props: {
           {/*) : null}*/}
         </div>
 
-        <div className="UiGoogleWorkspaceBottomRow">
+        <div className={gw.bottomRow}>
           <button className="UiTextButton" onClick={skip} type="button" disabled={props.gogBusy}>
             {skipText}
           </button>
-          <div className="UiGoogleWorkspaceActions">
+          <div className={gw.actions}>
             <PrimaryButton
               size={"sm"}
               disabled={props.gogBusy || selectedServices.length === 0}

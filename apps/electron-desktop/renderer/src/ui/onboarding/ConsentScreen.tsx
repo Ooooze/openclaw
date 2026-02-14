@@ -5,6 +5,7 @@ import { FooterText, HeroPageLayout, PrimaryButton, SplashLogo } from "../shared
 import { LoadingScreen } from "./LoadingScreen";
 import { addToastError } from "../shared/toast";
 import pkg from "../../../../package.json";
+import s from "./ConsentScreen.module.css";
 
 export type ConsentDesktopApi = NonNullable<Window["openclawDesktop"]> & {
   getConsentInfo?: () => Promise<{ accepted: boolean }>;
@@ -53,11 +54,11 @@ export function ConsentScreen({ onAccepted }: { onAccepted: () => void }) {
       align="center"
       hideTopbar
     >
-      <div className="UiConsentStage">
-        <div className="UiConsentCenter">
+      <div className={s.UiConsentStage}>
+        <div className={s.UiConsentCenter}>
           <SplashLogo iconAlt="Atomic Bot" />
-          <div className="UiConsentTitle">Welcome to Atomic Bot</div>
-          <div className="UiConsentSubtitle">Your Personal AI Agent based on OpenClaw</div>
+          <div className={s.UiConsentTitle}>Welcome to Atomic Bot</div>
+          <div className={s.UiConsentSubtitle}>Your Personal AI Agent based on OpenClaw</div>
 
           <PrimaryButton onClick={() => void accept()}>Start</PrimaryButton>
 

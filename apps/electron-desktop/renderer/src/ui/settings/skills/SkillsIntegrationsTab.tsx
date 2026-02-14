@@ -1,5 +1,6 @@
 import React from "react";
 import { settingsStyles as ps } from "../SettingsPage";
+import sit from "./SkillsIntegrationsTab.module.css";
 
 import { FeatureCta, Modal, TextInput } from "../../shared/kit";
 import type { GatewayState } from "../../../../../src/main/types";
@@ -197,11 +198,11 @@ export function SkillsIntegrationsTab(props: {
 
   return (
     <div className={ps.UiSettingsContentInner}>
-      <div className="UiSkillsTabHeader">
+      <div className={sit.UiSkillsTabHeader}>
         <div className={ps.UiSettingsTabTitle}>Skills and Integrations</div>
         <button
           type="button"
-          className="UiAddCustomSkillLink"
+          className={sit.UiAddCustomSkillLink}
           onClick={() => custom.setShowUploadModal(true)}
         >
           + Add custom skill
@@ -276,8 +277,8 @@ function SkillsGrid(props: {
 
   if (!hasResults) {
     return (
-      <div className="UiSkillsEmptyState">
-        <div className="UiSkillsEmptyStateText">
+      <div className={sit.UiSkillsEmptyState}>
+        <div className={sit.UiSkillsEmptyStateText}>
           No skills matching &quot;{searchQuery.trim()}&quot;
         </div>
       </div>
@@ -303,13 +304,13 @@ function SkillsGrid(props: {
             aria-label={skill.name}
           >
             <div className="UiSkillTopRow">
-              <span className="UiSkillIcon UiSkillIcon--custom" aria-hidden="true">
+              <span className={`UiSkillIcon ${sit["UiSkillIcon--custom"]}`} aria-hidden="true">
                 {skill.emoji}
                 <span className="UiProviderTileCheck" aria-label="Installed">
                   ✓
                 </span>
               </span>
-              <div className="UiSkillTopRight UiSkillTopRight--custom">
+              <div className={`UiSkillTopRight ${sit["UiSkillTopRight--custom"]}`}>
                 <CustomSkillMenu
                   onRemove={() => void onRemoveCustomSkill(skill.dirName, skill.name)}
                 />

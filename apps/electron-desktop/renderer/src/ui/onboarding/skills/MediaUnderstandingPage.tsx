@@ -1,5 +1,6 @@
 import React from "react";
 
+import gw from "../connections/GoogleWorkspace.module.css";
 import { getDesktopApiOrNull } from "../../../ipc/desktopApi";
 import {
   CheckboxRow,
@@ -94,7 +95,7 @@ export function MediaUnderstandingPage(props: {
 
   return (
     <HeroPageLayout variant="compact" align="center" aria-label="Media understanding setup">
-      <GlassCard className="UiGoogleWorkspaceCard UiGlassCardOnboarding">
+      <GlassCard className={`${gw.card} UiGlassCardOnboarding`}>
         <div className="UiOnboardingDots" aria-label="Onboarding progress">
           {Array.from({ length: totalSteps }).map((_, idx) => (
             <span
@@ -114,7 +115,7 @@ export function MediaUnderstandingPage(props: {
 
           {/*{props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}*/}
 
-          <div className="UiGoogleWorkspaceServices" style={{ marginTop: 10 }}>
+          <div className={gw.services} style={{ marginTop: 10 }}>
             <CheckboxRow
               checked={settings.image}
               disabled={isBusy}
@@ -161,11 +162,11 @@ export function MediaUnderstandingPage(props: {
           ) : null}
         </div>
 
-        <div className="UiGoogleWorkspaceBottomRow">
+        <div className={gw.bottomRow}>
           <button className="UiTextButton" onClick={props.onBack} type="button" disabled={isBusy}>
             Back
           </button>
-          <div className="UiGoogleWorkspaceActions">
+          <div className={gw.actions}>
             <PrimaryButton
               size={"sm"}
               disabled={isBusy || !canContinue}

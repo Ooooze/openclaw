@@ -1,5 +1,8 @@
 import React from "react";
 
+import cm from "./CustomSkillMenu.module.css";
+import sit from "./SkillsIntegrationsTab.module.css";
+
 export function CustomSkillMenu({ onRemove }: { onRemove: () => void }) {
   const [open, setOpen] = React.useState(false);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
@@ -22,11 +25,11 @@ export function CustomSkillMenu({ onRemove }: { onRemove: () => void }) {
   }, [open]);
 
   return (
-    <div className="UiCustomSkillMenuWrap">
+    <div className={sit.UiCustomSkillMenuWrap}>
       <button
         ref={triggerRef}
         type="button"
-        className="UiCustomSkillMenuTrigger"
+        className={cm.UiCustomSkillMenuTrigger}
         aria-label="Skill options"
         aria-expanded={open}
         aria-haspopup="true"
@@ -42,10 +45,10 @@ export function CustomSkillMenu({ onRemove }: { onRemove: () => void }) {
         </svg>
       </button>
       {open ? (
-        <div ref={popoverRef} className="UiPopover UiCustomSkillMenuPopover" role="menu">
+        <div ref={popoverRef} className={`UiPopover ${cm.UiCustomSkillMenuPopover}`} role="menu">
           <button
             type="button"
-            className="UiCustomSkillMenuItem UiCustomSkillMenuItem--danger"
+            className={`${cm.UiCustomSkillMenuItem} ${cm["UiCustomSkillMenuItem--danger"]}`}
             role="menuitem"
             onClick={(e) => {
               e.stopPropagation();

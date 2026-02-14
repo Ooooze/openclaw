@@ -1,5 +1,6 @@
 import React from "react";
 
+import sm from "./SkillModal.module.css";
 import { ActionButton, InlineError, TextInput } from "../../../shared/kit";
 import { getObject } from "../../../shared/utils/configHelpers";
 import { useWelcomeNotion } from "../../../onboarding/hooks/useWelcomeNotion";
@@ -66,19 +67,19 @@ export function NotionModalContent(props: {
   }, [apiKey, props, saveNotionApiKey]);
 
   return (
-    <div className="UiSkillModalContent">
+    <div className={sm.UiSkillModalContent}>
       <div className="UiSectionSubtitle">
         Create, search, update and organize your notes, docs, and knowledge base. Enter your Notion
         Integration API key below.
       </div>
       {error && <InlineError>{error}</InlineError>}
-      {status && <div className="UiSkillModalStatus">{status}</div>}
+      {status && <div className={sm.UiSkillModalStatus}>{status}</div>}
       {hasExistingKey && !apiKey && (
-        <div className="UiSkillModalStatus">API key configured. Enter a new key to update.</div>
+        <div className={sm.UiSkillModalStatus}>API key configured. Enter a new key to update.</div>
       )}
 
-      <div className="UiSkillModalField">
-        <label className="UiSkillModalLabel">Notion API key</label>
+      <div className={sm.UiSkillModalField}>
+        <label className={sm.UiSkillModalLabel}>Notion API key</label>
         <TextInput
           type="password"
           value={apiKey}
@@ -90,7 +91,7 @@ export function NotionModalContent(props: {
         />
       </div>
 
-      <div className="UiSkillModalActions">
+      <div className={sm.UiSkillModalActions}>
         <ActionButton
           variant="primary"
           disabled={busy || (!apiKey.trim() && !props.isConnected)}
@@ -101,10 +102,10 @@ export function NotionModalContent(props: {
       </div>
 
       {(props.isConnected || hasExistingKey) && (
-        <div className="UiSkillModalDangerZone">
+        <div className={sm.UiSkillModalDangerZone}>
           <button
             type="button"
-            className="UiSkillModalDisableButton"
+            className={sm.UiSkillModalDisableButton}
             disabled={busy}
             onClick={props.onDisabled}
           >

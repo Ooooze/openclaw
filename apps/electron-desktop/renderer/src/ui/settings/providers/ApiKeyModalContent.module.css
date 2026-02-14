@@ -1,0 +1,52 @@
+/* ── API key modal content ────────────────────────────── */
+
+.UiModalProviderHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.UiModalProviderIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-10);
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.UiModalProviderIcon img {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.UiModalProviderName {
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+}
+
+.UiModalHelpText {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.UiModalInputRow {
+  margin-bottom: 16px;
+}
+
+.UiModalInputRow :global(.UiInput) {
+  flex: 1;
+}
+
+.UiModalActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}

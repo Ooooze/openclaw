@@ -1,5 +1,6 @@
 import React from "react";
 
+import sm from "./SkillModal.module.css";
 import { ActionButton, CheckboxRow, InlineError, TextInput } from "../../../shared/kit";
 import { getObject } from "../../../shared/utils/configHelpers";
 import { useWelcomeApiKey } from "../../../onboarding/hooks/useWelcomeApiKey";
@@ -130,15 +131,15 @@ export function MediaUnderstandingModalContent(props: {
   const needsKey = canSave && !hasOpenAi;
 
   return (
-    <div className="UiSkillModalContent">
+    <div className={sm.UiSkillModalContent}>
       <div className="UiSectionSubtitle">
         Transcribe voice messages, describe images, and summarize videos you send. Automatically
         picks a compatible provider based on your configured API keys.
       </div>
       {error && <InlineError>{error}</InlineError>}
-      {status && <div className="UiSkillModalStatus">{status}</div>}
+      {status && <div className={sm.UiSkillModalStatus}>{status}</div>}
 
-      <div className="UiSkillModalField">
+      <div className={sm.UiSkillModalField}>
         <CheckboxRow checked={image} onChange={setImage}>
           Image understanding (describe images, screenshots)
         </CheckboxRow>
@@ -151,13 +152,13 @@ export function MediaUnderstandingModalContent(props: {
       </div>
 
       {needsKey && (
-        <div className="UiSkillModalField">
+        <div className={sm.UiSkillModalField}>
           <InlineError>
             OpenAI is not configured yet. Add an OpenAI API key to enable image + audio
             understanding reliably.
           </InlineError>
           {keyError && <InlineError>{keyError}</InlineError>}
-          <label className="UiSkillModalLabel mt-sm">
+          <label className={`${sm.UiSkillModalLabel} mt-sm`}>
             OpenAI API key
           </label>
           <TextInput
@@ -181,7 +182,7 @@ export function MediaUnderstandingModalContent(props: {
         </div>
       )}
 
-      <div className="UiSkillModalActions">
+      <div className={sm.UiSkillModalActions}>
         <ActionButton
           variant="primary"
           disabled={busy || !canSave || needsKey}
@@ -192,10 +193,10 @@ export function MediaUnderstandingModalContent(props: {
       </div>
 
       {props.isConnected && (
-        <div className="UiSkillModalDangerZone">
+        <div className={sm.UiSkillModalDangerZone}>
           <button
             type="button"
-            className="UiSkillModalDisableButton"
+            className={sm.UiSkillModalDisableButton}
             disabled={busy}
             onClick={props.onDisabled}
           >

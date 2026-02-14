@@ -1,0 +1,74 @@
+.UiSkillsTabHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.UiSkillsTabHeader :global(.UiSettingsTabTitle) {
+  margin-bottom: 0;
+}
+
+.UiSkillsEmptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+}
+
+.UiSkillsEmptyStateText {
+  font-size: 14px;
+  color: var(--muted2);
+}
+
+.UiAddCustomSkillLink {
+  appearance: none;
+  background: none;
+  border: none;
+  color: var(--lime);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: opacity 0.15s ease;
+  white-space: nowrap;
+}
+
+.UiAddCustomSkillLink:hover {
+  opacity: 0.8;
+}
+
+/* Custom skill icon (emoji-based) */
+.UiSkillIcon--custom {
+  font-size: 20px;
+  background: var(--surface-overlay-subtle);
+  width: 26px;
+  height: 26px;
+  line-height: 1;
+}
+
+/* Custom skill top-right: align badge + menu */
+:global(.UiSkillCard) .UiSkillTopRight--custom {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  flex: 1;
+}
+
+/* Installed badge for custom skills */
+.UiSkillStatus--custom {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(34, 197, 94, 0.85);
+  background: rgba(34, 197, 94, 0.1);
+  border-radius: var(--radius-full);
+  padding: 3px 10px;
+  white-space: nowrap;
+}
+
+/* Three-dot menu for custom skill cards */
+.UiCustomSkillMenuWrap {
+  position: relative;
+}

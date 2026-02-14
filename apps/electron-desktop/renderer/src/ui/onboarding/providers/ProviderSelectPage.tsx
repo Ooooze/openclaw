@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 
 import { GlassCard, HeroPageLayout, PrimaryButton } from "../../shared/kit";
+import ob from "./OnboardingProviders.module.css";
 
 import { MODEL_PROVIDERS, type ModelProvider, resolveProviderIconUrl } from "../../shared/models/providers";
 
@@ -25,13 +26,13 @@ export function ProviderSelectPage(props: {
 
   return (
     <HeroPageLayout variant="compact" align="center" aria-label="Provider selection">
-      <GlassCard className="UiProviderCard UiGlassCardOnboarding">
-        <div className="UiOnboardingDots" aria-label="Onboarding progress">
+      <GlassCard className={`${ob.UiProviderCard} UiGlassCardOnboarding`}>
+        <div className={ob.UiOnboardingDots} aria-label="Onboarding progress">
           {Array.from({ length: totalSteps }).map((_, idx) => (
             <span
               // eslint-disable-next-line react/no-array-index-key
               key={idx}
-              className={`UiOnboardingDot ${idx === activeStep ? "UiOnboardingDot--active" : ""}`}
+              className={`${ob.UiOnboardingDot} ${idx === activeStep ? ob["UiOnboardingDot--active"] : ""}`}
               aria-hidden="true"
             />
           ))}

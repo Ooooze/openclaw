@@ -1,5 +1,6 @@
 import React from "react";
 
+import gw from "./GoogleWorkspace.module.css";
 import { getDesktopApiOrNull } from "../../../ipc/desktopApi";
 import { GlassCard, HeroPageLayout, InlineError, PrimaryButton, TextInput } from "../../shared/kit";
 
@@ -214,8 +215,8 @@ export function SlackConnectPage(props: {
             </a>
           </div>
 
-          <details className="UiGoogleWorkspaceDetails" style={{ marginTop: 14, marginBottom: 14 }}>
-            <summary className="UiGoogleWorkspaceDetailsSummary">Where to find the tokens</summary>
+          <details className={gw.details} style={{ marginTop: 14, marginBottom: 14 }}>
+            <summary className={gw.detailsSummary}>Where to find the tokens</summary>
             <div className="UiSectionSubtitle" style={{ marginTop: 10 }}>
               <ol>
                 <li>

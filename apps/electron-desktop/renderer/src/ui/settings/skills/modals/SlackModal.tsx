@@ -1,5 +1,6 @@
 import React from "react";
 
+import sm from "./SkillModal.module.css";
 import { ActionButton, InlineError, TextInput } from "../../../shared/kit";
 import { useWelcomeSlack } from "../../../onboarding/hooks/useWelcomeSlack";
 import type { ConfigSnapshot, GatewayRpcLike } from "../../../onboarding/hooks/types";
@@ -50,19 +51,19 @@ export function SlackModalContent(props: {
   }, [appToken, botName, botToken, props, saveSlackConfig]);
 
   return (
-    <div className="UiSkillModalContent">
+    <div className={sm.UiSkillModalContent}>
       <div className="UiSectionSubtitle">
         Send messages, react, and manage pins in your Slack workspace. Enter your Slack bot
         credentials below.
       </div>
       {error && <InlineError>{error}</InlineError>}
-      {status && <div className="UiSkillModalStatus">{status}</div>}
+      {status && <div className={sm.UiSkillModalStatus}>{status}</div>}
       {props.isConnected && !botToken && !appToken && (
-        <div className="UiSkillModalStatus">Tokens configured. Enter new values to update.</div>
+        <div className={sm.UiSkillModalStatus}>Tokens configured. Enter new values to update.</div>
       )}
 
-      <div className="UiSkillModalField">
-        <label className="UiSkillModalLabel">Bot name (optional)</label>
+      <div className={sm.UiSkillModalField}>
+        <label className={sm.UiSkillModalLabel}>Bot name (optional)</label>
         <TextInput
           type="text"
           value={botName}
@@ -74,8 +75,8 @@ export function SlackModalContent(props: {
         />
       </div>
 
-      <div className="UiSkillModalField">
-        <label className="UiSkillModalLabel">Bot token</label>
+      <div className={sm.UiSkillModalField}>
+        <label className={sm.UiSkillModalLabel}>Bot token</label>
         <TextInput
           type="password"
           value={botToken}
@@ -87,8 +88,8 @@ export function SlackModalContent(props: {
         />
       </div>
 
-      <div className="UiSkillModalField">
-        <label className="UiSkillModalLabel">App token</label>
+      <div className={sm.UiSkillModalField}>
+        <label className={sm.UiSkillModalLabel}>App token</label>
         <TextInput
           type="password"
           value={appToken}
@@ -100,7 +101,7 @@ export function SlackModalContent(props: {
         />
       </div>
 
-      <div className="UiSkillModalActions">
+      <div className={sm.UiSkillModalActions}>
         <ActionButton
           variant="primary"
           disabled={busy || (!botToken.trim() && !appToken.trim() && !props.isConnected)}
@@ -111,10 +112,10 @@ export function SlackModalContent(props: {
       </div>
 
       {props.isConnected && (
-        <div className="UiSkillModalDangerZone">
+        <div className={sm.UiSkillModalDangerZone}>
           <button
             type="button"
-            className="UiSkillModalDisableButton"
+            className={sm.UiSkillModalDisableButton}
             disabled={busy}
             onClick={props.onDisabled}
           >

@@ -1,5 +1,6 @@
 import React from "react";
 
+import sm from "./SkillModal.module.css";
 import { ActionButton, InlineError, TextInput } from "../../../shared/kit";
 import { useWelcomeTrello } from "../../../onboarding/hooks/useWelcomeTrello";
 import type { ConfigSnapshot, GatewayRpcLike } from "../../../onboarding/hooks/types";
@@ -41,20 +42,20 @@ export function TrelloModalContent(props: {
   }, [apiKey, props, saveTrello, token]);
 
   return (
-    <div className="UiSkillModalContent">
+    <div className={sm.UiSkillModalContent}>
       <div className="UiSectionSubtitle">
         Track tasks, update boards and manage projects without opening Trello.
       </div>
       {error && <InlineError>{error}</InlineError>}
-      {status && <div className="UiSkillModalStatus">{status}</div>}
+      {status && <div className={sm.UiSkillModalStatus}>{status}</div>}
       {props.isConnected && !apiKey && !token && (
-        <div className="UiSkillModalStatus">
+        <div className={sm.UiSkillModalStatus}>
           Credentials configured. Enter new values to update.
         </div>
       )}
 
-      <div className="UiSkillModalField">
-        <label className="UiSkillModalLabel">Trello API key</label>
+      <div className={sm.UiSkillModalField}>
+        <label className={sm.UiSkillModalLabel}>Trello API key</label>
         <TextInput
           type="password"
           value={apiKey}
@@ -66,8 +67,8 @@ export function TrelloModalContent(props: {
         />
       </div>
 
-      <div className="UiSkillModalField">
-        <label className="UiSkillModalLabel">Trello token</label>
+      <div className={sm.UiSkillModalField}>
+        <label className={sm.UiSkillModalLabel}>Trello token</label>
         <TextInput
           type="password"
           value={token}
@@ -79,7 +80,7 @@ export function TrelloModalContent(props: {
         />
       </div>
 
-      <div className="UiSkillModalActions">
+      <div className={sm.UiSkillModalActions}>
         <ActionButton
           variant="primary"
           disabled={busy || (!apiKey.trim() && !token.trim() && !props.isConnected)}
@@ -90,10 +91,10 @@ export function TrelloModalContent(props: {
       </div>
 
       {props.isConnected && (
-        <div className="UiSkillModalDangerZone">
+        <div className={sm.UiSkillModalDangerZone}>
           <button
             type="button"
-            className="UiSkillModalDisableButton"
+            className={sm.UiSkillModalDisableButton}
             disabled={busy}
             onClick={props.onDisabled}
           >

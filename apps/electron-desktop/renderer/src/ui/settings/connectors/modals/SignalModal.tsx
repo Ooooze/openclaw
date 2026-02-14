@@ -1,5 +1,6 @@
 import React from "react";
 
+import sm from "../../skills/modals/SkillModal.module.css";
 import { ActionButton, InlineError, TextInput } from "../../../shared/kit";
 import { getObject } from "../../../shared/utils/configHelpers";
 import type { ConfigSnapshot, GatewayRpcLike } from "../../../onboarding/hooks/types";
@@ -73,7 +74,7 @@ export function SignalModalContent(props: {
   }, [account, props]);
 
   return (
-    <div className="UiSkillModalContent">
+    <div className={sm.UiSkillModalContent}>
       <div className="UiSectionTitle">Signal</div>
       <div className="UiSectionSubtitle">
         Connect Signal via signal-cli. You need{" "}
@@ -83,16 +84,16 @@ export function SignalModalContent(props: {
         installed and registered with your phone number.
       </div>
       {error && <InlineError>{error}</InlineError>}
-      {status && <div className="UiSkillModalStatus">{status}</div>}
+      {status && <div className={sm.UiSkillModalStatus}>{status}</div>}
 
       {existingAccount && (
-        <div className="UiSkillModalStatus">
+        <div className={sm.UiSkillModalStatus}>
           Connected account: <strong>{existingAccount}</strong>
         </div>
       )}
 
-      <div className="UiSkillModalField">
-        <label className="UiSkillModalLabel">Phone number (E.164 format)</label>
+      <div className={sm.UiSkillModalField}>
+        <label className={sm.UiSkillModalLabel}>Phone number (E.164 format)</label>
         <TextInput
           type="text"
           value={account}
@@ -106,7 +107,7 @@ export function SignalModalContent(props: {
         />
       </div>
 
-      <div className="UiSkillModalActions">
+      <div className={sm.UiSkillModalActions}>
         <ActionButton
           variant="primary"
           disabled={busy || (!account.trim() && !props.isConnected)}
@@ -117,10 +118,10 @@ export function SignalModalContent(props: {
       </div>
 
       {props.isConnected && (
-        <div className="UiSkillModalDangerZone">
+        <div className={sm.UiSkillModalDangerZone}>
           <button
             type="button"
-            className="UiSkillModalDisableButton"
+            className={sm.UiSkillModalDisableButton}
             disabled={busy}
             onClick={props.onDisabled}
           >

@@ -2,6 +2,7 @@ import React from "react";
 import Markdown from "react-markdown";
 import { getDesktopApiOrNull } from "../../ipc/desktopApi";
 import { Modal } from "../shared/kit/ui";
+import s from "./WhatsNewModal.module.css";
 
 const STORAGE_KEY = "whatsNew_lastVersion";
 const GITHUB_OWNER = "AtomicBot-ai";
@@ -92,16 +93,16 @@ export function WhatsNewModal() {
 
   return (
     <Modal open={open} onClose={handleClose} aria-label="What's new">
-      <div className="WhatsNew">
-        <div className="WhatsNew-header">
-          <h2 className="WhatsNew-title">Version {version} has been released</h2>
+      <div className={s.WhatsNew}>
+        <div className={s["WhatsNew-header"]}>
+          <h2 className={s["WhatsNew-title"]}>Version {version} has been released</h2>
         </div>
 
-        <div className="WhatsNew-subheader">
-          <span className="WhatsNew-label">What&apos;s new</span>
+        <div className={s["WhatsNew-subheader"]}>
+          <span className={s["WhatsNew-label"]}>What&apos;s new</span>
           {state.kind === "ready" && state.htmlUrl && (
             <button
-              className="WhatsNew-changelogLink"
+              className={s["WhatsNew-changelogLink"]}
               type="button"
               onClick={handleOpenChangelog}
             >
@@ -110,9 +111,9 @@ export function WhatsNewModal() {
           )}
         </div>
 
-        <div className="WhatsNew-body">
+        <div className={s["WhatsNew-body"]}>
           {state.kind === "loading" && (
-            <div className="WhatsNew-loading">
+            <div className={s["WhatsNew-loading"]}>
               <span className="UiButtonSpinner" aria-hidden="true" />
               <span>Loading release notes…</span>
             </div>
@@ -125,14 +126,14 @@ export function WhatsNewModal() {
           )}
 
           {state.kind === "ready" && !state.body && (
-            <p className="WhatsNew-empty">
+            <p className={s["WhatsNew-empty"]}>
               The app has been updated. Check the changelog for details.
             </p>
           )}
         </div>
 
-        <div className="WhatsNew-footer">
-          <button className="WhatsNew-gotIt" type="button" onClick={handleClose}>
+        <div className={s["WhatsNew-footer"]}>
+          <button className={s["WhatsNew-gotIt"]} type="button" onClick={handleClose}>
             Got it
           </button>
         </div>

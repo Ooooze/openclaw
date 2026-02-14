@@ -149,3 +149,27 @@ a {
 .flex-col-gap-sm { display: flex; gap: var(--spacing-sm); flex-direction: column; }
 .flex-row-center { display: flex; gap: 10px; align-items: center; }
 .flex-end { display: flex; justify-content: flex-end; }
+
+/* ── Root & pre reset ─── */
+
+#root {
+  height: 100%;
+}
+
+pre {
+  margin: 0;
+  padding: 12px 12px;
+  border-radius: var(--radius-lg);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border-light);
+  max-height: 340px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+    monospace;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #d2dbe6;
+}

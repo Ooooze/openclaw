@@ -8,6 +8,7 @@ import { getDesktopApiOrNull } from "../../../ipc/desktopApi";
 import { ActionButton, TextInput } from "../../shared/kit";
 import type { ModelProviderInfo } from "../../shared/models/providers";
 import { resolveProviderIconUrl } from "../../shared/models/providers";
+import s from "./ApiKeyModalContent.module.css";
 
 export function ApiKeyModalContent(props: {
   provider: ModelProviderInfo;
@@ -54,14 +55,14 @@ export function ApiKeyModalContent(props: {
 
   return (
     <>
-      <div className="UiModalProviderHeader">
-        <span className="UiModalProviderIcon" aria-hidden="true">
+      <div className={s.UiModalProviderHeader}>
+        <span className={s.UiModalProviderIcon} aria-hidden="true">
           <img src={resolveProviderIconUrl(provider.id)} alt="" />
         </span>
-        <span className="UiModalProviderName">{provider.name}</span>
+        <span className={s.UiModalProviderName}>{provider.name}</span>
       </div>
 
-      <div className="UiModalHelpText">
+      <div className={s.UiModalHelpText}>
         {provider.helpText}{" "}
         {provider.helpUrl ? (
           <a
@@ -80,7 +81,7 @@ export function ApiKeyModalContent(props: {
         ) : null}
       </div>
 
-      <div className="UiModalInputRow">
+      <div className={s.UiModalInputRow}>
         <TextInput
           type="password"
           value={draftKey}
@@ -97,7 +98,7 @@ export function ApiKeyModalContent(props: {
         />
       </div>
 
-      <div className="UiModalActions">
+      <div className={s.UiModalActions}>
         <ActionButton disabled={isBusy} onClick={() => void handlePaste()}>
           Paste
         </ActionButton>

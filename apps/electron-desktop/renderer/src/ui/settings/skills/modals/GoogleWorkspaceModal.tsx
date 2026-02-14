@@ -1,5 +1,6 @@
 import React from "react";
 
+import sm from "./SkillModal.module.css";
 import { getDesktopApiOrNull } from "../../../../ipc/desktopApi";
 import { ActionButton, InlineError, TextInput } from "../../../shared/kit";
 
@@ -114,15 +115,15 @@ export function GoogleWorkspaceModalContent(props: {
   }, [runGog]);
 
   return (
-    <div className="UiSkillModalContent">
+    <div className={sm.UiSkillModalContent}>
       <div className="UiSectionSubtitle">
         Connects your Google account locally to enable email and calendar skills. This opens a
         browser for consent. Secrets are stored locally.
       </div>
       {error && <InlineError>{error}</InlineError>}
 
-      <div className="UiSkillModalField">
-        <label className="UiSkillModalLabel">Google account email</label>
+      <div className={sm.UiSkillModalField}>
+        <label className={sm.UiSkillModalLabel}>Google account email</label>
         <TextInput
           type="text"
           value={account}
@@ -134,7 +135,7 @@ export function GoogleWorkspaceModalContent(props: {
         />
       </div>
 
-      <div className="UiSkillModalActions">
+      <div className={sm.UiSkillModalActions}>
         <ActionButton variant="primary" disabled={busy} onClick={() => void handleConnect()}>
           {busy ? "Connecting…" : "Connect"}
         </ActionButton>
@@ -143,13 +144,13 @@ export function GoogleWorkspaceModalContent(props: {
         </ActionButton>
       </div>
 
-      {output && <pre className="UiSkillModalOutput">{output}</pre>}
+      {output && <pre className={sm.UiSkillModalOutput}>{output}</pre>}
 
       {props.isConnected && (
-        <div className="UiSkillModalDangerZone">
+        <div className={sm.UiSkillModalDangerZone}>
           <button
             type="button"
-            className="UiSkillModalDisableButton"
+            className={sm.UiSkillModalDisableButton}
             disabled={busy}
             onClick={props.onDisabled}
           >

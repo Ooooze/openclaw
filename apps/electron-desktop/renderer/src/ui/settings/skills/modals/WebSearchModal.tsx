@@ -1,5 +1,6 @@
 import React from "react";
 
+import sm from "./SkillModal.module.css";
 import { ActionButton, InlineError, TextInput } from "../../../shared/kit";
 import { getObject } from "../../../shared/utils/configHelpers";
 import {
@@ -70,29 +71,29 @@ export function WebSearchModalContent(props: {
   }, [apiKey, props, provider, saveWebSearch]);
 
   return (
-    <div className="UiSkillModalContent">
+    <div className={sm.UiSkillModalContent}>
       <div className="UiSectionSubtitle">
         Enable the web_search tool via Brave Search or Perplexity Sonar.
       </div>
       {error && <InlineError>{error}</InlineError>}
-      {status && <div className="UiSkillModalStatus">{status}</div>}
+      {status && <div className={sm.UiSkillModalStatus}>{status}</div>}
       {props.isConnected && !apiKey && (
-        <div className="UiSkillModalStatus">API key configured. Enter a new key to update.</div>
+        <div className={sm.UiSkillModalStatus}>API key configured. Enter a new key to update.</div>
       )}
 
-      <div className="UiSkillModalField">
-        <label className="UiSkillModalLabel">Provider</label>
-        <div className="UiSkillModalProviderSelect">
+      <div className={sm.UiSkillModalField}>
+        <label className={sm.UiSkillModalLabel}>Provider</label>
+        <div className={sm.UiSkillModalProviderSelect}>
           <button
             type="button"
-            className={`UiSkillModalProviderOption${provider === "brave" ? " UiSkillModalProviderOption--active" : ""}`}
+            className={provider === "brave" ? `${sm.UiSkillModalProviderOption} ${sm["UiSkillModalProviderOption--active"]}` : sm.UiSkillModalProviderOption}
             onClick={() => setProvider("brave")}
           >
             Brave Search
           </button>
           <button
             type="button"
-            className={`UiSkillModalProviderOption${provider === "perplexity" ? " UiSkillModalProviderOption--active" : ""}`}
+            className={provider === "perplexity" ? `${sm.UiSkillModalProviderOption} ${sm["UiSkillModalProviderOption--active"]}` : sm.UiSkillModalProviderOption}
             onClick={() => setProvider("perplexity")}
           >
             Perplexity Sonar
@@ -100,8 +101,8 @@ export function WebSearchModalContent(props: {
         </div>
       </div>
 
-      <div className="UiSkillModalField">
-        <label className="UiSkillModalLabel">API key</label>
+      <div className={sm.UiSkillModalField}>
+        <label className={sm.UiSkillModalLabel}>API key</label>
         <TextInput
           type="password"
           value={apiKey}
@@ -119,7 +120,7 @@ export function WebSearchModalContent(props: {
         />
       </div>
 
-      <div className="UiSkillModalActions">
+      <div className={sm.UiSkillModalActions}>
         <ActionButton
           variant="primary"
           disabled={busy || (!apiKey.trim() && !props.isConnected)}
@@ -130,10 +131,10 @@ export function WebSearchModalContent(props: {
       </div>
 
       {props.isConnected && (
-        <div className="UiSkillModalDangerZone">
+        <div className={sm.UiSkillModalDangerZone}>
           <button
             type="button"
-            className="UiSkillModalDisableButton"
+            className={sm.UiSkillModalDisableButton}
             disabled={busy}
             onClick={props.onDisabled}
           >

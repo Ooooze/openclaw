@@ -1,5 +1,6 @@
 import React from "react";
 import { useGatewayRpc } from "../../gateway/context";
+import s from "./ExecApprovalModal.module.css";
 
 // ── Types ──────────────────────────────────────────────────
 
@@ -111,9 +112,9 @@ function useCountdown(expiresAtMs: number): string {
 function MetaRow({ label, value }: { label: string; value?: string | null }) {
   if (!value) {return null;}
   return (
-    <div className="ExecApprovalMetaRow">
-      <span className="ExecApprovalMetaLabel">{label}</span>
-      <span className="ExecApprovalMetaValue">{value}</span>
+    <div className={s.ExecApprovalMetaRow}>
+      <span className={s.ExecApprovalMetaLabel}>{label}</span>
+      <span className={s.ExecApprovalMetaValue}>{value}</span>
     </div>
   );
 }
@@ -211,26 +212,26 @@ function ExecApprovalCard({
 
   return (
     <div
-      className="UiModalOverlay ExecApprovalOverlay"
+      className={`UiModalOverlay ${s.ExecApprovalOverlay}`}
       role="dialog"
       aria-modal="true"
       aria-label="Exec approval needed"
     >
-      <div className="UiModalCard ExecApprovalCard">
+      <div className={`UiModalCard ${s.ExecApprovalCard}`}>
         {/* Header */}
-        <div className="ExecApprovalHeader">
+        <div className={s.ExecApprovalHeader}>
           <div>
-            <div className="ExecApprovalTitle">Exec approval needed</div>
-            <div className="ExecApprovalSub">{remaining}</div>
+            <div className={s.ExecApprovalTitle}>Exec approval needed</div>
+            <div className={s.ExecApprovalSub}>{remaining}</div>
           </div>
-          {queueCount > 1 && <div className="ExecApprovalBadge">{queueCount} pending</div>}
+          {queueCount > 1 && <div className={s.ExecApprovalBadge}>{queueCount} pending</div>}
         </div>
 
         {/* Command */}
-        <div className="ExecApprovalCommand">{request.command}</div>
+        <div className={s.ExecApprovalCommand}>{request.command}</div>
 
         {/* Meta rows */}
-        <div className="ExecApprovalMeta">
+        <div className={s.ExecApprovalMeta}>
           <MetaRow label="Host" value={request.host} />
           <MetaRow label="Agent" value={request.agentId} />
           <MetaRow label="Session" value={request.sessionKey} />
@@ -241,10 +242,10 @@ function ExecApprovalCard({
         </div>
 
         {/* Error */}
-        {error && <div className="ExecApprovalError">{error}</div>}
+        {error && <div className={s.ExecApprovalError}>{error}</div>}
 
         {/* Actions */}
-        <div className="ExecApprovalActions">
+        <div className={s.ExecApprovalActions}>
           <button
             className="UiActionButton UiActionButton-primary"
             disabled={busy}
@@ -260,7 +261,7 @@ function ExecApprovalCard({
             Always allow
           </button>
           <button
-            className="UiActionButton ExecApprovalDenyBtn"
+            className={`UiActionButton ${s.ExecApprovalDenyBtn}`}
             disabled={busy}
             onClick={() => onDecision("deny")}
           >

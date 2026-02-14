@@ -1,6 +1,7 @@
 import React from "react";
 
 import { getDesktopApiOrNull } from "../../ipc/desktopApi";
+import s from "./UpdateBanner.module.css";
 
 type UpdatePhase =
   | { kind: "idle" }
@@ -60,7 +61,7 @@ function ErrorIcon() {
  */
 /** Tiny CSS spinner rendered inline inside buttons. */
 function BtnSpinner() {
-  return <span className="UpdateBanner-spinner" />;
+  return <span className={s["UpdateBanner-spinner"]} />;
 }
 
 export function UpdateBanner() {
@@ -131,8 +132,8 @@ export function UpdateBanner() {
   const isError = phase.kind === "error";
 
   return (
-    <div className="UpdateBanner" role="status" aria-live="polite">
-      <div className={`UpdateBanner-icon${isError ? " UpdateBanner-icon--error" : ""}`}>
+    <div className={s.UpdateBanner} role="status" aria-live="polite">
+      <div className={`${s["UpdateBanner-icon"]}${isError ? ` ${s["UpdateBanner-icon--error"]}` : ""}`}>
         {phase.kind === "available" && <DownloadIcon />}
         {phase.kind === "downloading" && <DownloadIcon />}
         {phase.kind === "ready" && <ReadyIcon />}
@@ -141,12 +142,12 @@ export function UpdateBanner() {
 
       {phase.kind === "available" && (
         <>
-          <span className="UpdateBanner-text">
+          <span className={s["UpdateBanner-text"]}>
             Update available: <strong>v{phase.version}</strong>
           </span>
-          <div className="UpdateBanner-actions">
+          <div className={s["UpdateBanner-actions"]}>
             <button
-              className="UpdateBanner-btn UpdateBanner-btn--primary"
+              className={`${s["UpdateBanner-btn"]} ${s["UpdateBanner-btn--primary"]}`}
               disabled={startingDownload}
               onClick={() => {
                 setStartingDownload(true);
@@ -156,7 +157,7 @@ export function UpdateBanner() {
               {startingDownload ? <BtnSpinner /> : "Download"}
             </button>
             <button
-              className="UpdateBanner-btn UpdateBanner-btn--dismiss"
+              className={`${s["UpdateBanner-btn"]} ${s["UpdateBanner-btn--dismiss"]}`}
               onClick={() => setDismissed(true)}
               aria-label="Dismiss"
             >
@@ -168,24 +169,24 @@ export function UpdateBanner() {
 
       {phase.kind === "downloading" && (
         <>
-          <div className="UpdateBanner-body">
-            <span className="UpdateBanner-text">Downloading update…</span>
-            <div className="UpdateBanner-progress">
-              <div className="UpdateBanner-progressBar" style={{ width: `${phase.percent}%` }} />
+          <div className={s["UpdateBanner-body"]}>
+            <span className={s["UpdateBanner-text"]}>Downloading update…</span>
+            <div className={s["UpdateBanner-progress"]}>
+              <div className={s["UpdateBanner-progressBar"]} style={{ width: `${phase.percent}%` }} />
             </div>
           </div>
-          <span className="UpdateBanner-percent">{phase.percent}%</span>
+          <span className={s["UpdateBanner-percent"]}>{phase.percent}%</span>
         </>
       )}
 
       {phase.kind === "ready" && (
         <>
-          <span className="UpdateBanner-text">
+          <span className={s["UpdateBanner-text"]}>
             <strong>v{phase.version}</strong> ready to install
           </span>
-          <div className="UpdateBanner-actions">
+          <div className={s["UpdateBanner-actions"]}>
             <button
-              className="UpdateBanner-btn UpdateBanner-btn--primary"
+              className={`${s["UpdateBanner-btn"]} ${s["UpdateBanner-btn--primary"]}`}
               disabled={installing}
               onClick={() => {
                 setInstalling(true);
@@ -196,7 +197,7 @@ export function UpdateBanner() {
             </button>
             {!installing && (
               <button
-                className="UpdateBanner-btn UpdateBanner-btn--dismiss"
+                className={`${s["UpdateBanner-btn"]} ${s["UpdateBanner-btn--dismiss"]}`}
                 onClick={() => setDismissed(true)}
                 aria-label="Dismiss"
               >
@@ -209,12 +210,12 @@ export function UpdateBanner() {
 
       {phase.kind === "error" && (
         <>
-          <span className="UpdateBanner-text UpdateBanner-text--error">
+          <span className={`${s["UpdateBanner-text"]} ${s["UpdateBanner-text--error"]}`}>
             Update failed: {phase.message}
           </span>
-          <div className="UpdateBanner-actions">
+          <div className={s["UpdateBanner-actions"]}>
             <button
-              className="UpdateBanner-btn UpdateBanner-btn--dismiss"
+              className={`${s["UpdateBanner-btn"]} ${s["UpdateBanner-btn--dismiss"]}`}
               onClick={() => setDismissed(true)}
               aria-label="Dismiss"
             >

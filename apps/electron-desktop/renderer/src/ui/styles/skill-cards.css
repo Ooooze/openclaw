@@ -1,4 +1,4 @@
-/* ── Onboarding: Skills setup ──────────────────────── */
+/* ── Skill cards (shared: onboarding + settings) ─────── */
 
 .UiSkillsBottomRow {
   display: flex;
@@ -260,4 +260,31 @@
   display: flex;
   align-items: center;
   gap: 2px;
+}
+
+/* ── Disabled skill tile ─────────────────────────────── */
+
+.UiSkillCard--disabled {
+  border-color: var(--surface-overlay-subtle);
+  opacity: 0.6;
+}
+
+/* ── Clickable status badges ─────────────────────────── */
+
+.UiSkillStatus--clickable {
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+.UiSkillStatus--clickable:hover {
+  opacity: 0.82;
+}
+
+.UiSkillStatus--disabled {
+  border-color: transparent;
+  background: rgba(230, 237, 243, 0.12);
+  color: rgba(230, 237, 243, 0.6);
 }

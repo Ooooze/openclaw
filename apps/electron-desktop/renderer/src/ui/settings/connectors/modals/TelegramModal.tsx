@@ -1,5 +1,7 @@
 import React from "react";
 
+import sm from "../../skills/modals/SkillModal.module.css";
+import tg from "./TelegramModal.module.css";
 import { ActionButton, InlineError, TextInput } from "../../../shared/kit";
 import { getObject, getStringArray } from "../../../shared/utils/configHelpers";
 import type { ConfigSnapshot, GatewayRpcLike } from "../../../onboarding/hooks/types";
@@ -198,7 +200,7 @@ export function TelegramModalContent(props: {
   );
 
   return (
-    <div className="UiSkillModalContent">
+    <div className={sm.UiSkillModalContent}>
       <div className="UiSectionSubtitle">
         {setupStep === "token" ? (
           <>
@@ -260,10 +262,10 @@ export function TelegramModalContent(props: {
 
       {/* ── Bot token (hidden during allowlist step of setup flow) ── */}
       {setupStep !== "allowlist" && (
-        <div className="UiSkillModalField">
-          <label className="UiSkillModalLabel">Bot token</label>
+        <div className={sm.UiSkillModalField}>
+          <label className={sm.UiSkillModalLabel}>Bot token</label>
           {hasExistingToken && !botToken && (
-            <div className="UiSkillModalStatus mb-xs">
+            <div className={`${sm.UiSkillModalStatus} mb-xs`}>
               Token configured. Enter a new token to update.
             </div>
           )}
@@ -294,19 +296,19 @@ export function TelegramModalContent(props: {
 
       {/* ── Allowlist management (hidden during token step of setup flow) ── */}
       {setupStep !== "token" && (
-        <div className="UiSkillModalField">
-          <label className="UiSkillModalLabel">
+        <div className={sm.UiSkillModalField}>
+          <label className={sm.UiSkillModalLabel}>
             DM allowlist ({allowList.length} {allowList.length === 1 ? "entry" : "entries"})
           </label>
 
           {allowList.length > 0 && (
-            <div className="UiAllowlistEntries">
+            <div className={tg.UiAllowlistEntries}>
               {allowList.map((id) => (
-                <div key={id} className="UiAllowlistEntry">
-                  <code className="UiAllowlistId">{id}</code>
+                <div key={id} className={tg.UiAllowlistEntry}>
+                  <code className={tg.UiAllowlistId}>{id}</code>
                   <button
                     type="button"
-                    className="UiAllowlistRemove"
+                    className={tg.UiAllowlistRemove}
                     disabled={busy}
                     title={`Remove ${id}`}
                     onClick={() => void handleRemoveId(id)}
@@ -375,10 +377,10 @@ export function TelegramModalContent(props: {
 
       {/* ── Disable ──────────────────────────────────────── */}
       {props.isConnected && !setupStep && (
-        <div className="UiSkillModalDangerZone">
+        <div className={sm.UiSkillModalDangerZone}>
           <button
             type="button"
-            className="UiSkillModalDisableButton"
+            className={sm.UiSkillModalDisableButton}
             disabled={busy}
             onClick={props.onDisabled}
           >

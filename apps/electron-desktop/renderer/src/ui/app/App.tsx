@@ -27,6 +27,7 @@ import type { GatewayState } from "../../../../src/main/types";
 import { isBootstrapPath, routes } from "./routes";
 import { OptimisticSessionProvider, OptimisticSessionSync } from "../chat/optimisticSessionContext";
 import { ExecApprovalOverlay } from "./ExecApprovalModal";
+import a from "./App.module.css";
 
 function ChatRoute({ state }: { state: Extract<GatewayState, { kind: "ready" }> }) {
   const [searchParams] = useSearchParams();
@@ -43,10 +44,10 @@ function SidebarLayout({ state }: { state: Extract<GatewayState, { kind: "ready"
       <OptimisticSessionProvider>
         <OptimisticSessionSync />
         <ExecApprovalOverlay />
-        <div className="UiAppShell">
-          <div className="UiAppPage UiChatLayout">
+        <div className={a.UiAppShell}>
+          <div className={`${a.UiAppPage} ${a.UiChatLayout}`}>
             <Sidebar />
-            <div className="UiChatLayoutMain">
+            <div className={a.UiChatLayoutMain}>
               <Outlet />
             </div>
           </div>
@@ -63,13 +64,13 @@ function Topbar() {
   }, []);
 
   return (
-    <div className="UiAppTopbar">
-      <NavLink to={routes.chat} className="UiAppNavLink">
+    <div className={a.UiAppTopbar}>
+      <NavLink to={routes.chat} className={a.UiAppNavLink}>
         <Brand text="ATOMIC BOT" iconSrc={brandIconUrl} iconAlt="" />
       </NavLink>
 
-      <div className="UiAppTopbarActions">
-        <NavLink to={routes.settings + "/other"} className="UiAppTopbarBackButton">
+      <div className={a.UiAppTopbarActions}>
+        <NavLink to={routes.settings + "/other"} className={a.UiAppTopbarBackButton}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="14"
@@ -91,15 +92,15 @@ function Topbar() {
 
 function ErrorScreen({ state }: { state: Extract<GatewayState, { kind: "failed" }> }) {
   return (
-    <div className="UiCentered">
-      <div className="UiCard">
-        <div className="UiCardTitle">OpenClaw Gateway failed to start</div>
-        <div className="UiCardSubtitle">
+    <div className={a.UiCentered}>
+      <div className={a.UiCard}>
+        <div className={a.UiCardTitle}>OpenClaw Gateway failed to start</div>
+        <div className={a.UiCardSubtitle}>
           The Gateway process did not become available. Open the logs to see the root cause.
         </div>
-        <div className="UiMeta">
-          <div className="UiPill">port: {state.port}</div>
-          <div className="UiPill">logs: {state.logsDir}</div>
+        <div className={a.UiMeta}>
+          <div className={a.UiPill}>port: {state.port}</div>
+          <div className={a.UiPill}>logs: {state.logsDir}</div>
         </div>
         <pre>{state.details || "No details."}</pre>
       </div>
@@ -119,7 +120,7 @@ function LegacyScreen({ state }: { state: Extract<GatewayState, { kind: "ready" 
     return `${base}overview?token=${token}&embed=1`;
   }, [state.url, state.token]);
   return (
-    <div className="IframeWrap">
+    <div className={a.IframeWrap}>
       <iframe title="OpenClaw Control UI" src={legacyUrl} />
     </div>
   );
@@ -258,9 +259,9 @@ export function App() {
         <Route
           path="*"
           element={
-            <div className="UiAppShell">
+            <div className={a.UiAppShell}>
               <Topbar />
-              <div className="UiAppPage">
+              <div className={a.UiAppPage}>
                 <ReadyRoutes state={state} />
               </div>
             </div>

@@ -1,7 +1,7 @@
 /* ── What's New modal ────────────────────────────────── */
 
 /* Override shared modal size for the What's New dialog */
-.UiModalCard:has(.WhatsNew) {
+:global(.UiModalCard):has(.WhatsNew) {
   width: 520px;
   max-height: 90vh;
 }
@@ -76,25 +76,25 @@
   border-radius: 1000px;
 }
 
-.WhatsNew-body .UiMarkdown {
+.WhatsNew-body :global(.UiMarkdown) {
   font-size: 0.9em;
   line-height: 1.55;
   color: rgba(255, 255, 255, 0.82);
 }
 
-.WhatsNew-body .UiMarkdown h1,
-.WhatsNew-body .UiMarkdown h2,
-.WhatsNew-body .UiMarkdown h3 {
+.WhatsNew-body :global(.UiMarkdown) h1,
+.WhatsNew-body :global(.UiMarkdown) h2,
+.WhatsNew-body :global(.UiMarkdown) h3 {
   font-size: 0.95em;
   color: #fff;
   margin: 14px 0 6px;
 }
 
-.WhatsNew-body .UiMarkdown ul {
+.WhatsNew-body :global(.UiMarkdown) ul {
   padding-left: 18px;
 }
 
-.WhatsNew-body .UiMarkdown li {
+.WhatsNew-body :global(.UiMarkdown) li {
   margin: 3px 0;
 }
 

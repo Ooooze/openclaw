@@ -1,5 +1,6 @@
 import React from "react";
 
+import sm from "../../skills/modals/SkillModal.module.css";
 import { ActionButton, InlineError, TextInput } from "../../../shared/kit";
 import { getObject, getStringArray } from "../../../shared/utils/configHelpers";
 import type { ConfigSnapshot, GatewayRpcLike } from "../../../onboarding/hooks/types";
@@ -160,7 +161,7 @@ export function SlackConnectorModalContent(props: {
   }, [appToken, botToken, channelsRaw, dmAllowFromRaw, dmPolicy, groupPolicy, props]);
 
   return (
-    <div className="UiSkillModalContent">
+    <div className={sm.UiSkillModalContent}>
       <div className="UiSectionSubtitle">
         Connect your Slack workspace via Socket Mode. See{" "}
         <a
@@ -174,11 +175,11 @@ export function SlackConnectorModalContent(props: {
         for details.
       </div>
       {error && <InlineError>{error}</InlineError>}
-      {status && <div className="UiSkillModalStatus">{status}</div>}
+      {status && <div className={sm.UiSkillModalStatus}>{status}</div>}
 
       {/* ── Tokens ────────────────────────────────────────── */}
-      <div className="UiSkillModalField">
-        <label className="UiSkillModalLabel">
+      <div className={sm.UiSkillModalField}>
+        <label className={sm.UiSkillModalLabel}>
           Bot token (<code>xoxb-...</code>)
         </label>
         <TextInput
@@ -192,8 +193,8 @@ export function SlackConnectorModalContent(props: {
         />
       </div>
 
-      <div className="UiSkillModalField">
-        <label className="UiSkillModalLabel">
+      <div className={sm.UiSkillModalField}>
+        <label className={sm.UiSkillModalLabel}>
           App token (<code>xapp-...</code>)
         </label>
         <TextInput
@@ -208,14 +209,14 @@ export function SlackConnectorModalContent(props: {
       </div>
 
       {/* ── Channel policy ────────────────────────────────── */}
-      <div className="UiSkillModalField">
-        <label className="UiSkillModalLabel">Channel access policy</label>
-        <div className="UiSkillModalProviderSelect">
+      <div className={sm.UiSkillModalField}>
+        <label className={sm.UiSkillModalLabel}>Channel access policy</label>
+        <div className={sm.UiSkillModalProviderSelect}>
           {(["allowlist", "open", "disabled"] as const).map((p) => (
             <button
               key={p}
               type="button"
-              className={`UiSkillModalProviderOption${groupPolicy === p ? " UiSkillModalProviderOption--active" : ""}`}
+              className={groupPolicy === p ? `${sm.UiSkillModalProviderOption} ${sm["UiSkillModalProviderOption--active"]}` : sm.UiSkillModalProviderOption}
               disabled={busy}
               onClick={() => setGroupPolicy(p)}
             >
@@ -226,12 +227,12 @@ export function SlackConnectorModalContent(props: {
       </div>
 
       {groupPolicy === "allowlist" && (
-        <div className="UiSkillModalField">
-          <label className="UiSkillModalLabel">
+        <div className={sm.UiSkillModalField}>
+          <label className={sm.UiSkillModalLabel}>
             Allowed channels (names or IDs, comma-separated)
           </label>
           <textarea
-            className="UiSkillModalSelect"
+            className={sm.UiSkillModalSelect}
             rows={2}
             disabled={busy}
             value={channelsRaw}
@@ -250,14 +251,14 @@ export function SlackConnectorModalContent(props: {
       )}
 
       {/* ── DM policy ─────────────────────────────────────── */}
-      <div className="UiSkillModalField">
-        <label className="UiSkillModalLabel">DM policy</label>
-        <div className="UiSkillModalProviderSelect">
+      <div className={sm.UiSkillModalField}>
+        <label className={sm.UiSkillModalLabel}>DM policy</label>
+        <div className={sm.UiSkillModalProviderSelect}>
           {(["pairing", "allowlist", "open", "disabled"] as const).map((p) => (
             <button
               key={p}
               type="button"
-              className={`UiSkillModalProviderOption${dmPolicy === p ? " UiSkillModalProviderOption--active" : ""}`}
+              className={dmPolicy === p ? `${sm.UiSkillModalProviderOption} ${sm["UiSkillModalProviderOption--active"]}` : sm.UiSkillModalProviderOption}
               disabled={busy}
               onClick={() => setDmPolicy(p)}
             >
@@ -268,12 +269,12 @@ export function SlackConnectorModalContent(props: {
       </div>
 
       {(dmPolicy === "allowlist" || dmPolicy === "open") && (
-        <div className="UiSkillModalField">
-          <label className="UiSkillModalLabel">
+        <div className={sm.UiSkillModalField}>
+          <label className={sm.UiSkillModalLabel}>
             DM allowFrom (user IDs or @handles, comma-separated)
           </label>
           <textarea
-            className="UiSkillModalSelect"
+            className={sm.UiSkillModalSelect}
             rows={2}
             disabled={busy}
             value={dmAllowFromRaw}
@@ -292,7 +293,7 @@ export function SlackConnectorModalContent(props: {
             <InlineError>At least one allowFrom entry is required for DM allowlist.</InlineError>
           )}
           {dmPolicy === "open" && (
-            <div className="UiSkillModalStatus">
+            <div className={sm.UiSkillModalStatus}>
               If left empty, everyone is allowed (wildcard <code>*</code>).
             </div>
           )}
@@ -300,7 +301,7 @@ export function SlackConnectorModalContent(props: {
       )}
 
       {/* ── Save ──────────────────────────────────────────── */}
-      <div className="UiSkillModalActions">
+      <div className={sm.UiSkillModalActions}>
         <ActionButton
           variant="primary"
           disabled={busy || !canSave}
@@ -311,10 +312,10 @@ export function SlackConnectorModalContent(props: {
       </div>
 
       {props.isConnected && (
-        <div className="UiSkillModalDangerZone">
+        <div className={sm.UiSkillModalDangerZone}>
           <button
             type="button"
-            className="UiSkillModalDisableButton"
+            className={sm.UiSkillModalDisableButton}
             disabled={busy}
             onClick={props.onDisabled}
           >

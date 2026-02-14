@@ -1,5 +1,15 @@
-#root {
+/* ── App layout ──────────────────────────────────────── */
+
+.IframeWrap {
   height: 100%;
+  min-height: 0;
+}
+
+.IframeWrap iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #0b0f14;
 }
 
 .UiCentered {
@@ -110,20 +120,20 @@
   background: rgba(230, 237, 243, 0.05);
 }
 
-pre {
-  margin: 0;
-  padding: 12px 12px;
-  border-radius: var(--radius-lg);
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid var(--border-light);
-  max-height: 340px;
-  overflow: auto;
-  white-space: pre-wrap;
-  word-break: break-word;
-  font-family:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
-    monospace;
-  font-size: 12px;
-  line-height: 1.45;
-  color: #d2dbe6;
+.UiChatLayoutMain {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.UiChatLayout {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
 }

@@ -1,75 +1,10 @@
-/* ── Onboarding: Provider & model selection, API keys ── */
-
-.UiOnboardingDots {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin: 2px 0 10px 0;
-}
-
-.UiOnboardingDot {
-  width: 7px;
-  height: 7px;
-  border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.16);
-}
-
-.UiOnboardingDot--active {
-  background: rgba(255, 255, 255, 0.92);
-}
-
-.UiApiKeyCard {
-  display: flex;
-  flex-direction: column;
-  height: 472px;
-  justify-content: space-between;
-}
-
-.UiProviderCard {
-  display: flex;
-  flex-direction: column;
-}
-
-.UiProviderCard .UiProviderList {
-  flex: 1;
-}
-
-.UiApiKeyTitle {
-  font-weight: 700;
-  font-size: 26px;
-  line-height: 32px;
-  margin-bottom: 4px;
-}
-
-.UiApiKeySubtitle {
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 20px;
-  color: #a0a0a0;
-  margin-bottom: 24px;
-}
+/* ── Shared: Provider & model selection (onboarding + settings) ── */
 
 .UiContentWrapper {
   flex: 1;
   overflow: auto;
   margin-bottom: 10px;
   padding-bottom: 4px;
-}
-
-.UiApiKeyInputRow .UiInput {
-  width: 100%;
-  border-radius: var(--radius-lg);
-}
-
-.UiApiKeySpacer {
-  flex: 1;
-}
-
-.UiApiKeyButtonRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
 }
 
 .UiTextButton {

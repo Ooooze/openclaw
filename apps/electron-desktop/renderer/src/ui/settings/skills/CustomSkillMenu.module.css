@@ -1,0 +1,59 @@
+.UiCustomSkillMenuTrigger {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--surface-overlay-strong);
+  border-radius: 50%;
+  background: var(--surface-overlay-subtle);
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition:
+    background 0.14s ease,
+    border-color 0.14s ease,
+    color 0.14s ease;
+}
+
+.UiCustomSkillMenuTrigger:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* Uses shared UiPopover base class; only override min-width */
+.UiCustomSkillMenuPopover {
+  min-width: 130px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.UiCustomSkillMenuItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  text-align: left;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  cursor: pointer;
+  appearance: none;
+  transition: background 0.14s ease;
+}
+
+.UiCustomSkillMenuItem:hover {
+  background: var(--surface-overlay);
+}
+
+.UiCustomSkillMenuItem--danger {
+  color: #ff6b6b;
+}
+
+.UiCustomSkillMenuItem--danger:hover {
+  background: rgba(255, 70, 70, 0.12);
+}

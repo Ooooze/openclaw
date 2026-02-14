@@ -6,6 +6,7 @@ import React from "react";
 
 import type { ModelProviderInfo } from "../../shared/models/providers";
 import { resolveProviderIconUrl } from "../../shared/models/providers";
+import mp from "./ModelProvidersTab.module.css";
 
 export const ProviderTile = React.memo(function ProviderTile(props: {
   provider: ModelProviderInfo;
@@ -30,7 +31,7 @@ export const ProviderTile = React.memo(function ProviderTile(props: {
         <span className="UiSkillIcon" aria-hidden="true">
           <img src={resolveProviderIconUrl(provider.id)} alt="" />
           {configured ? (
-            <span className="UiProviderTileCheck" aria-label="Key configured">
+            <span className={mp.UiProviderTileCheck} aria-label="Key configured">
               ✓
             </span>
           ) : null}
@@ -52,8 +53,8 @@ export const ProviderTile = React.memo(function ProviderTile(props: {
           </button>
         )}
       </div>
-      <div className="UiProviderTileName">{provider.name}</div>
-      <div className="UiProviderTileDesc">{provider.description}</div>
+      <div className={mp.UiProviderTileName}>{provider.name}</div>
+      <div className={mp.UiProviderTileDesc}>{provider.description}</div>
     </div>
   );
 });

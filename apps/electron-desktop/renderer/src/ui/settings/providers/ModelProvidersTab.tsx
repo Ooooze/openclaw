@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { settingsStyles as ps } from "../SettingsPage";
 
 import { Modal, TextInput } from "../../shared/kit";
+import mp from "./ModelProvidersTab.module.css";
 import {
   MODEL_PROVIDER_BY_ID,
   MODEL_PROVIDERS,
@@ -100,9 +101,9 @@ function ModelsView(props: { state: ReturnType<typeof useModelProvidersState> })
       {/* Active model card */}
       {activeModelId ? (
         <div>
-          <div className="UiSettingsSubtitle">Live Model</div>
-          <div className="UiActiveModelCard">
-            <div className="UiActiveModelInfo">
+          <div className={mp.UiSettingsSubtitle}>Live Model</div>
+          <div className={mp.UiActiveModelCard}>
+            <div className={mp.UiActiveModelInfo}>
               <div className="UiProviderContent">
                 <div className="UiProviderHeader">
                   <span className="UiProviderName">
@@ -129,7 +130,7 @@ function ModelsView(props: { state: ReturnType<typeof useModelProvidersState> })
         <div className="UiSectionSubtitle">No model selected yet. Choose one below.</div>
       )}
 
-      <div className="UiSettingsSubtitle">Change Model</div>
+      <div className={mp.UiSettingsSubtitle}>Change Model</div>
       <div className="UiInputRow">
         <TextInput
           type="text"
@@ -184,12 +185,12 @@ function ProviderFilterChips(props: {
   const { strictConfiguredProviders, providerFilter, onToggle } = props;
 
   return (
-    <div className="UiProviderFilterRow">
+    <div className={mp.UiProviderFilterRow}>
       {strictConfiguredProviders.size > 1 ? (
         <>
           <button
             type="button"
-            className={`UiProviderFilterChip${!providerFilter ? " UiProviderFilterChip--active" : ""}`}
+            className={`${mp.UiProviderFilterChip}${!providerFilter ? ` ${mp["UiProviderFilterChip--active"]}` : ""}`}
             onClick={() => onToggle(providerFilter!)}
           >
             All
@@ -200,11 +201,11 @@ function ProviderFilterChips(props: {
               <button
                 key={p.id}
                 type="button"
-                className={`UiProviderFilterChip${active ? " UiProviderFilterChip--active" : ""}`}
+                className={`${mp.UiProviderFilterChip}${active ? ` ${mp["UiProviderFilterChip--active"]}` : ""}`}
                 onClick={() => onToggle(p.id)}
               >
                 <img
-                  className="UiProviderFilterChipIcon"
+                  className={mp.UiProviderFilterChipIcon}
                   src={resolveProviderIconUrl(p.id)}
                   alt=""
                   aria-hidden="true"
@@ -217,7 +218,7 @@ function ProviderFilterChips(props: {
       ) : null}
       <NavLink
         to="/settings/ai-providers"
-        className="UiProviderFilterChip UiProviderFilterChip--add"
+        className={`${mp.UiProviderFilterChip} ${mp["UiProviderFilterChip--add"]}`}
       >
         + Add Provider
       </NavLink>
@@ -349,7 +350,7 @@ function ProvidersView(props: { state: ReturnType<typeof useModelProvidersState>
 
   return (
     <section className={ps.UiSettingsSection}>
-      <div className="UiProviderTilesGrid">
+      <div className={mp.UiProviderTilesGrid}>
         {MODEL_PROVIDERS.map((p) => (
           <ProviderTile
             key={p.id}

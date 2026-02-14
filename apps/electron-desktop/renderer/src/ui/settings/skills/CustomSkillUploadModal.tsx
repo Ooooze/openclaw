@@ -3,6 +3,8 @@ import React from "react";
 import { getDesktopApiOrNull } from "../../../ipc/desktopApi";
 import { Modal } from "../../shared/kit";
 
+import cs from "./CustomSkillUpload.module.css";
+
 type CustomSkillResult = {
   name: string;
   description: string;
@@ -129,20 +131,20 @@ export function CustomSkillUploadModal(props: {
 
       {/* Drag-and-drop zone */}
       <div
-        className={`UiCustomSkillDropZone${dragActive ? " UiCustomSkillDropZone--active" : ""}`}
+        className={`${cs.UiCustomSkillDropZone}${dragActive ? ` ${cs["UiCustomSkillDropZone--active"]}` : ""}`}
         onDrop={onDrop}
         onDragOver={onDragOver}
         onDragEnter={onDragEnter}
         onDragLeave={onDragLeave}
       >
         {state === "loading" ? (
-          <div className="UiCustomSkillSpinner" aria-label="Installing skill..." />
+          <div className={cs.UiCustomSkillSpinner} aria-label="Installing skill..." />
         ) : (
           <>
-            <div className="UiCustomSkillDropZoneTitle">Drag ZIP folder here</div>
-            <div className="UiCustomSkillDropZoneSubtext">
+            <div className={cs.UiCustomSkillDropZoneTitle}>Drag ZIP folder here</div>
+            <div className={cs.UiCustomSkillDropZoneSubtext}>
               Or{" "}
-              <button type="button" className="UiCustomSkillChooseFileLink" onClick={openFilePicker}>
+              <button type="button" className={cs.UiCustomSkillChooseFileLink} onClick={openFilePicker}>
                 choose a file
               </button>{" "}
               from finder
@@ -153,23 +155,23 @@ export function CustomSkillUploadModal(props: {
 
       {/* Error message */}
       {state === "error" && error ? (
-        <div className="UiCustomSkillError">{error}</div>
+        <div className={cs.UiCustomSkillError}>{error}</div>
       ) : null}
 
       {/* Info block */}
-      <div className="UiCustomSkillInfoBlock">
-        <span className="UiCustomSkillInfoIcon" aria-hidden="true">
+      <div className={cs.UiCustomSkillInfoBlock}>
+        <span className={cs.UiCustomSkillInfoIcon} aria-hidden="true">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.2" />
             <path d="M8 7v4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
             <circle cx="8" cy="5" r="0.75" fill="currentColor" />
           </svg>
         </span>
-        <div className="UiCustomSkillInfoText">
+        <div className={cs.UiCustomSkillInfoText}>
           Custom skills you can find on{" "}
           <a
             href="#"
-            className="UiCustomSkillInfoLink"
+            className={cs.UiCustomSkillInfoLink}
             onClick={(e) => {
               e.preventDefault();
               void getDesktopApiOrNull()?.openExternal("https://clawhub.com");
@@ -181,15 +183,15 @@ export function CustomSkillUploadModal(props: {
       </div>
 
       {/* Security warning */}
-      <div className="UiCustomSkillDangerBlock">
-        <span className="UiCustomSkillDangerIcon" aria-hidden="true">
+      <div className={cs.UiCustomSkillDangerBlock}>
+        <span className={cs.UiCustomSkillDangerIcon} aria-hidden="true">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M8 1L1 14h14L8 1z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
             <path d="M8 6v4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
             <circle cx="8" cy="12" r="0.75" fill="currentColor" />
           </svg>
         </span>
-        <div className="UiCustomSkillDangerText">
+        <div className={cs.UiCustomSkillDangerText}>
           Custom packages may introduce security risks — upload only trusted files
         </div>
       </div>

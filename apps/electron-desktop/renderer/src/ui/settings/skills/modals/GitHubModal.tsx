@@ -1,5 +1,6 @@
 import React from "react";
 
+import sm from "./SkillModal.module.css";
 import { getDesktopApi, getDesktopApiOrNull } from "../../../../ipc/desktopApi";
 import { ActionButton, InlineError, TextInput } from "../../../shared/kit";
 import { useWelcomeGitHub } from "../../../onboarding/hooks/useWelcomeGitHub";
@@ -99,7 +100,7 @@ export function GitHubModalContent(props: {
   }, [enableGitHub, pat, props]);
 
   return (
-    <div className="UiSkillModalContent">
+    <div className={sm.UiSkillModalContent}>
       <div className="UiSectionSubtitle">
         Work with issues, pull requests, and workflows via the bundled gh CLI.
         {ghUser && (
@@ -110,10 +111,10 @@ export function GitHubModalContent(props: {
         )}
       </div>
       {error && <InlineError>{error}</InlineError>}
-      {status && <div className="UiSkillModalStatus">{status}</div>}
+      {status && <div className={sm.UiSkillModalStatus}>{status}</div>}
 
-      <div className="UiSkillModalField">
-        <label className="UiSkillModalLabel">
+      <div className={sm.UiSkillModalField}>
+        <label className={sm.UiSkillModalLabel}>
           Personal Access Token (PAT)
           {props.isConnected ? " — enter a new PAT to re-authenticate" : ""}
         </label>
@@ -128,7 +129,7 @@ export function GitHubModalContent(props: {
         />
       </div>
 
-      <div className="UiSkillModalActions">
+      <div className={sm.UiSkillModalActions}>
         <ActionButton
           variant="primary"
           disabled={busy || !pat.trim()}
@@ -139,10 +140,10 @@ export function GitHubModalContent(props: {
       </div>
 
       {props.isConnected && (
-        <div className="UiSkillModalDangerZone">
+        <div className={sm.UiSkillModalDangerZone}>
           <button
             type="button"
-            className="UiSkillModalDisableButton"
+            className={sm.UiSkillModalDisableButton}
             disabled={busy}
             onClick={props.onDisabled}
           >

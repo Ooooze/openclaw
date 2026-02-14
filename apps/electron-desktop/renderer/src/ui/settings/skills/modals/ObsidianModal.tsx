@@ -1,5 +1,6 @@
 import React from "react";
 
+import sm from "./SkillModal.module.css";
 import { getDesktopApi, getDesktopApiOrNull } from "../../../../ipc/desktopApi";
 import { ActionButton, InlineError } from "../../../shared/kit";
 import { useWelcomeObsidian } from "../../../onboarding/hooks/useWelcomeObsidian";
@@ -118,20 +119,20 @@ export function ObsidianModalContent(props: {
   }, [enableObsidian, props, selectedVault]);
 
   return (
-    <div className="UiSkillModalContent">
+    <div className={sm.UiSkillModalContent}>
       <div className="UiSectionSubtitle">
         Work with your Obsidian vaults from the terminal (search, create, move, delete).
       </div>
       {error && <InlineError>{error}</InlineError>}
-      {status && <div className="UiSkillModalStatus">{status}</div>}
+      {status && <div className={sm.UiSkillModalStatus}>{status}</div>}
 
       {vaultsLoading ? (
-        <div className="UiSkillModalStatus">Loading vaults…</div>
+        <div className={sm.UiSkillModalStatus}>Loading vaults…</div>
       ) : vaults.length > 0 ? (
-        <div className="UiSkillModalField">
-          <label className="UiSkillModalLabel">Default vault</label>
+        <div className={sm.UiSkillModalField}>
+          <label className={sm.UiSkillModalLabel}>Default vault</label>
           <select
-            className="UiSkillModalSelect"
+            className={sm.UiSkillModalSelect}
             value={selectedVault}
             onChange={(e) => setSelectedVault(e.target.value)}
           >
@@ -144,20 +145,20 @@ export function ObsidianModalContent(props: {
           </select>
         </div>
       ) : (
-        <div className="UiSkillModalStatus">No Obsidian vaults found.</div>
+        <div className={sm.UiSkillModalStatus}>No Obsidian vaults found.</div>
       )}
 
-      <div className="UiSkillModalActions">
+      <div className={sm.UiSkillModalActions}>
         <ActionButton variant="primary" disabled={busy} onClick={() => void handleCheckAndEnable()}>
           {busy ? "Enabling…" : "Check & enable"}
         </ActionButton>
       </div>
 
       {props.isConnected && (
-        <div className="UiSkillModalDangerZone">
+        <div className={sm.UiSkillModalDangerZone}>
           <button
             type="button"
-            className="UiSkillModalDisableButton"
+            className={sm.UiSkillModalDisableButton}
             disabled={busy}
             onClick={props.onDisabled}
           >

@@ -58,3 +58,15 @@
   font-size: 12px;
   color: rgba(255, 122, 0, 0.95);
 }
+
+.UiFooterText {
+  position: absolute;
+  bottom: 18px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(230, 237, 243, 0.35);
+  letter-spacing: 0.2px;
+  user-select: none;
+}

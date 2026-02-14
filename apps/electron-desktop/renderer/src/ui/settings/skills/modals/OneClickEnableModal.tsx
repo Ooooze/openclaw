@@ -1,5 +1,6 @@
 import React from "react";
 
+import sm from "./SkillModal.module.css";
 import { getDesktopApi } from "../../../../ipc/desktopApi";
 import { ActionButton, InlineError } from "../../../shared/kit";
 import { useWelcomeAppleNotes } from "../../../onboarding/hooks/useWelcomeAppleNotes";
@@ -49,25 +50,25 @@ export function AppleNotesModalContent(props: {
   }, [enableAppleNotes, props]);
 
   return (
-    <div className="UiSkillModalContent">
+    <div className={sm.UiSkillModalContent}>
       <div className="UiSectionSubtitle">
         Create, search and organize notes without leaving your keyboard. This will check the bundled
         memo binary and enable the skill.
       </div>
       {error && <InlineError>{error}</InlineError>}
-      {status && <div className="UiSkillModalStatus">{status}</div>}
+      {status && <div className={sm.UiSkillModalStatus}>{status}</div>}
 
-      <div className="UiSkillModalActions">
+      <div className={sm.UiSkillModalActions}>
         <ActionButton variant="primary" disabled={busy} onClick={() => void handleEnable()}>
           {busy ? "Enabling…" : props.isConnected ? "Re-enable" : "Enable Apple Notes"}
         </ActionButton>
       </div>
 
       {props.isConnected && (
-        <div className="UiSkillModalDangerZone">
+        <div className={sm.UiSkillModalDangerZone}>
           <button
             type="button"
-            className="UiSkillModalDisableButton"
+            className={sm.UiSkillModalDisableButton}
             disabled={busy}
             onClick={props.onDisabled}
           >
@@ -134,25 +135,25 @@ export function AppleRemindersModalContent(props: {
   }, [enableAppleReminders, props]);
 
   return (
-    <div className="UiSkillModalContent">
+    <div className={sm.UiSkillModalContent}>
       <div className="UiSectionSubtitle">
         Add, list and complete reminders without opening the Reminders app. This will authorize
         remindctl and enable the skill.
       </div>
       {error && <InlineError>{error}</InlineError>}
-      {status && <div className="UiSkillModalStatus">{status}</div>}
+      {status && <div className={sm.UiSkillModalStatus}>{status}</div>}
 
-      <div className="UiSkillModalActions">
+      <div className={sm.UiSkillModalActions}>
         <ActionButton variant="primary" disabled={busy} onClick={() => void handleEnable()}>
           {busy ? "Enabling…" : props.isConnected ? "Re-enable" : "Enable Apple Reminders"}
         </ActionButton>
       </div>
 
       {props.isConnected && (
-        <div className="UiSkillModalDangerZone">
+        <div className={sm.UiSkillModalDangerZone}>
           <button
             type="button"
-            className="UiSkillModalDisableButton"
+            className={sm.UiSkillModalDisableButton}
             disabled={busy}
             onClick={props.onDisabled}
           >

@@ -1,5 +1,6 @@
 import React from "react";
 
+import sm from "../../skills/modals/SkillModal.module.css";
 import { ActionButton, InlineError, TextInput } from "../../../shared/kit";
 import { getObject } from "../../../shared/utils/configHelpers";
 import type { ConfigSnapshot, GatewayRpcLike } from "../../../onboarding/hooks/types";
@@ -73,7 +74,7 @@ export function DiscordModalContent(props: {
   }, [token, props]);
 
   return (
-    <div className="UiSkillModalContent">
+    <div className={sm.UiSkillModalContent}>
       <div className="UiSectionTitle">Discord</div>
       <div className="UiSectionSubtitle">
         Connect your Discord bot. Create one in the{" "}
@@ -87,13 +88,13 @@ export function DiscordModalContent(props: {
         and copy the bot token.
       </div>
       {error && <InlineError>{error}</InlineError>}
-      {status && <div className="UiSkillModalStatus">{status}</div>}
+      {status && <div className={sm.UiSkillModalStatus}>{status}</div>}
       {hasExistingToken && !token && (
-        <div className="UiSkillModalStatus">Bot token configured. Enter a new token to update.</div>
+        <div className={sm.UiSkillModalStatus}>Bot token configured. Enter a new token to update.</div>
       )}
 
-      <div className="UiSkillModalField">
-        <label className="UiSkillModalLabel">Bot token</label>
+      <div className={sm.UiSkillModalField}>
+        <label className={sm.UiSkillModalLabel}>Bot token</label>
         <TextInput
           type="password"
           value={token}
@@ -105,7 +106,7 @@ export function DiscordModalContent(props: {
         />
       </div>
 
-      <div className="UiSkillModalActions">
+      <div className={sm.UiSkillModalActions}>
         <ActionButton
           variant="primary"
           disabled={busy || (!token.trim() && !props.isConnected)}
@@ -116,10 +117,10 @@ export function DiscordModalContent(props: {
       </div>
 
       {props.isConnected && (
-        <div className="UiSkillModalDangerZone">
+        <div className={sm.UiSkillModalDangerZone}>
           <button
             type="button"
-            className="UiSkillModalDisableButton"
+            className={sm.UiSkillModalDisableButton}
             disabled={busy}
             onClick={props.onDisabled}
           >

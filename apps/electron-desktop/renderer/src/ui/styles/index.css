@@ -1,11 +1,5 @@
 @import "./base.css";
-@import "./layout.css";
-@import "./consent.css";
 @import "./kit.css";
-@import "./onboarding.css";
-@import "./chat.css";
-@import "./whats-new.css";
-@import "./settings.css";
-@import "./update-banner.css";
-@import "./exec-approval.css";
-@import "./custom-skill.css";
+@import "./markdown.css";
+@import "./providers-shared.css";
+@import "./skill-cards.css";
