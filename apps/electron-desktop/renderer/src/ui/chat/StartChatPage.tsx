@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useGatewayRpc } from "../../gateway/context";
 import type { GatewayState } from "../../../../src/main/types";
 import { dataUrlToBase64, type ChatAttachmentInput } from "../../store/slices/chatSlice";
-import { ChatComposer, type ChatComposerRef } from "./ChatComposer";
+import { ChatComposer, type ChatComposerRef } from "./components/ChatComposer";
 import { addToastError } from "../shared/toast";
 import { routes } from "../app/routes";
 import ct from "./ChatTranscript.module.css";

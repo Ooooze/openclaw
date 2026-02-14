@@ -26,7 +26,7 @@ vi.mock("../../gateway/context", () => ({
 }));
 
 // Mock optimistic session context used by Sidebar.
-vi.mock("../chat/optimisticSessionContext", () => ({
+vi.mock("../chat/hooks/optimisticSessionContext", () => ({
   useOptimisticSession: vi.fn(() => stableSessionMock),
   OptimisticSessionProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   OptimisticSessionSync: () => null,
@@ -58,7 +58,7 @@ vi.mock("../settings/skills/SkillsIntegrationsTab", () => ({
 }));
 
 // Mock ChatAttachmentCard used by ChatComposer.
-vi.mock("../chat/ChatAttachmentCard", () => ({
+vi.mock("../chat/components/ChatAttachmentCard", () => ({
   ChatAttachmentCard: () => <div data-testid="mock-attachment-card" />,
   getFileTypeLabel: (t: string) => t,
 }));
@@ -69,7 +69,7 @@ vi.mock("../chat/ChatAttachmentCard", () => ({
 
 import { LoadingScreen } from "../onboarding/LoadingScreen";
 import { ConsentScreen } from "../onboarding/ConsentScreen";
-import { ChatComposer } from "../chat/ChatComposer";
+import { ChatComposer } from "../chat/components/ChatComposer";
 import { Sidebar } from "../sidebar/Sidebar";
 import { SettingsPage } from "../settings/SettingsPage";
 import { chatReducer } from "../../store/slices/chatSlice";

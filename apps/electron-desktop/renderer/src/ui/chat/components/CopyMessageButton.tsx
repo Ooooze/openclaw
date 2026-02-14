@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CopyIcon, CheckIcon } from "../shared/kit/icons";
+import { CopyIcon, CheckIcon } from "../../shared/kit/icons";
 import am from "./AssistantMessage.module.css";
 
 /** Copy button with local state so only this message's icon toggles on copy. */

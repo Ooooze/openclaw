@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import type { ChatAttachmentInput } from "../../store/slices/chatSlice";
-import { routes } from "../app/routes";
+import type { ChatAttachmentInput } from "../../../store/slices/chatSlice";
+import { routes } from "../../app/routes";
 
 export type OptimisticSession = {
   key: string;

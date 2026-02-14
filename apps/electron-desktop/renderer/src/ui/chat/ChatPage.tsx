@@ -14,16 +14,16 @@ import {
   type UiMessageAttachment,
 } from "../../store/slices/chatSlice";
 import type { GatewayState } from "../../../../src/main/types";
-import { ChatAttachmentCard, getFileTypeLabel } from "./ChatAttachmentCard";
-import { ChatComposer, type ChatComposerRef } from "./ChatComposer";
-import { useOptimisticSession } from "./optimisticSessionContext";
+import { ChatAttachmentCard, getFileTypeLabel } from "./components/ChatAttachmentCard";
+import { ChatComposer, type ChatComposerRef } from "./components/ChatComposer";
+import { useOptimisticSession } from "./hooks/optimisticSessionContext";
 import { addToastError } from "../shared/toast";
-import { parseUserMessageWithAttachments } from "./messageParser";
-import { CopyMessageButton } from "./CopyMessageButton";
+import { parseUserMessageWithAttachments } from "./hooks/messageParser";
+import { CopyMessageButton } from "./components/CopyMessageButton";
 import ct from "./ChatTranscript.module.css";
-import ub from "./UserMessageBubble.module.css";
-import am from "./AssistantMessage.module.css";
-import cc from "./ChatComposer.module.css";
+import ub from "./components/UserMessageBubble.module.css";
+import am from "./components/AssistantMessage.module.css";
+import cc from "./components/ChatComposer.module.css";
 
 type ChatEvent = {
   runId: string;
