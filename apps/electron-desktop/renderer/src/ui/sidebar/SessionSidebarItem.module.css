@@ -1,0 +1,117 @@
+.SessionSidebarItem {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 2px 0;
+  position: relative;
+}
+
+.SessionSidebarItem__title {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+  height: 36px;
+  padding: 8px 10px;
+  text-align: left;
+  border-radius: var(--radius-10);
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+  cursor: pointer;
+  appearance: none;
+  overflow: visible;
+  transition:
+    background 140ms ease,
+    color 140ms ease;
+}
+
+.SessionSidebarItem__titleText {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.SessionSidebarItem__title:hover {
+  background: var(--border-subtle);
+}
+
+.SessionSidebarItem__title--active-true {
+  background: var(--surface-overlay);
+}
+
+.SessionSidebarItem__actions {
+  position: relative;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 140ms ease;
+}
+
+.SessionSidebarItem:hover .SessionSidebarItem__actions,
+.SessionSidebarItem--menuOpen .SessionSidebarItem__actions {
+  opacity: 1;
+}
+
+.SessionSidebarItem__menuTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  appearance: none;
+  transition:
+    background 140ms ease,
+    color 140ms ease;
+}
+
+.SessionSidebarItem__menuTrigger:focus {
+  outline: none;
+}
+
+.SessionSidebarItem__menuTrigger:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.4);
+  outline-offset: 2px;
+}
+
+.SessionSidebarItem__menuTrigger:hover {
+  background: var(--border-subtle);
+  color: var(--text);
+}
+
+/* Uses shared UiPopover base class; no additional overrides needed */
+
+.SessionSidebarItem__popoverItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  text-align: left;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font-size: 13px;
+  cursor: pointer;
+  appearance: none;
+  transition: background 140ms ease;
+}
+
+.SessionSidebarItem__popoverItem:hover {
+  background: rgba(230, 237, 243, 0.08);
+}
+
+.SessionSidebarItem__popoverIcon {
+  flex-shrink: 0;
+  color: var(--muted);
+}

@@ -1,0 +1,155 @@
+.UiTerminalPage {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: var(--bg);
+}
+
+/* ── Tab bar (reuses UiInnerTabBar pattern) ─────────────────────── */
+
+.UiTerminalTabBar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 4px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+  -webkit-app-region: no-drag;
+}
+
+.UiTerminalTab {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--muted2);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 12px;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  user-select: none;
+  transition: color var(--transition-fast);
+}
+
+.UiTerminalTab:hover {
+  color: var(--muted);
+}
+
+.UiTerminalTabActive {
+  color: #fff;
+}
+
+.UiTerminalTabActive::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: -1px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--lime);
+}
+
+.UiTerminalTabDead .UiTerminalTabLabel {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.UiTerminalTabLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+.UiTerminalTabClose {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: inherit;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition:
+    opacity var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.UiTerminalTab:hover .UiTerminalTabClose {
+  opacity: 0.6;
+}
+
+.UiTerminalTabClose:hover {
+  opacity: 1 !important;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.UiTerminalNewTab {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--muted2);
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  padding: 0;
+  font-size: 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.UiTerminalNewTab:hover {
+  background: var(--panel);
+  color: var(--accent);
+}
+
+/* ── Terminal pane container ─────────────────────────────────────── */
+
+.UiTerminalPaneContainer {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+
+.UiTerminalPane {
+  padding: 4px 8px;
+}
+
+/* Ensure xterm fills the pane */
+.UiTerminalPane .xterm {
+  height: 100%;
+}
+
+.UiTerminalPane .xterm-viewport {
+  overflow-y: auto !important;
+}
+
+/* ── Loading / empty state ──────────────────────────────────────── */
+
+.UiTerminalLoading,
+.UiTerminalEmpty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--muted2);
+  font-size: 13px;
+}

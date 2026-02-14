@@ -8,6 +8,7 @@ import { addToastError } from "../shared/toast";
 import { SplashLogo } from "../shared/kit";
 import { SessionSidebarItem } from "./SessionSidebarItem";
 import { cleanDerivedTitle } from "../chat/messageParser";
+import css from "./Sidebar.module.css";
 
 const TERMINAL_SIDEBAR_KEY = "terminal-sidebar-visible";
 
@@ -171,10 +172,10 @@ export function Sidebar() {
   );
 
   return (
-    <aside className="UiChatSidebar" aria-label="Chat sessions">
+    <aside className={css.UiChatSidebar} aria-label="Chat sessions">
       <button
         type="button"
-        className="UiChatSidebarNewSession"
+        className={css.UiChatSidebarNewSession}
         onClick={handleNewSession}
         aria-label="New session"
       >
@@ -182,14 +183,14 @@ export function Sidebar() {
         New session
       </button>
 
-      <div className="UiChatSidebarSessions">
-        <h2 className="UiChatSidebarSessionsTitle">Sessions</h2>
+      <div className={css.UiChatSidebarSessions}>
+        <h2 className={css.UiChatSidebarSessionsTitle}>Sessions</h2>
         {loading && !optimistic ? (
-          <div className="UiChatSidebarSubtitle">Loading...</div>
+          <div className={css.UiChatSidebarSubtitle}>Loading...</div>
         ) : (
-          <ul className="UiChatSidebarSessionList" role="list">
+          <ul className={css.UiChatSidebarSessionList} role="list">
             {!sessions.length && !optimistic && (
-              <div className="UiChatSidebarSubtitle">No sessions yet</div>
+              <div className={css.UiChatSidebarSubtitle}>No sessions yet</div>
             )}
             {(optimistic
               ? [
@@ -211,10 +212,10 @@ export function Sidebar() {
         )}
       </div>
 
-      <div className="UiChatSidebarFooter">
+      <div className={css.UiChatSidebarFooter}>
         {showTerminal && (
-          <NavLink to={routes.terminal} className="UiChatSidebarSettings" aria-label="Terminal">
-            <span className="UiChatSidebarSettingsIcon" aria-hidden="true">
+          <NavLink to={routes.terminal} className={css.UiChatSidebarSettings} aria-label="Terminal">
+            <span className={css.UiChatSidebarSettingsIcon} aria-hidden="true">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -241,8 +242,8 @@ export function Sidebar() {
             Terminal
           </NavLink>
         )}
-        <NavLink to={routes.settings} className="UiChatSidebarSettings" aria-label="Settings">
-          <span className="UiChatSidebarSettingsIcon" aria-hidden="true">
+        <NavLink to={routes.settings} className={css.UiChatSidebarSettings} aria-label="Settings">
+          <span className={css.UiChatSidebarSettingsIcon} aria-hidden="true">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"

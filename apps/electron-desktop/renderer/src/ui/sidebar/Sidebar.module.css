@@ -1,0 +1,107 @@
+/* Chat sidebar */
+.UiChatSidebar {
+  width: 220px;
+  min-width: 200px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-primary);
+  gap: 8px;
+}
+
+.UiChatSidebarNewSession {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: var(--radius-10);
+  padding: 8px 10px;
+  margin: 12px 6px 0;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  appearance: none;
+  border: none;
+  background: none;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease;
+  height: 36px;
+  align-self: stretch;
+}
+
+.UiChatSidebarNewSession:hover {
+  background: var(--border-subtle);
+}
+
+.UiChatSidebarSessions {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 6px;
+}
+
+.UiChatSidebarSessionsTitle {
+  display: flex;
+  padding: 8px 10px;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  margin: 0;
+}
+
+.UiChatSidebarSubtitle {
+  font-size: 13px;
+  color: var(--muted2);
+  padding: 8px 0;
+  text-align: center;
+}
+
+.UiChatSidebarSessionList {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 12px;
+  overflow: auto;
+  height: 100%;
+}
+
+.UiChatSidebarSessionList li {
+  margin: 2px 0;
+}
+
+.UiChatSidebarFooter {
+  flex-shrink: 0;
+  padding: 6px;
+}
+
+.UiChatSidebarSettings {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: var(--radius-10);
+  color: var(--muted);
+  font-size: 14px;
+  text-decoration: none;
+  transition:
+    background 140ms ease,
+    color 140ms ease;
+}
+
+.UiChatSidebarSettings:hover {
+  background: var(--border-subtle);
+  color: var(--text);
+}
+
+.UiChatSidebarSettingsIcon {
+  width: 20px;
+  height: 20px;
+}

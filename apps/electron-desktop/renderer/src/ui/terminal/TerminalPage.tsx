@@ -2,7 +2,7 @@ import React from "react";
 import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import "@xterm/xterm/css/xterm.css";
-import "./TerminalPage.css";
+import s from "./TerminalPage.module.css";
 
 // ─── Desktop API bridge ────────────────────────────────────────────────────
 
@@ -170,7 +170,7 @@ function TerminalPane({
 
   return (
     <div
-      className="UiTerminalPane"
+      className={s.UiTerminalPane}
       ref={containerRef}
       style={{ display: visible ? "block" : "none" }}
     />
@@ -278,28 +278,28 @@ export function TerminalPage() {
 
   if (!ready) {
     return (
-      <div className="UiTerminalPage">
-        <div className="UiTerminalLoading">Loading...</div>
+      <div className={s.UiTerminalPage}>
+        <div className={s.UiTerminalLoading}>Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="UiTerminalPage">
+    <div className={s.UiTerminalPage}>
       {/* Tab bar */}
-      <div className="UiTerminalTabBar">
+      <div className={s.UiTerminalTabBar}>
         {tabs.map((tab) => (
           <div
             key={tab.id}
-            className={`UiTerminalTab ${tab.id === activeId ? "UiTerminalTabActive" : ""} ${!tab.alive ? "UiTerminalTabDead" : ""}`}
+            className={`${s.UiTerminalTab} ${tab.id === activeId ? s.UiTerminalTabActive : ""} ${!tab.alive ? s.UiTerminalTabDead : ""}`}
             onClick={() => setActiveId(tab.id)}
             role="tab"
             aria-selected={tab.id === activeId}
           >
-            <span className="UiTerminalTabLabel">{tab.label}</span>
+            <span className={s.UiTerminalTabLabel}>{tab.label}</span>
             <button
               type="button"
-              className="UiTerminalTabClose"
+              className={s.UiTerminalTabClose}
               onClick={(e) => {
                 e.stopPropagation();
                 handleCloseTab(tab.id);
@@ -312,7 +312,7 @@ export function TerminalPage() {
         ))}
         <button
           type="button"
-          className="UiTerminalNewTab"
+          className={s.UiTerminalNewTab}
           onClick={handleNewTab}
           aria-label="New terminal"
         >
@@ -321,7 +321,7 @@ export function TerminalPage() {
       </div>
 
       {/* Terminal panes — all mounted, only the active one is visible */}
-      <div className="UiTerminalPaneContainer">
+      <div className={s.UiTerminalPaneContainer}>
         {tabs.map((tab) => (
           <TerminalPane
             key={tab.id}
@@ -330,7 +330,7 @@ export function TerminalPage() {
           />
         ))}
         {tabs.length === 0 && (
-          <div className="UiTerminalEmpty">
+          <div className={s.UiTerminalEmpty}>
             No terminals. Click <strong>+</strong> to open one.
           </div>
         )}

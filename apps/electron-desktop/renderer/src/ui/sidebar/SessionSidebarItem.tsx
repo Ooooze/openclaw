@@ -1,5 +1,5 @@
 import React from "react";
-import "./SessionSidebarItem.css";
+import s from "./SessionSidebarItem.module.css";
 
 export type SessionSidebarItemProps = {
   sessionKey: string;
@@ -106,18 +106,18 @@ export const SessionSidebarItem = React.memo(function SessionSidebarItem({
   }, [menuOpen]);
 
   return (
-    <li className={`SessionSidebarItem${menuOpen ? " SessionSidebarItem--menuOpen" : ""}`}>
+    <li className={`${s.SessionSidebarItem}${menuOpen ? ` ${s["SessionSidebarItem--menuOpen"]}` : ""}`}>
       <button
         type="button"
-        className={`SessionSidebarItem__title SessionSidebarItem__title--active-${isActive}`}
+        className={`${s.SessionSidebarItem__title}${isActive ? ` ${s["SessionSidebarItem__title--active-true"]}` : ""}`}
         onClick={onSelect}
         title={sessionKey}
       >
-        <span className="SessionSidebarItem__titleText">{title}</span>
-        <div className="SessionSidebarItem__actions">
+        <span className={s.SessionSidebarItem__titleText}>{title}</span>
+        <div className={s.SessionSidebarItem__actions}>
           <span
             ref={menuTriggerRef}
-            className="SessionSidebarItem__menuTrigger"
+            className={s.SessionSidebarItem__menuTrigger}
             role="button"
             tabIndex={0}
             onClick={handleMenuClick}
@@ -132,11 +132,11 @@ export const SessionSidebarItem = React.memo(function SessionSidebarItem({
             <div ref={popoverRef} className="UiPopover" role="menu">
               <button
                 type="button"
-                className="SessionSidebarItem__popoverItem"
+                className={s.SessionSidebarItem__popoverItem}
                 role="menuitem"
                 onClick={handleDeleteClick}
               >
-                <IconTrash className="SessionSidebarItem__popoverIcon" />
+                <IconTrash className={s.SessionSidebarItem__popoverIcon} />
                 Delete
               </button>
             </div>

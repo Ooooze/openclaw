@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 import { getDesktopApiOrNull } from "../../ipc/desktopApi";
 import { routes } from "../app/routes";
-import "./OtherTab.css";
+import s from "./OtherTab.module.css";
 import pkg from "../../../../package.json";
 
 const TERMINAL_SIDEBAR_KEY = "terminal-sidebar-visible";
@@ -87,106 +87,106 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
   const api = getDesktopApiOrNull();
 
   return (
-    <div className="UiSettingsContentInner UiSettingsOther">
-      <h2 className="UiSettingsOtherTitle">Other</h2>
+    <div className="UiSettingsContentInner">
+      <h2 className={s.UiSettingsOtherTitle}>Other</h2>
 
-      <section className="UiSettingsOtherSection">
-        <h3 className="UiSettingsOtherSectionTitle">OpenClaw Folder</h3>
-        <div className="UiSettingsOtherCard">
-          <div className="UiSettingsOtherRow">
-            <span className="UiSettingsOtherRowLabel">OpenClaw folder</span>
+      <section className={s.UiSettingsOtherSection}>
+        <h3 className={s.UiSettingsOtherSectionTitle}>OpenClaw Folder</h3>
+        <div className={s.UiSettingsOtherCard}>
+          <div className={s.UiSettingsOtherRow}>
+            <span className={s.UiSettingsOtherRowLabel}>OpenClaw folder</span>
             <button
               type="button"
-              className="UiSettingsOtherLink"
+              className={s.UiSettingsOtherLink}
               onClick={() => void api?.openOpenclawFolder()}
             >
               Open folder
             </button>
           </div>
         </div>
-        <p className="UiSettingsOtherHint">
+        <p className={s.UiSettingsOtherHint}>
           Contains your local OpenClaw state and app data.
         </p>
       </section>
 
-      <section className="UiSettingsOtherSection">
-        <h3 className="UiSettingsOtherSectionTitle">Workspace</h3>
-        <div className="UiSettingsOtherCard">
-          <div className="UiSettingsOtherRow">
-            <span className="UiSettingsOtherRowLabel">Agent workspace</span>
+      <section className={s.UiSettingsOtherSection}>
+        <h3 className={s.UiSettingsOtherSectionTitle}>Workspace</h3>
+        <div className={s.UiSettingsOtherCard}>
+          <div className={s.UiSettingsOtherRow}>
+            <span className={s.UiSettingsOtherRowLabel}>Agent workspace</span>
             <button
               type="button"
-              className="UiSettingsOtherLink"
+              className={s.UiSettingsOtherLink}
               onClick={() => void api?.openWorkspaceFolder()}
             >
               Open folder
             </button>
           </div>
         </div>
-        <p className="UiSettingsOtherHint">
+        <p className={s.UiSettingsOtherHint}>
           Contains editable .md files (AGENTS, SOUL, USER, IDENTITY, TOOLS, HEARTBEAT, BOOTSTRAP) that shape the agent.
         </p>
       </section>
 
-      <section className="UiSettingsOtherSection">
-        <h3 className="UiSettingsOtherSectionTitle">Terminal</h3>
-        <div className="UiSettingsOtherCard">
-          <div className="UiSettingsOtherRow">
-            <span className="UiSettingsOtherRowLabel">Show in sidebar</span>
-            <span className="UiSettingsOtherAppRowValue">
-              <label className="UiSettingsOtherToggle" aria-label="Show terminal in sidebar">
+      <section className={s.UiSettingsOtherSection}>
+        <h3 className={s.UiSettingsOtherSectionTitle}>Terminal</h3>
+        <div className={s.UiSettingsOtherCard}>
+          <div className={s.UiSettingsOtherRow}>
+            <span className={s.UiSettingsOtherRowLabel}>Show in sidebar</span>
+            <span className={s.UiSettingsOtherAppRowValue}>
+              <label className={s.UiSettingsOtherToggle} aria-label="Show terminal in sidebar">
                 <input
                   type="checkbox"
                   checked={terminalSidebar}
                   onChange={(e) => setTerminalSidebar(e.target.checked)}
                 />
-                <span className="UiSettingsOtherToggleTrack">
-                  <span className="UiSettingsOtherToggleThumb" />
+                <span className={s.UiSettingsOtherToggleTrack}>
+                  <span className={s.UiSettingsOtherToggleThumb} />
                 </span>
               </label>
             </span>
           </div>
-          <div className="UiSettingsOtherRow">
-            <NavLink to={routes.terminal} className="UiSettingsOtherLink">
+          <div className={s.UiSettingsOtherRow}>
+            <NavLink to={routes.terminal} className={s.UiSettingsOtherLink}>
               Open Terminal
             </NavLink>
           </div>
         </div>
-        <p className="UiSettingsOtherHint">
+        <p className={s.UiSettingsOtherHint}>
           Built-in terminal with openclaw and bundled tools in PATH.
         </p>
       </section>
 
       {/* About */}
-      <section className="UiSettingsOtherSection">
-        <h3 className="UiSettingsOtherSectionTitle">App</h3>
-        <div className="UiSettingsOtherCard">
-          <div className="UiSettingsOtherRow">
-            <span className="UiSettingsOtherRowLabel">Version</span>
-            <span className="UiSettingsOtherAppRowValue">Atomic Bot v{appVersion}</span>
+      <section className={s.UiSettingsOtherSection}>
+        <h3 className={s.UiSettingsOtherSectionTitle}>App</h3>
+        <div className={s.UiSettingsOtherCard}>
+          <div className={s.UiSettingsOtherRow}>
+            <span className={s.UiSettingsOtherRowLabel}>Version</span>
+            <span className={s.UiSettingsOtherAppRowValue}>Atomic Bot v{appVersion}</span>
           </div>
 
-          <div className="UiSettingsOtherRow">
-            <span className="UiSettingsOtherRowLabel">Auto start</span>
-            <span className="UiSettingsOtherAppRowValue">
-              <label className="UiSettingsOtherToggle" aria-label="Launch at startup">
+          <div className={s.UiSettingsOtherRow}>
+            <span className={s.UiSettingsOtherRowLabel}>Auto start</span>
+            <span className={s.UiSettingsOtherAppRowValue}>
+              <label className={s.UiSettingsOtherToggle} aria-label="Launch at startup">
                 <input
                   type="checkbox"
                   checked={launchAtStartup}
                   onChange={(e) => void toggleLaunchAtStartup(e.target.checked)}
                 />
-                <span className="UiSettingsOtherToggleTrack">
-                  <span className="UiSettingsOtherToggleThumb" />
+                <span className={s.UiSettingsOtherToggleTrack}>
+                  <span className={s.UiSettingsOtherToggleThumb} />
                 </span>
               </label>
             </span>
           </div>
 
-          <div className="UiSettingsOtherRow">
-            <span className="UiSettingsOtherRowLabel">License</span>
+          <div className={s.UiSettingsOtherRow}>
+            <span className={s.UiSettingsOtherRowLabel}>License</span>
             <button
               type="button"
-              className="UiSettingsOtherLink"
+              className={s.UiSettingsOtherLink}
               onClick={() =>
                 void api?.openExternal("https://polyformproject.org/licenses/noncommercial/1.0.0")
               }
@@ -195,8 +195,8 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
             </button>
           </div>
 
-          <div className="UiSettingsOtherRow">
-            <NavLink to={routes.legacy} className="UiSettingsOtherLink">
+          <div className={s.UiSettingsOtherRow}>
+            <NavLink to={routes.legacy} className={s.UiSettingsOtherLink}>
               Legacy
             </NavLink>
           </div>
@@ -204,60 +204,60 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
       </section>
 
       {/* About */}
-      <section className="UiSettingsOtherSection">
-        <h3 className="UiSettingsOtherSectionTitle">About</h3>
-        <div className="UiSettingsOtherCard">
-          <div className="UiSettingsOtherRow">
-            <span className="UiSettingsOtherRowLabel">
+      <section className={s.UiSettingsOtherSection}>
+        <h3 className={s.UiSettingsOtherSectionTitle}>About</h3>
+        <div className={s.UiSettingsOtherCard}>
+          <div className={s.UiSettingsOtherRow}>
+            <span className={s.UiSettingsOtherRowLabel}>
               &copy; {new Date().getFullYear()} Atomic Bot
             </span>
           </div>
-          <div className="UiSettingsOtherRow">
-            <span className="UiSettingsOtherRowLabel">Support</span>
-            <a href="mailto:support@atomicbot.ai" className="UiSettingsOtherLink">
+          <div className={s.UiSettingsOtherRow}>
+            <span className={s.UiSettingsOtherRowLabel}>Support</span>
+            <a href="mailto:support@atomicbot.ai" className={s.UiSettingsOtherLink}>
               support@atomicbot.ai
             </a>
           </div>
-          <div className="UiSettingsOtherRow">
+          <div className={s.UiSettingsOtherRow}>
             <button
               type="button"
-              className="UiSettingsOtherLink"
+              className={s.UiSettingsOtherLink}
               onClick={() => void api?.openExternal("https://github.com/AtomicBot-ai/atomicbot")}
             >
               GitHub
             </button>
           </div>
-          <div className="UiSettingsOtherRow">
+          <div className={s.UiSettingsOtherRow}>
             <button
               type="button"
-              className="UiSettingsOtherLink"
+              className={s.UiSettingsOtherLink}
               onClick={() => void api?.openExternal("https://atomicbot.ai")}
             >
               Website
             </button>
           </div>
-          <div className="UiSettingsOtherRow">
+          <div className={s.UiSettingsOtherRow}>
             <button
               type="button"
-              className="UiSettingsOtherLink"
+              className={s.UiSettingsOtherLink}
               onClick={() => void api?.openExternal("https://x.com/atomicbot_ai")}
             >
               X (Twitter)
             </button>
           </div>
-          <div className="UiSettingsOtherRow">
+          <div className={s.UiSettingsOtherRow}>
             <button
               type="button"
-              className="UiSettingsOtherLink"
+              className={s.UiSettingsOtherLink}
               onClick={() => void api?.openExternal("https://www.instagram.com/atomicbot.ai/")}
             >
               Instagram
             </button>
           </div>
-          <div className="UiSettingsOtherRow">
+          <div className={s.UiSettingsOtherRow}>
             <button
               type="button"
-              className="UiSettingsOtherLink"
+              className={s.UiSettingsOtherLink}
               onClick={() => void api?.openExternal("https://discord.gg/2TXafRV69m")}
             >
               Discord
@@ -267,17 +267,17 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
       </section>
 
       {/* Danger zone (reset) */}
-      <section className="UiSettingsOtherSection">
-        <h3 className="UiSettingsOtherSectionTitle">Account</h3>
-        <h3 className="UiSettingsOtherDangerSubtitle">
+      <section className={s.UiSettingsOtherSection}>
+        <h3 className={s.UiSettingsOtherSectionTitle}>Account</h3>
+        <h3 className={s.UiSettingsOtherDangerSubtitle}>
           This will wipe the app's local state and remove all Google Workspace authorizations. The
           app will restart.
         </h3>
-        <div className="UiSettingsOtherCard UiSettingsOtherCard--danger">
-          <div className="UiSettingsOtherRow">
+        <div className={`${s.UiSettingsOtherCard} ${s["UiSettingsOtherCard--danger"]}`}>
+          <div className={s.UiSettingsOtherRow}>
             <button
               type="button"
-              className="UiSettingsOtherDangerButton"
+              className={s.UiSettingsOtherDangerButton}
               disabled={resetBusy}
               onClick={() => void resetAndClose()}
             >
