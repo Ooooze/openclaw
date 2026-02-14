@@ -2,6 +2,7 @@ import { app, BrowserWindow, Menu, Tray, nativeImage } from "electron";
 import type { ChildProcess } from "node:child_process";
 import { randomBytes } from "node:crypto";
 import * as fs from "node:fs";
+import * as os from "node:os";
 import * as path from "node:path";
 import { registerIpcHandlers } from "./main/ipc/register";
 import { registerTerminalIpcHandlers } from "./main/terminal/ipc";
@@ -248,6 +249,31 @@ void app.whenReady().then(async () => {
       return;
     }
     const nextWin = await ensureMainWindow();
+
+    // Check if an external gateway is already running on the default port.
+    if (port !== DEFAULT_PORT) {
+      // pickPort returned a different port, meaning DEFAULT_PORT is occupied.
+      // Try to connect to the existing gateway instead of spawning a new one.
+      const externalConfigPath = path.join(os.homedir(), ".openclaw", "openclaw.json");
+      const externalToken = readGatewayTokenFromConfig(externalConfigPath);
+      if (externalToken) {
+        const reachable = await waitForPortOpen("127.0.0.1", DEFAULT_PORT, 3_000);
+        if (reachable) {
+          // Ensure the external config allows the Electron renderer's file:// origin ("null").
+          ensureGatewayConfigFile({ configPath: externalConfigPath, token: externalToken });
+          const externalUrl = `http://127.0.0.1:${DEFAULT_PORT}/`;
+          broadcastGatewayState(nextWin, {
+            kind: "ready",
+            port: DEFAULT_PORT,
+            logsDir,
+            url: externalUrl,
+            token: externalToken,
+          });
+          return;
+        }
+      }
+    }
+
     broadcastGatewayState(nextWin, { kind: "starting", port, logsDir, token });
     gateway = spawnGateway({
       port,
