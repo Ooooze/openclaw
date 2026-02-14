@@ -170,7 +170,7 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
   const displayMessages = allMessages.filter(
     (m) =>
       (m.role === "user" || m.role === "assistant") &&
-      m.text !== "[2 file(s)]" &&
+      m.text.trim() !== "" &&
       !isHeartbeatMessage(m.role, m.text)
   );
 
