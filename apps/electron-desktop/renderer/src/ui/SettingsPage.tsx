@@ -10,6 +10,7 @@ import { ConnectorsTab } from "./settings/ConnectorsTab";
 import { ModelProvidersTab } from "./settings/ModelProvidersTab";
 import { OtherTab } from "./settings/OtherTab";
 import { SkillsIntegrationsTab } from "./settings/SkillsIntegrationsTab";
+import { AgentsTab } from "./settings/AgentsTab";
 import { addToastError } from "./toast";
 
 export type SettingsOutletContext = {
@@ -20,13 +21,14 @@ export type SettingsOutletContext = {
   onError: (msg: string | null) => void;
 };
 
-export type SettingsTabId = "model" | "providers" | "skills-integrations" | "connectors" | "other";
+export type SettingsTabId = "model" | "providers" | "skills-integrations" | "connectors" | "agents" | "other";
 
 const SETTINGS_TABS: Array<{ path: string; label: string; tab: SettingsTabId }> = [
   { path: "ai-models", label: "AI Models", tab: "model" },
   { path: "ai-providers", label: "AI Providers", tab: "providers" },
   { path: "messengers", label: "Messengers", tab: "connectors" },
   { path: "skills", label: "Skills", tab: "skills-integrations" },
+  { path: "agents", label: "Agents", tab: "agents" },
   { path: "other", label: "Other", tab: "other" },
 ];
 
@@ -44,7 +46,7 @@ function SettingsTabItem({ to, children }: { to: string; children: React.ReactNo
 
 export function SettingsTab({ tab }: { tab: SettingsTabId }) {
   const ctx = useOutletContext<SettingsOutletContext>();
-  if (!ctx) return null;
+  if (!ctx) {return null;}
 
   switch (tab) {
     case "model":
@@ -80,6 +82,15 @@ export function SettingsTab({ tab }: { tab: SettingsTabId }) {
     case "connectors":
       return (
         <ConnectorsTab
+          gw={ctx.gw}
+          configSnap={ctx.configSnap ?? null}
+          reload={ctx.reload}
+          onError={ctx.onError}
+        />
+      );
+    case "agents":
+      return (
+        <AgentsTab
           gw={ctx.gw}
           configSnap={ctx.configSnap ?? null}
           reload={ctx.reload}
